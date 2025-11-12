@@ -1,172 +1,190 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The Soulset Navigator – V5 (Connected)</title>
-  <meta name="description" content="Version connectée IA de The Soulset Navigator — guidance poétique et spirituelle pour clarifier vos décisions.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Soulset Navigator • Interface claire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg:#070b0f;
-      --card:#0f1626;
-      --ink:#f3f7ff;
-      --muted:#b8c6dc;
-      --accent:#7a5cff;
-      --accent2:#ffca3a;
-      --good:#22e6a8;
-      --warn:#ffa62b;
-      --danger:#ff4d6d;
+    :root{
+      /* Palette douce et calme (pas de noir) */
+      --bg-1:#f6f9fc;   /* bleu très pâle */
+      --bg-2:#eef7f6;   /* vert d'eau très léger */
+      --card:#ffffff;   /* blanc propre */
+      --text:#335566;   /* bleu-gris doux, bonne lisibilité */
+      --muted:#6f8791;  /* texte secondaire */
+      --primary:#5aa3a6;/* sarcelle tendre */
+      --primary-strong:#428c8f; /* pour hover */
+      --accent:#c9d7ff; /* lavande très légère */
+      --ring:#a7d9db;   /* contour focus */
+      --success:#4bbf73;
+      --warning:#e9ad43;
+      --shadow: 0 8px 24px rgba(82,126,133,.12);
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background: radial-gradient(1400px 900px at 70% -10%, #1d2b44 0%, #0a0f18 55%), radial-gradient(900px 600px at 10% 120%, rgba(122,92,255,0.25), transparent 60%), var(--bg); color:var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial}
-    header{position:sticky;top:0;backdrop-filter:blur(8px);background:linear-gradient(180deg, rgba(11,15,20,.85), rgba(11,15,20,.6));border-bottom:1px solid #27344a;z-index:5}
-    .wrap{max-width:960px;margin:0 auto;padding:16px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:36px;height:36px;border-radius:12px;background:conic-gradient(from 210deg, var(--accent), var(--accent2) 40%, #88d0ff 70%, var(--accent));box-shadow:0 0 24px rgba(168,137,255,.35) inset, 0 10px 30px rgba(0,0,0,.3)}
-    h1{font-size:18px;margin:0;letter-spacing:.3px}
-    h1 span{color:var(--muted);font-weight:500}
-    main{padding:12px 0 96px}
-    .grid{display:grid;grid-template-columns:1fr;gap:16px}
-    @media(min-width:900px){.grid{grid-template-columns:1fr 320px}}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));border:1px solid #27344a;border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    .small{font-size:12px;color:var(--muted)}
-    .chat{display:flex;flex-direction:column;gap:12px}
-    .bubble{max-width:92%;padding:12px 14px;border-radius:14px;line-height:1.5}
-    .bubble.user{background:#1a2433;border:1px solid #2a394f;margin-left:auto;border-bottom-right-radius:6px}
-    .bubble.ai{background:#131b27;border:1px solid #273349;margin-right:auto;border-bottom-left-radius:6px}
-    textarea{width:100%;min-height:64px;background:#0f1520;color:var(--ink);border:1px solid #263148;border-radius:12px;padding:12px;resize:vertical}
-    button{appearance:none;border:1px solid #3a4970;background:linear-gradient(180deg,#253a6a,#172244);color:#e9f2ff;border-radius:12px;padding:12px 14px;font-weight:600;cursor:pointer;transition:transform .05s ease}
-    button:active{transform:translateY(1px)}
-    .cta{background:linear-gradient(180deg,#3a2c7d,#241a4f);border-color:#533c9c}
-    .foot{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(180deg, rgba(11,15,20,.1), rgba(11,15,20,1));border-top:1px solid #27344a}
-    .foot .wrap{display:flex;gap:10px}
-    .rule{border-top:1px dashed #263148;margin:8px 0}
-    .tag{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid #2a384e;color:var(--muted)}
-    .kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    .kpi div{background:#0f1622;border:1px solid #24314a;padding:10px;border-radius:12px}
-    .aside h3{margin-top:0;font-size:16px}
-    .product{display:flex;gap:10px;align-items:center;background:#0f1622;border:1px solid #24314a;padding:10px;border-radius:12px}
-    .product .thumb{width:56px;height:56px;border-radius:10px;background:radial-gradient(80px 60px at 70% 20%, #836fff, #1b1437 60%)}
-    .product .meta{line-height:1.2}
-    .product .meta .name{font-weight:600}
-    .spinner{width:18px;height:18px;border:3px solid #2c3e63;border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .notice{font-size:12px;color:var(--muted)}
-    a.link{color:#cbb6ff;text-decoration:none;border-bottom:1px dashed #3e2e72}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Nunito, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 15% -10%, var(--bg-2), transparent 60%),
+                  radial-gradient(900px 700px at 100% 0%, var(--accent), transparent 55%),
+                  linear-gradient(180deg, var(--bg-1), #ffffff);
+    }
+    .container{max-width:1100px;margin:0 auto;padding:32px 20px}
+    header{
+      display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px
+    }
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#d9f2f1,#bfe6ff);box-shadow:var(--shadow);display:grid;place-items:center}
+    .logo span{font-family:"Playfair Display", serif;color:var(--primary);font-size:22px}
+    h1{font-family:"Playfair Display", serif;font-weight:700;letter-spacing:.2px;margin:0;font-size:clamp(22px,2.7vw,30px)}
+    .subtitle{color:var(--muted);font-size:14px}
+
+    .grid{display:grid;grid-template-columns:2fr 1fr;gap:22px}
+    @media (max-width: 880px){.grid{grid-template-columns:1fr}}
+
+    .card{background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:20px}
+    .card h2{margin:0 0 8px;font-size:18px}
+    .help{font-size:14px;color:var(--muted)}
+
+    textarea{
+      width:100%;min-height:88px;border-radius:14px;border:1.5px solid rgba(90,163,166,.25);
+      padding:14px 14px 12px;font-size:16px;resize:vertical;outline:none;color:var(--text);
+      background:#fbfeff;
+    }
+    textarea:focus{box-shadow:0 0 0 4px var(--ring);border-color:transparent}
+
+    .actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}
+    .btn{
+      appearance:none;border:0;border-radius:14px;padding:12px 18px;font-weight:700;cursor:pointer;
+      background:var(--primary);color:#fff;box-shadow:var(--shadow);transition:transform .06s ease, background .2s ease, box-shadow .2s ease
+    }
+    .btn:hover{background:var(--primary-strong);transform:translateY(-1px)}
+    .btn:disabled{opacity:.65;cursor:not-allowed;transform:none}
+    .ghost{background:transparent;color:var(--primary);border:1.5px solid var(--primary);}
+
+    .result{margin-top:16px}
+    .bubble{background:linear-gradient(180deg,#ffffff, #f7fbfb);border-radius:16px;padding:16px 16px;box-shadow:var(--shadow);line-height:1.7}
+    .bubble .section{margin:10px 0}
+    .bubble .title{font-weight:700}
+
+    .rituals .chip{display:block;background:#f5fbfb;border:1px dashed #b8e4e6;border-radius:12px;padding:10px 12px;margin:8px 0;color:#426a72;font-size:14px}
+    .wellbeing{display:flex;gap:12px;align-items:center;background:#f7f9ff;border:1px solid #dfe8ff;border-radius:14px;padding:12px}
+    .well-ico{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#dfeaff,#c1ffe9);display:grid;place-items:center;color:#5b79c7;font-weight:900}
+    .well-cta{font-size:14px;color:#5b6a9b}
+
+    .footer{margin-top:28px;font-size:12.5px;color:var(--muted);text-align:center}
+    .small{font-size:13px;color:var(--muted)}
   </style>
 </head>
 <body>
-<header>
-  <div class="wrap brand">
-    <div class="logo" aria-hidden="true"></div>
-    <div>
-      <h1>The Soulset Navigator <span>· V5 connecté</span></h1>
-      <div class="small">Guidance IA poétique et spirituelle pour décisions alignées.</div>
-    </div>
-    <div style="margin-left:auto"><span class="tag" id="status">Hors ligne</span></div>
-  </div>
-</header>
-
-<main class="wrap">
-  <div class="grid">
-    <section class="card">
-      <div class="small">Étape 1</div>
-      <h2 style="margin-top:4px">Décrivez votre dilemme en une phrase</h2>
-      <div class="rule"></div>
-      <div id="chat" class="chat">
-        <div class="bubble ai">Bienvenue 🌙 Je suis votre guide intérieur. Partagez votre dilemme et je vous répondrai avec une lecture énergétique, une révélation de clarté et un rituel.</div>
-      </div>
-    </section>
-
-    <aside class="aside card">
-      <h3>Rituels de clarté</h3>
-      <div class="kpi">
-        <div><div class="small">Respiration</div><div><strong>4–6–8</strong> (inspire · retient · expire)</div></div>
-        <div><div class="small">Ancrage</div><div>Nommer <strong>3</strong> faits, <strong>2</strong> émotions, <strong>1</strong> action</div></div>
-      </div>
-      <div class="rule"></div>
-      <div class="small">Suggestion bien-être (démo)</div>
-      <div id="product" class="product">
-        <div class="thumb"></div>
-        <div class="meta">
-          <div class="name" id="prod-name">ASTRO-MIND Projector</div>
-          <div class="small">Créez un sanctuaire visuel apaisant.</div>
-          <div class="small"><a class="link" href="#" onclick="alert('Reliez ce lien à votre boutique.');return false;">Voir le produit</a></div>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><span>★</span></div>
+        <div>
+          <h1>The Soulset Navigator</h1>
+          <div class="subtitle">Guidance IA poétique pour décisions alignées</div>
         </div>
       </div>
-      <div class="rule"></div>
-      <div class="notice">Version connectée : nécessite une API côté serveur (dossier <code>/api</code>). Aucun secret en front.</div>
-    </aside>
+    </header>
+
+    <div class="grid">
+      <!-- Colonne gauche : Saisie & Résultats -->
+      <section class="card">
+        <h2>Étape 1</h2>
+        <p class="help">Décrivez votre dilemme en une phrase. L’oracle vous renverra une lecture énergétique, une prise de conscience, un rituel, puis une parole de guidance.</p>
+
+        <textarea id="dilemmaInput" placeholder="Ex. : J’hésite à changer de ville pour un nouvel emploi."></textarea>
+        <div class="actions">
+          <button id="analyzeBtn" class="btn">Analyser</button>
+          <button id="clearBtn" class="btn ghost" type="button">Effacer</button>
+          <span id="status" class="small" aria-live="polite"></span>
+        </div>
+
+        <div id="result" class="result"></div>
+      </section>
+
+      <!-- Colonne droite : Rituels & Bien-être -->
+      <aside class="card rituals">
+        <h2>Rituels de clarté</h2>
+        <span class="chip">Respiration 4–6–8 : inspirer 4 · retenir 6 · expirer 8</span>
+        <span class="chip">Ancrage : nommer 3 faits, 2 émotions, 1 action</span>
+        <span class="chip">Écriture : 3 lignes sur « Si je privilégiais la paix intérieure, je… »</span>
+        <div style="height:8px"></div>
+        <div class="wellbeing">
+          <div class="well-ico">☽</div>
+          <div class="well-cta">Suggestion bien‑être : créez une ambiance douce (lumière chaude, respiration lente) pour lire votre guidance.</div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="footer">© SoulsetJourney • Interface claire et apaisée • V5</div>
   </div>
-</main>
 
-<footer class="foot">
-  <div class="wrap">
-    <textarea id="input" placeholder="Écrivez ici votre dilemme, par ex. ‘Je n’arrive pas à trancher entre deux options…’"></textarea>
-    <button class="cta" id="analyzeBtn">Analyser</button>
-  </div>
-</footer>
+  <script>
+    const qs = sel => document.querySelector(sel);
+    const inputEl = qs('#dilemmaInput');
+    const resultEl = qs('#result');
+    const btn = qs('#analyzeBtn');
+    const clearBtn = qs('#clearBtn');
+    const statusEl = qs('#status');
 
-<script>
-const chat = document.getElementById("chat");
-const inputEl = document.getElementById("input");
-const prodName = document.getElementById("prod-name");
-const statusEl = document.getElementById("status");
+    function renderMessage(text) {
+      const card = document.createElement('div');
+      card.className = 'bubble';
+      // On conserve les retours à la ligne et on crée des petits blocs par sections si possible
+      const safe = (text || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const html = safe
+        .split(/\n+/)
+        .map(line => `<div class="section">${line}</div>`)
+        .join('');
+      card.innerHTML = html;
+      resultEl.innerHTML = '';
+      resultEl.appendChild(card);
+    }
 
-function say(role, html){
-  const div=document.createElement("div");
-  div.className="bubble " + (role==="user"?"user":"ai");
-  div.innerHTML=html;
-  chat.appendChild(div);
-  chat.scrollTop=chat.scrollHeight;
-}
+    async function analyze() {
+      const text = (inputEl.value || '').trim();
+      if (!text) { inputEl.focus(); return; }
 
-function sanitize(s){ return s.replace(/[<>&]/g, c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c])); }
+      btn.disabled = true; clearBtn.disabled = true;
+      statusEl.textContent = 'Lecture en cours…';
+      renderMessage('⏳ Je t’écoute, souffle calme…');
 
-async function checkOnline(){
-  try{
-    const res = await fetch("/api/health");
-    statusEl.textContent = res.ok ? "Connecté" : "Hors ligne";
-  }catch(e){
-    statusEl.textContent = "Hors ligne";
-  }
-}
-checkOnline();
+      try {
+        const res = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+        const data = await res.json().catch(() => ({}));
 
-async function analyze(){
-  const t = inputEl.value.trim();
-  if(!t) return;
-  say("user", sanitize(t));
-  inputEl.value="";
-  const wait = document.createElement("div");
-  wait.className="bubble ai";
-  wait.innerHTML = '<span class="spinner"></span> Analyse en cours…';
-  chat.appendChild(wait); chat.scrollTop=chat.scrollHeight;
+        const output = data?.text || data?.markdown || data?.result || '';
+        if (res.ok && data?.ok && output) {
+          renderMessage(output);
+          statusEl.textContent = 'Guidance prête.';
+        } else {
+          renderMessage('✨ Je n’ai pas pu générer l’analyse. Réessaie avec une phrase simple.');
+          statusEl.textContent = 'Ajustez le texte et réessayez.';
+          console.error('Analyze error', data);
+        }
+      } catch (e) {
+        renderMessage('⚠️ Erreur réseau — réessayez dans un instant.');
+        statusEl.textContent = 'Hors‑ligne ?';
+        console.error(e);
+      } finally {
+        btn.disabled = false; clearBtn.disabled = false;
+      }
+    }
 
-  try{
-    const res = await fetch("/api/analyze", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ text: t })
+    btn.addEventListener('click', analyze);
+    inputEl.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') analyze();
     });
-    if(!res.ok){ throw new Error("API error"); }
-    const data = await res.json();
-
-    // Expect: data.markdown (preferred) + optional product suggestion
-    chat.removeChild(wait);
-    say("ai", data.markdown || "Je n’ai pas pu générer l’analyse cette fois.");
-
-    if(data.product){ prodName.textContent = data.product; }
-  }catch(e){
-    chat.removeChild(wait);
-    say("ai", "Désolé, le service est indisponible pour le moment. Vérifiez la clé API côté serveur.");
-  }
-}
-
-document.getElementById("analyzeBtn").addEventListener("click", analyze);
-inputEl.addEventListener("keydown", (e)=>{
-  if(e.key==="Enter" && (e.metaKey||e.ctrlKey)) analyze();
-});
-</script>
+    clearBtn.addEventListener('click', () => { inputEl.value=''; resultEl.innerHTML=''; statusEl.textContent=''; inputEl.focus(); })
+  </script>
 </body>
 </html>
