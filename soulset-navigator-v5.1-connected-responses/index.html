@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Soulset Navigator – V5 (Connected)</title>
+  <meta name="description" content="Version connectée IA de The Soulset Navigator — guidance poétique et spirituelle pour clarifier vos décisions.">
+  <style>
+    :root {
+      --bg:#070b0f;
+      --card:#0f1626;
+      --ink:#f3f7ff;
+      --muted:#b8c6dc;
+      --accent:#7a5cff;
+      --accent2:#ffca3a;
+      --good:#22e6a8;
+      --warn:#ffa62b;
+      --danger:#ff4d6d;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background: radial-gradient(1400px 900px at 70% -10%, #1d2b44 0%, #0a0f18 55%), radial-gradient(900px 600px at 10% 120%, rgba(122,92,255,0.25), transparent 60%), var(--bg); color:var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial}
+    header{position:sticky;top:0;backdrop-filter:blur(8px);background:linear-gradient(180deg, rgba(11,15,20,.85), rgba(11,15,20,.6));border-bottom:1px solid #27344a;z-index:5}
+    .wrap{max-width:960px;margin:0 auto;padding:16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:36px;height:36px;border-radius:12px;background:conic-gradient(from 210deg, var(--accent), var(--accent2) 40%, #88d0ff 70%, var(--accent));box-shadow:0 0 24px rgba(168,137,255,.35) inset, 0 10px 30px rgba(0,0,0,.3)}
+    h1{font-size:18px;margin:0;letter-spacing:.3px}
+    h1 span{color:var(--muted);font-weight:500}
+    main{padding:12px 0 96px}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:900px){.grid{grid-template-columns:1fr 320px}}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));border:1px solid #27344a;border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .small{font-size:12px;color:var(--muted)}
+    .chat{display:flex;flex-direction:column;gap:12px}
+    .bubble{max-width:92%;padding:12px 14px;border-radius:14px;line-height:1.5}
+    .bubble.user{background:#1a2433;border:1px solid #2a394f;margin-left:auto;border-bottom-right-radius:6px}
+    .bubble.ai{background:#131b27;border:1px solid #273349;margin-right:auto;border-bottom-left-radius:6px}
+    textarea{width:100%;min-height:64px;background:#0f1520;color:var(--ink);border:1px solid #263148;border-radius:12px;padding:12px;resize:vertical}
+    button{appearance:none;border:1px solid #3a4970;background:linear-gradient(180deg,#253a6a,#172244);color:#e9f2ff;border-radius:12px;padding:12px 14px;font-weight:600;cursor:pointer;transition:transform .05s ease}
+    button:active{transform:translateY(1px)}
+    .cta{background:linear-gradient(180deg,#3a2c7d,#241a4f);border-color:#533c9c}
+    .foot{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(180deg, rgba(11,15,20,.1), rgba(11,15,20,1));border-top:1px solid #27344a}
+    .foot .wrap{display:flex;gap:10px}
+    .rule{border-top:1px dashed #263148;margin:8px 0}
+    .tag{font-size:11px;padding:4px 8px;border-radius:999px;border:1px solid #2a384e;color:var(--muted)}
+    .kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .kpi div{background:#0f1622;border:1px solid #24314a;padding:10px;border-radius:12px}
+    .aside h3{margin-top:0;font-size:16px}
+    .product{display:flex;gap:10px;align-items:center;background:#0f1622;border:1px solid #24314a;padding:10px;border-radius:12px}
+    .product .thumb{width:56px;height:56px;border-radius:10px;background:radial-gradient(80px 60px at 70% 20%, #836fff, #1b1437 60%)}
+    .product .meta{line-height:1.2}
+    .product .meta .name{font-weight:600}
+    .spinner{width:18px;height:18px;border:3px solid #2c3e63;border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .notice{font-size:12px;color:var(--muted)}
+    a.link{color:#cbb6ff;text-decoration:none;border-bottom:1px dashed #3e2e72}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap brand">
+    <div class="logo" aria-hidden="true"></div>
+    <div>
+      <h1>The Soulset Navigator <span>· V5 connecté</span></h1>
+      <div class="small">Guidance IA poétique et spirituelle pour décisions alignées.</div>
+    </div>
+    <div style="margin-left:auto"><span class="tag" id="status">Hors ligne</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid">
+    <section class="card">
+      <div class="small">Étape 1</div>
+      <h2 style="margin-top:4px">Décrivez votre dilemme en une phrase</h2>
+      <div class="rule"></div>
+      <div id="chat" class="chat">
+        <div class="bubble ai">Bienvenue 🌙 Je suis votre guide intérieur. Partagez votre dilemme et je vous répondrai avec une lecture énergétique, une révélation de clarté et un rituel.</div>
+      </div>
+    </section>
+
+    <aside class="aside card">
+      <h3>Rituels de clarté</h3>
+      <div class="kpi">
+        <div><div class="small">Respiration</div><div><strong>4–6–8</strong> (inspire · retient · expire)</div></div>
+        <div><div class="small">Ancrage</div><div>Nommer <strong>3</strong> faits, <strong>2</strong> émotions, <strong>1</strong> action</div></div>
+      </div>
+      <div class="rule"></div>
+      <div class="small">Suggestion bien-être (démo)</div>
+      <div id="product" class="product">
+        <div class="thumb"></div>
+        <div class="meta">
+          <div class="name" id="prod-name">ASTRO-MIND Projector</div>
+          <div class="small">Créez un sanctuaire visuel apaisant.</div>
+          <div class="small"><a class="link" href="#" onclick="alert('Reliez ce lien à votre boutique.');return false;">Voir le produit</a></div>
+        </div>
+      </div>
+      <div class="rule"></div>
+      <div class="notice">Version connectée : nécessite une API côté serveur (dossier <code>/api</code>). Aucun secret en front.</div>
+    </aside>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <textarea id="input" placeholder="Écrivez ici votre dilemme, par ex. ‘Je n’arrive pas à trancher entre deux options…’"></textarea>
+    <button class="cta" id="analyzeBtn">Analyser</button>
+  </div>
+</footer>
+
+<script>
+const chat = document.getElementById("chat");
+const inputEl = document.getElementById("input");
+const prodName = document.getElementById("prod-name");
+const statusEl = document.getElementById("status");
+
+function say(role, html){
+  const div=document.createElement("div");
+  div.className="bubble " + (role==="user"?"user":"ai");
+  div.innerHTML=html;
+  chat.appendChild(div);
+  chat.scrollTop=chat.scrollHeight;
+}
+
+function sanitize(s){ return s.replace(/[<>&]/g, c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c])); }
+
+async function checkOnline(){
+  try{
+    const res = await fetch("/api/health");
+    statusEl.textContent = res.ok ? "Connecté" : "Hors ligne";
+  }catch(e){
+    statusEl.textContent = "Hors ligne";
+  }
+}
+checkOnline();
+
+async function analyze(){
+  const t = inputEl.value.trim();
+  if(!t) return;
+  say("user", sanitize(t));
+  inputEl.value="";
+  const wait = document.createElement("div");
+  wait.className="bubble ai";
+  wait.innerHTML = '<span class="spinner"></span> Analyse en cours…';
+  chat.appendChild(wait); chat.scrollTop=chat.scrollHeight;
+
+  try{
+    const res = await fetch("/api/analyze", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ text: t })
+    });
+    if(!res.ok){ throw new Error("API error"); }
+    const data = await res.json();
+
+    // Expect: data.markdown (preferred) + optional product suggestion
+    chat.removeChild(wait);
+    say("ai", data.markdown || "Je n’ai pas pu générer l’analyse cette fois.");
+
+    if(data.product){ prodName.textContent = data.product; }
+  }catch(e){
+    chat.removeChild(wait);
+    say("ai", "Désolé, le service est indisponible pour le moment. Vérifiez la clé API côté serveur.");
+  }
+}
+
+document.getElementById("analyzeBtn").addEventListener("click", analyze);
+inputEl.addEventListener("keydown", (e)=>{
+  if(e.key==="Enter" && (e.metaKey||e.ctrlKey)) analyze();
+});
+</script>
+</body>
+</html>

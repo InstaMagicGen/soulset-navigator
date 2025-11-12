@@ -1,0 +1,12 @@
+{
+  "name": "soulset-navigator-v5",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
