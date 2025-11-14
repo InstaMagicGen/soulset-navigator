@@ -63,48 +63,81 @@ export default async function handler(req) {
   // 🧪 Simple language heuristic when lang === "" (auto)
   let finalLang = lang;
   if (!finalLang) {
-    // Quelques marqueurs FR
     const looksFrench = /(je |j[’']|ne sais pas|travail|emploi|ville|changer|peur|avenir|dois|devrais)/.test(t);
     finalLang = looksFrench ? "fr" : "en";
   }
 
-  // 🧘 Base rituals & product (semantic only, model rewrites them)
-  const RITUALS = {
+  // 🧘 Multiple rituals per theme
+  const RITUAL_BANK = {
     stress: {
-      ritual: "Sit down for two minutes. Inhale 4 seconds, hold 6, exhale 8 through the mouth. With each exhale, imagine a layer of workload dropping from your shoulders.",
+      rituals: [
+        "Sit down for two minutes. Inhale for 4 seconds, hold for 6, and exhale for 8 through the mouth. With every exhale, imagine a layer of workload dropping from your shoulders.",
+        "Place both feet on the floor. For one minute, mentally list every surface that supports you right now: the chair, the ground, the walls, even gravity. Let your body feel carried instead of alone with the pressure.",
+        "Open a note or a paper and write three tasks: “now”, “later”, “not today”. Move each worry into one list. Circle only one “now” action and allow everything else to rest."
+      ],
       product: "Zen Moon Diffuser"
     },
     fear: {
-      ritual: "Walk 20 slow steps. With each step, name one small thing you already handled in your life. Let your body remember you can move with fear beside you.",
+      rituals: [
+        "Walk 20 slow steps. With each step, name one small thing you already handled in your life. Let your body remember you can move with fear beside you.",
+        "Sit comfortably, put a hand on your heart and whisper: “Right now I am safe enough to breathe.” Repeat it five times, noticing one detail in the room each time.",
+        "Draw a tiny ladder with three steps. On the first step, write the smallest action you could take even with fear. On the second, what you would do once that is done. Leave the third blank for the future."
+      ],
       product: "Warm Focus Lamp"
     },
     guilt: {
-      ritual: "Take a paper and write one sentence of self-forgiveness that begins with “Today I release…”. Read it out loud in a gentle voice.",
+      rituals: [
+        "Take a paper and write one sentence of self-forgiveness that begins with “Today I release…”. Read it out loud in a gentle voice.",
+        "Place your hand on your chest and imagine you are talking to a younger version of yourself. Tell them one sentence you needed to hear back then.",
+        "Write two columns: “What I regret” and “What I learned”. Move at least one element from the first into the second."
+      ],
       product: "Clarity Candle"
     },
     uncertainty: {
-      ritual: "Draw two small columns: “Stability now” and “New path later”. Under each, write one concrete action you could take this month. You are not choosing forever, only your next step.",
+      rituals: [
+        "Draw two small columns: “Stability now” and “New path later”. Under each, write one concrete action you could take this month. You are not choosing forever, only your next step.",
+        "Set a 3-minute timer. In the first minute, write what you are afraid of losing; second minute, what you might gain; third minute, one thing that would make the choice feel 10% lighter.",
+        "Pick a coin. Before tossing, imagine heads = option A, tails = option B. Notice your body’s reaction while the coin is in the air—that reaction matters more than the result."
+      ],
       product: "Horizon Mind Projector"
     },
     anger: {
-      ritual: "Place one hand on your heart and one on your belly. Inhale through the nose, exhale through the mouth with a quiet sigh. Let the heat turn into clear strength instead of explosion.",
+      rituals: [
+        "Place one hand on your heart and one on your belly. Inhale through the nose, exhale through the mouth with a quiet sigh. Let the heat turn into clear strength instead of explosion.",
+        "Take a sheet of paper and write everything you want to shout, without filtering. When you’re done, crumple or tear it and exhale slowly as if you were emptying the anger from your muscles.",
+        "Do 10 strong exhales through the mouth, like blowing out candles, shaking gently your hands and shoulders, then finish with three slow and silent breaths."
+      ],
       product: "Soft Sandalwood Incense"
     },
     sadness: {
-      ritual: "Put a hand on your chest. Breathe and name, in a whisper, three things that still bring a tiny spark of softness to your day.",
+      rituals: [
+        "Put a hand on your chest. Breathe and name, in a whisper, three things that still bring a tiny spark of softness to your day.",
+        "Sit by a window, if possible. For two minutes, simply watch the light change on one object and let your sadness be there without trying to fix it.",
+        "Write one sentence beginning with “Right now, my heart feels…” and allow yourself to complete it honestly, without judging or editing."
+      ],
       product: "Calm Soul Bracelet"
     },
     inspiration: {
-      ritual: "Open a note and write three crazy ideas you would try if nothing could fail. Circle the one that makes your body feel lighter.",
+      rituals: [
+        "Open a note and write three crazy ideas you would try if nothing could fail. Circle the one that makes your body feel lighter.",
+        "Set a 3-minute timer and write without stopping: “If my life was a creative project, I would…”. Do not correct, just let it flow.",
+        "Choose one object around you and imagine it has a secret story. In your mind, invent the first three lines of that story."
+      ],
       product: "ASTRO-MIND Projector"
     },
     neutral: {
-      ritual: "Pause for one minute. Notice three details around you that make this moment a little more livable, and breathe into them.",
+      rituals: [
+        "Pause for one minute. Notice three details around you that make this moment a little more livable, and breathe into them.",
+        "Take five slow breaths. On each inhale, mentally say “I arrive”. On each exhale, “I soften”.",
+        "Look around and choose one item to put in a small “clarity corner” (desk, shelf, etc.). Let it remind you that you are allowed to reset at any time."
+      ],
       product: "Zen Moon Diffuser"
     }
   };
 
-  const base = RITUALS[theme] || RITUALS.neutral;
+  const bank = RITUAL_BANK[theme] || RITUAL_BANK.neutral;
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  const chosenRitual = pick(bank.rituals);
 
   const userPrompt = `
 TARGET LANGUAGE (ISO code): ${finalLang}
@@ -120,10 +153,10 @@ ${text}
 DETECTED EMOTION THEME (for context): ${theme}
 
 SUGGESTED RITUAL (you can adapt wording, but keep spirit & duration < 5 minutes):
-${base.ritual}
+${chosenRitual}
 
 SUGGESTED PRODUCT / AMBIANCE (you may rephrase the name but keep it short):
-${base.product}
+${bank.product}
 
 Now produce the 5 sections exactly as described in the system message, in the TARGET LANGUAGE.
 `;
@@ -137,7 +170,7 @@ Now produce the 5 sections exactly as described in the system message, in the TA
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
-        temperature: 0.9, // variety but still coherent
+        temperature: 0.9,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userPrompt }
@@ -156,8 +189,8 @@ Now produce the 5 sections exactly as described in the system message, in the TA
         ok: true,
         text: textOut,
         theme,
-        ritual: base.ritual,
-        product: base.product,
+        ritual: chosenRitual,
+        product: bank.product,
         lang: finalLang
       }),
       { status: 200, headers: { "Content-Type": "application/json" } }
