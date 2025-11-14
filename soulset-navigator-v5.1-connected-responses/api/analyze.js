@@ -1,100 +1,159 @@
-// /api/analyze — Edge Function (Vercel)
+// /api/analyze — Soulset Navigator: multi-language + adaptive rituals
 export const config = { runtime: "edge" };
 
 const SYSTEM_PROMPT = `
-Tu es "The Soulset Navigator", une voix douce et poétique alignée avec la marque SoulsetJourney.
-Ta mission : clarifier un dilemme en 4 sections (FR), concises mais profondes :
-1) 🌫 Lecture énergétique — ce que révèle le dilemme (conflits internes, besoins de l'âme)
-2) 🪞 Clarity Insight — une prise de conscience concrète, sans blâmer
-3) 🕯 Rituel — micro-pratique réalisable en < 5 minutes (respiration 4–6–8, écriture, marche consciente)
-4) 🗣 Parole de guidance — courte phrase/mantra au ton SoulsetJourney
+You are "The Soulset Navigator", a poetic, gentle guide aligned with the SoulsetJourney brand.
 
-Contraintes :
-- Ton doux, rassurant, non-moraliste (images lumineuses : ciel, horizon, souffle)
-- 5 à 8 lignes max
-- Pas d'avis médical, financier ou juridique
-- Tu peux proposer 1 "Option produit" en 5 mots max si pertinent, format : Option produit : <nom>
+Your mission:
+- Clarify a dilemma in 4 structured sections.
+- Adapt the tone and imagery (sky, breath, horizon, light) to the dominant emotion.
+- You can answer in ANY language.
+  - If a target language is given (like "en", "fr", "es", "ar"), you MUST answer fully in that language only.
+  - If no language is given, answer in the same language as the user's dilemma.
+
+Expected structure (in the chosen language):
+1) 🌫 Energy Reading — what the dilemma reveals (dominant emotion, inner conflict)
+2) 🪞 Clarity Insight — a concrete, kind awareness
+3) 🕯 Personalized Ritual — a short micro-practice suited to this situation (< 5 minutes)
+4) 🗣 Guidance Phrase — a short mantra-like sentence, SoulsetJourney tone
+5) 🪷 Product Option — if relevant, a tiny well-being object or ambiance (max 5 words), format: Product option: <name>
+
+Style constraints:
+- Poetic, calm, reassuring. Simple images of light, breath, sky, horizon.
+- 5 to 8 lines total.
+- Never give medical, legal or financial advice.
 `;
 
 export default async function handler(req) {
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ ok:false, error:"Method not allowed" }), { status: 405 });
+    return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), { status: 405 });
   }
 
-  // Lire le corps JSON (robuste) et accepter text|dilemma
   let bodyIn;
-  try { bodyIn = await req.json(); }
-  catch { return new Response(JSON.stringify({ ok:false, error:"Invalid JSON body" }), { status: 400 }); }
+  try {
+    bodyIn = await req.json();
+  } catch {
+    return new Response(JSON.stringify({ ok: false, error: "Invalid JSON body" }), { status: 400 });
+  }
 
-  const userText = (bodyIn?.text ?? bodyIn?.dilemma ?? "").toString().trim();
-  if (!userText) {
-    return new Response(JSON.stringify({ ok:false, error:"Missing text/dilemma" }), { status: 400 });
+  const text = (bodyIn?.text ?? bodyIn?.dilemma ?? "").trim();
+  const lang = (bodyIn?.lang ?? "").toString().trim().toLowerCase(); // "en", "fr", "es", "ar", etc.
+
+  if (!text) {
+    return new Response(JSON.stringify({ ok: false, error: "Missing text" }), { status: 400 });
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    return new Response(JSON.stringify({ ok:false, error:"Missing OPENAI_API_KEY" }), { status: 500 });
+    return new Response(JSON.stringify({ ok: false, error: "Missing OPENAI_API_KEY" }), { status: 500 });
   }
 
-  // Messages pour Chat Completions
-  const messages = [
-    { role: "system", content: SYSTEM_PROMPT },
-    { role: "user", content: `Dilemme : ${userText}` }
-  ];
+  // 🔍 Emotion detection (FR + EN keywords)
+  let theme = "neutral";
+  const t = text.toLowerCase();
 
-  // Essaie d'abord gpt-4o-mini (rapide/éco), sinon gpt-4o en fallback si besoin
-  const modelsToTry = ["gpt-4o-mini", "gpt-4o"];
+  if (/(stress|angoiss|fatigue|épuis|pression|overwhelmed|stressed|burnout)/.test(t)) theme = "stress";
+  else if (/(peur|crain|inqui|anxi|afraid|scared|fear)/.test(t)) theme = "fear";
+  else if (/(culpabil|regret|honte|guilt|guilty|ashamed)/.test(t)) theme = "guilt";
+  else if (/(perdu|incertitude|doute|choix|uncertain|doubt|confused|decision)/.test(t)) theme = "uncertainty";
+  else if (/(colère|colere|frustration|blessure|angry|anger|rage)/.test(t)) theme = "anger";
+  else if (/(tristesse|solitude|vide|sad|lonely|emptiness)/.test(t)) theme = "sadness";
+  else if (/(inspir|créativ|creativ|motivat|idée|idea|inspired)/.test(t)) theme = "inspiration";
 
-  for (const model of modelsToTry) {
-    try {
-      const r = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model,
-          messages,
-          temperature: 0.8
-        })
-      });
-
-      const data = await r.json();
-
-      if (!r.ok) {
-        // Log côté serveur pour debug dans Runtime Logs
-        console.log("OpenAI chat error:", model, data);
-        // essaie le modèle suivant
-        continue;
-      }
-
-      const out =
-        data?.choices?.[0]?.message?.content?.trim() || "";
-
-      if (!out) {
-        console.log("Empty completion content for model:", model, data);
-        continue;
-      }
-
-      // Suggestion produit simple (heuristique)
-      let product = null;
-      const low = userText.toLowerCase();
-      if (/(stress|dormi|sommeil|anx|angoisse)/.test(low)) product = "Diffuseur ‘Lune Zen’";
-      else if (/(dispers|choisir|trop d'options|focus)/.test(low)) product = "Lampe d’ambiance ‘Focus’";
-      else if (/(creativ|inspiration|idée|idee)/.test(low)) product = "ASTRO-MIND Projector";
-
-      return new Response(
-        JSON.stringify({ ok:true, text: out, markdown: out, result: out, modelUsed: model, product }),
-        { status: 200, headers: { "Content-Type": "application/json" } }
-      );
-    } catch (e) {
-      console.log("Server fetch error:", model, e?.message || e);
-      // essaie le modèle suivant
-      continue;
+  // 🧘 Base rituals & product (in English, model will adapt to language)
+  const RITUALS = {
+    stress: {
+      ritual: "Close your eyes and breathe slowly: inhale 4 seconds, hold 6, exhale 8. Feel the weight leaving with your breath.",
+      product: "Zen Moon Diffuser"
+    },
+    fear: {
+      ritual: "Take 20 slow steps in silence. Each step is proof that you can move forward even with fear beside you.",
+      product: "Warm Focus Lamp"
+    },
+    guilt: {
+      ritual: "Write one sentence of forgiveness to yourself. Read it softly, as if you were talking to a younger you.",
+      product: "Clarity Candle"
+    },
+    uncertainty: {
+      ritual: "Close your eyes and imagine a calm horizon. Whisper: “I choose peace before the answer.”",
+      product: "Horizon Mind Projector"
+    },
+    anger: {
+      ritual: "Place your hand on your heart. Inhale through the nose, exhale through the mouth. Let tension melt into warm strength.",
+      product: "Soft Sandalwood Incense"
+    },
+    sadness: {
+      ritual: "Place one hand on your chest and one on your belly. Breathe and repeat: “I am allowed to feel.”",
+      product: "Calm Soul Bracelet"
+    },
+    inspiration: {
+      ritual: "Take a notebook. Write down the first three ideas that come, without judging them. They already carry your light.",
+      product: "ASTRO-MIND Projector"
+    },
+    neutral: {
+      ritual: "Notice three details around you that bring you a little peace, and gently anchor yourself in this moment.",
+      product: "Zen Moon Diffuser"
     }
-  }
+  };
 
-  // Si aucun modèle n’a produit de texte :
-  return new Response(JSON.stringify({ ok:false, error:"No output generated by models" }), { status: 500 });
+  const base = RITUALS[theme] || RITUALS.neutral;
+
+  const userPrompt = `
+Target language: ${lang || "auto (same as the user's dilemma language)"}.
+
+USER DILEMMA:
+${text}
+
+DETECTED EMOTION THEME (for you to use as context, but you can refine it): ${theme}
+
+SUGGESTED RITUAL (you can adapt wording, but keep the spirit and duration under 5 minutes):
+${base.ritual}
+
+SUGGESTED PRODUCT / AMBIANCE (you may rephrase the name but keep it short):
+${base.product}
+
+You MUST:
+- Answer ONLY in the target language above, if it is not empty.
+- If target language is "auto", detect and use the user's language.
+- Follow exactly the structure described in the system message.
+`;
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        temperature: 0.95, // more variety
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          { role: "user", content: userPrompt }
+        ]
+      })
+    });
+
+    const data = await res.json();
+
+    const textOut =
+      data?.choices?.[0]?.message?.content?.trim() ||
+      "I couldn’t generate guidance right now.";
+
+    return new Response(
+      JSON.stringify({
+        ok: true,
+        text: textOut,
+        theme,
+        ritual: base.ritual,
+        product: base.product,
+        lang: lang || "auto"
+      }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
+  } catch (err) {
+    console.error("OpenAI error:", err);
+    return new Response(JSON.stringify({ ok: false, error: err.message }), { status: 500 });
+  }
 }

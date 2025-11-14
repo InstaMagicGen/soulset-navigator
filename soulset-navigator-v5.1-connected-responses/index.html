@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Soulset Navigator • Interface claire</title>
+  <title>The Soulset Navigator • Clear Interface</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -81,9 +81,16 @@
     .well-ico{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#dfeaff,#c1ffe9);display:grid;place-items:center;color:#5b79c7;font-weight:900}
     .well-cta{font-size:14px;color:#5b6a9b}
 
+    .theme-icon{
+      font-size:40px;
+      text-align:center;
+      margin-bottom:8px;
+    }
+
     .footer{margin-top:28px;font-size:12.5px;color:var(--muted);text-align:center}
     .small{font-size:13px;color:var(--muted)}
 
+    /* Halo background */
     .halo { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
     .halo::before {
       content: ""; position: absolute; width: 120vmax; height: 120vmax;
@@ -96,25 +103,17 @@
       50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.55; }
     }
     .theme-stress::before { background: radial-gradient(circle, #a8d8ff, #80b5d6); }
-    .theme-peur::before { background: radial-gradient(circle, #ffe2b0, #f7c87b); }
-    .theme-culpabilite::before { background: radial-gradient(circle, #dcbcff, #b89adb); }
-    .theme-incertitude::before { background: radial-gradient(circle, #fff4b3, #ffe480); }
-    .theme-colere::before { background: radial-gradient(circle, #ffb3b3, #ff8686); }
-    .theme-tristesse::before { background: radial-gradient(circle, #c9e4ff, #a4c6e5); }
+    .theme-fear::before { background: radial-gradient(circle, #ffe2b0, #f7c87b); }
+    .theme-guilt::before { background: radial-gradient(circle, #dcbcff, #b89adb); }
+    .theme-uncertainty::before { background: radial-gradient(circle, #fff4b3, #ffe480); }
+    .theme-anger::before { background: radial-gradient(circle, #ffb3b3, #ff8686); }
+    .theme-sadness::before { background: radial-gradient(circle, #c9e4ff, #a4c6e5); }
     .theme-inspiration::before { background: radial-gradient(circle, #ffd2e6, #f8a8c6); }
-    .theme-neutre::before { background: radial-gradient(circle, #dff7d9, #b8e5b0); }
-
-    .visual {
-      position: absolute; width: 120px; height: 120px;
-      top: 30%; left: 50%; transform: translateX(-50%);
-      opacity: 0.3; animation: float 9s ease-in-out infinite;
-    }
-    @keyframes float { 0%,100% { transform: translate(-50%, -10px); } 50% { transform: translate(-50%, 10px); } }
+    .theme-neutral::before { background: radial-gradient(circle, #dff7d9, #b8e5b0); }
   </style>
 </head>
 <body>
   <div class="halo"></div>
-  <img id="visual" class="visual" alt="" src="" style="display:none;">
 
   <div class="container">
     <header>
@@ -122,24 +121,27 @@
         <div class="logo" aria-hidden="true"><span>★</span></div>
         <div>
           <h1>The Soulset Navigator</h1>
-          <div class="subtitle">Guidance IA poétique pour décisions alignées</div>
+          <div class="subtitle">Poetic AI guidance for aligned decisions</div>
         </div>
       </div>
     </header>
 
     <div class="grid">
       <section class="card">
-        <h2>Étape 1</h2>
-        <p class="help">Décrivez votre dilemme en une phrase. L’oracle vous renverra une lecture énergétique, une prise de conscience, un rituel, puis une parole de guidance.</p>
+        <h2>Step 1</h2>
+        <p class="help">
+          Describe your dilemma in one sentence. The navigator will send you an energy reading, a clarity insight,
+          a ritual, and a short guidance phrase.
+        </p>
 
-        <textarea id="dilemmaInput" placeholder="Ex. : J’hésite à changer de ville pour un nouvel emploi."></textarea>
+        <textarea id="dilemmaInput" placeholder="E.g.: I’m not sure if I should move to a new city for a job."></textarea>
         <div class="actions">
-          <button id="analyzeBtn" class="btn">Analyser</button>
-          <button id="clearBtn" class="btn ghost" type="button">Effacer</button>
+          <button id="analyzeBtn" class="btn">Analyze</button>
+          <button id="clearBtn" class="btn ghost" type="button">Clear</button>
           <select id="langSelect" class="lang-select">
-            <option value="">Langue : auto</option>
-            <option value="fr">Français</option>
+            <option value="">Language: auto</option>
             <option value="en">English</option>
+            <option value="fr">Français</option>
             <option value="es">Español</option>
             <option value="ar">العربية</option>
           </select>
@@ -150,19 +152,22 @@
       </section>
 
       <aside class="card rituals">
-        <h2>Rituels de clarté</h2>
-        <span class="chip">Respiration 4–6–8 : inspirer 4 · retenir 6 · expirer 8</span>
-        <span class="chip">Ancrage : nommer 3 faits, 2 émotions, 1 action</span>
-        <span class="chip">Écriture : 3 lignes « Si je privilégiais la paix intérieure, je… »</span>
+        <div id="themeIcon" class="theme-icon">🍃</div>
+        <h2>Clarity rituals</h2>
+        <span class="chip">Breath 4–6–8: inhale 4 · hold 6 · exhale 8</span>
+        <span class="chip">Grounding: name 3 facts, 2 emotions, 1 tiny action</span>
+        <span class="chip">Journaling: 3 lines starting with “If I chose peace first…”</span>
         <div style="height:8px"></div>
         <div class="wellbeing">
           <div class="well-ico">☽</div>
-          <div class="well-cta">Suggestion bien-être : créez une ambiance douce (lumière chaude, respiration lente) pour lire votre guidance.</div>
+          <div class="well-cta">
+            Well-being tip: soften the lights, slow down your breathing, and read your guidance as if it were a letter from your future self.
+          </div>
         </div>
       </aside>
     </div>
 
-    <div class="footer">©️ SoulsetJourney • Interface claire et apaisée • V6</div>
+    <div class="footer">© SoulsetJourney • Clear & soothing interface • V7</div>
   </div>
 
   <script>
@@ -173,28 +178,25 @@
     const clearBtn = qs('#clearBtn');
     const statusEl = qs('#status');
     const halo = qs('.halo');
-    const visual = qs('#visual');
     const langSelect = qs('#langSelect');
+    const themeIconEl = qs('#themeIcon');
 
-    const visuals = {
-      stress: "https://cdn-icons-png.flaticon.com/512/4140/4140048.png",
-      peur: "https://cdn-icons-png.flaticon.com/512/3075/3075977.png",
-      culpabilite: "https://cdn-icons-png.flaticon.com/512/4140/4140037.png",
-      incertitude: "https://cdn-icons-png.flaticon.com/512/2972/2972179.png",
-      colere: "https://cdn-icons-png.flaticon.com/512/4140/4140076.png",
-      tristesse: "https://cdn-icons-png.flaticon.com/512/4140/4140044.png",
-      inspiration: "https://cdn-icons-png.flaticon.com/512/4140/4140094.png",
-      neutre: "https://cdn-icons-png.flaticon.com/512/4140/4140082.png"
+    const themeEmojis = {
+      stress: "😰",
+      fear: "😨",
+      guilt: "🫂",
+      uncertainty: "🤔",
+      anger: "🔥",
+      sadness: "😢",
+      inspiration: "✨",
+      neutral: "🍃"
     };
 
     function setTheme(theme) {
+      const t = theme || "neutral";
       halo.className = "halo";
-      halo.classList.add(`theme-${theme}`);
-      visual.style.display = "none";
-      if (visuals[theme]) {
-        visual.src = visuals[theme];
-        visual.style.display = "block";
-      }
+      halo.classList.add(`theme-${t}`);
+      themeIconEl.textContent = themeEmojis[t] || themeEmojis.neutral;
     }
 
     function renderMessage(text) {
@@ -210,10 +212,12 @@
       const text = (inputEl.value || '').trim();
       if (!text) { inputEl.focus(); return; }
 
-      btn.disabled = true; clearBtn.disabled = true; langSelect.disabled = true;
-      statusEl.textContent = 'Lecture en cours…';
-      renderMessage('⏳ Je t’écoute, souffle calme…');
-      setTheme('neutre');
+      btn.disabled = true;
+      clearBtn.disabled = true;
+      langSelect.disabled = true;
+      statusEl.textContent = 'Reading your energy…';
+      renderMessage('⏳ I am listening, breathe softly…');
+      setTheme('neutral');
 
       try {
         const res = await fetch('/api/analyze', {
@@ -224,25 +228,28 @@
         const data = await res.json().catch(() => ({}));
 
         const output = data?.text || data?.markdown || data?.result || '';
-        const theme = data?.theme || 'neutre';
+        const theme = data?.theme || 'neutral';
+        const lang = data?.lang || 'auto';
 
         if (res.ok && data?.ok && output) {
           renderMessage(output);
           setTheme(theme);
-          statusEl.textContent = `Thème : ${theme} • Langue : ${data.lang || 'auto'}`;
+          statusEl.textContent = `Theme: ${theme} • Language: ${lang}`;
         } else {
-          renderMessage('✨ Je n’ai pas pu générer l’analyse. Réessaie avec une phrase simple.');
-          setTheme('neutre');
-          statusEl.textContent = 'Ajustez le texte et réessayez.';
+          renderMessage('✨ I could not generate guidance. Try again with a simple, clear sentence.');
+          setTheme('neutral');
+          statusEl.textContent = 'Adjust your text and try again.';
           console.error('Analyze error', data);
         }
       } catch (e) {
-        renderMessage('⚠️ Erreur réseau — réessayez dans un instant.');
-        setTheme('neutre');
-        statusEl.textContent = 'Hors-ligne ?';
+        renderMessage('⚠️ Network error — please try again in a moment.');
+        setTheme('neutral');
+        statusEl.textContent = 'Offline?';
         console.error(e);
       } finally {
-        btn.disabled = false; clearBtn.disabled = false; langSelect.disabled = false;
+        btn.disabled = false;
+        clearBtn.disabled = false;
+        langSelect.disabled = false;
       }
     }
 
@@ -251,8 +258,11 @@
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') analyze();
     });
     clearBtn.addEventListener('click', () => {
-      inputEl.value=''; resultEl.innerHTML=''; statusEl.textContent='';
-      setTheme('neutre'); inputEl.focus();
+      inputEl.value = '';
+      resultEl.innerHTML = '';
+      statusEl.textContent = '';
+      setTheme('neutral');
+      inputEl.focus();
     });
   </script>
 </body>
