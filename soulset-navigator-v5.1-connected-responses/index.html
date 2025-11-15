@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Soulset Navigator • Clear Interface</title>
+  <!-- PWA: manifest + theme color -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#5aa3a6">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -279,5 +282,17 @@
       inputEl.focus();
     });
   </script>
+    <!-- PWA: register service worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .catch(err => console.error('SW registration failed', err));
+      });
+    }
+  </script>
+</body>
+</html>
+
 </body>
 </html>
