@@ -81,9 +81,46 @@
     }
 
     .result{margin-top:16px}
+
     .bubble{background:linear-gradient(180deg,#ffffff, #f7fbfb);border-radius:16px;padding:16px 16px;box-shadow:var(--shadow);line-height:1.7}
     .bubble .section{margin:10px 0}
     .bubble .title{font-weight:700}
+
+    /* PAW layout */
+    .paw-grid{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:8px;
+    }
+    .paw-card{
+      border-radius:14px;
+      background:linear-gradient(180deg,#ffffff,#f7fbfb);
+      box-shadow:var(--shadow);
+      padding:12px 14px;
+    }
+    .paw-label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    .paw-text{
+      font-size:14px;
+      line-height:1.6;
+      white-space:pre-wrap;
+    }
+    .paw-prompt{
+      font-style:italic;
+      opacity:0.9;
+    }
+    .paw-tag{
+      font-weight:600;
+      margin-top:6px;
+      margin-bottom:2px;
+      font-size:13px;
+    }
 
     .rituals .chip{
       display:block;
@@ -149,7 +186,6 @@
   <div class="container">
     <header>
       <div class="brand">
-        <!-- Logo Soulset Navigator -->
         <img
           src="soulset-icon-512.png"
           alt="Soulset Navigator logo"
@@ -157,7 +193,7 @@
         />
         <div>
           <h1>The Soulset Navigator</h1>
-          <div class="subtitle">Poetic AI guidance for aligned decisions</div>
+          <div class="subtitle">PAW Mode • Prompt · Awareness · Wisdom</div>
         </div>
       </div>
     </header>
@@ -166,8 +202,8 @@
       <section class="card">
         <h2>Step 1</h2>
         <p class="help">
-          Describe your dilemma in one sentence. The navigator will send you an energy reading, clarity insights,
-          a personalized ritual, and a short guidance phrase.
+          Describe your dilemma in one sentence. The navigator will reflect your prompt (P), read your inner field (A),
+          and offer grounded guidance (W).
         </p>
 
         <textarea id="dilemmaInput" placeholder="E.g.: I’m not sure if I should move to a new city for a job."></textarea>
@@ -283,11 +319,64 @@
       themeIconEl.textContent = themeEmojis[t] || themeEmojis.neutral;
     }
 
+    function escapeHTML(str = "") {
+      return str
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#39;");
+    }
+
+    // Découper la réponse du modèle via les emojis 🌫 🪞 🕯 🗣 🪷
+    function splitByIcons(rawText = "") {
+      const markers = ["🌫", "🪞", "🕯", "🗣", "🪷"];
+      const keyMap = {
+        "🌫": "energy",
+        "🪞": "clarity",
+        "🕯": "ritual",
+        "🗣": "guidance",
+        "🪷": "product"
+      };
+
+      const text = rawText || "";
+      const found = [];
+
+      markers.forEach(m => {
+        const idx = text.indexOf(m);
+        if (idx !== -1) found.push({ m, i: idx });
+      });
+
+      found.sort((a,b) => a.i - b.i);
+
+      const sections = {
+        energy: "",
+        clarity: "",
+        ritual: "",
+        guidance: "",
+        product: ""
+      };
+
+      if (!found.length) {
+        return sections;
+      }
+
+      for (let k = 0; k < found.length; k++) {
+        const { m, i } = found[k];
+        const key = keyMap[m];
+        const start = i;
+        const end = (k + 1 < found.length) ? found[k + 1].i : text.length;
+        sections[key] = text.slice(start, end).trim();
+      }
+
+      return sections;
+    }
+
+    // Fallback simple (bulle unique)
     function renderMessage(text) {
       const card = document.createElement('div');
       card.className = 'bubble';
-      const safe = (text || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-
+      const safe = escapeHTML(text || '');
       card.innerHTML = safe
         .split(/\n{2,}/)
         .map(line => `<div class="section">${line}</div>`)
@@ -295,6 +384,69 @@
 
       resultEl.innerHTML = '';
       resultEl.appendChild(card);
+    }
+
+    // Vue PAW (Prompt / Awareness / Wisdom)
+    function renderPAW(rawText, originalPrompt, extra) {
+      const secs = splitByIcons(rawText);
+      const hasIcons = Object.values(secs).some(v => v && v.length > 0);
+
+      if (!hasIcons) {
+        // si le modèle n'a pas respecté le format, on revient au rendu simple
+        renderMessage(rawText);
+        return;
+      }
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'paw-grid';
+
+      // P — Prompt
+      const pCard = document.createElement('div');
+      pCard.className = 'paw-card';
+      pCard.innerHTML = `
+        <div class="paw-label">P — Prompt</div>
+        <div class="paw-text paw-prompt">${escapeHTML(originalPrompt || '').trim() || "No prompt."}</div>
+      `;
+      wrapper.appendChild(pCard);
+
+      // A — Awareness (Energy + Clarity)
+      const awarenessTextParts = [];
+      if (secs.energy) awarenessTextParts.push(secs.energy);
+      if (secs.clarity) awarenessTextParts.push(secs.clarity);
+      const awarenessText = awarenessTextParts.join("\n\n").trim();
+
+      const aCard = document.createElement('div');
+      aCard.className = 'paw-card';
+      aCard.innerHTML = `
+        <div class="paw-label">A — Awareness</div>
+        <div class="paw-text">${escapeHTML(awarenessText || rawText)}</div>
+      `;
+      wrapper.appendChild(aCard);
+
+      // W — Wisdom (Ritual + Guidance + Product)
+      let wisdomBlock = "";
+      if (secs.ritual) {
+        wisdomBlock += `<div class="paw-tag">🕯 Ritual</div><div class="paw-text">${escapeHTML(secs.ritual)}</div>`;
+      }
+      if (secs.guidance) {
+        wisdomBlock += `<div class="paw-tag">🗣 Guidance</div><div class="paw-text">${escapeHTML(secs.guidance)}</div>`;
+      }
+      if (extra && extra.product) {
+        wisdomBlock += `<div class="paw-tag">🪷 Product option</div><div class="paw-text">${escapeHTML(extra.product)}</div>`;
+      } else if (secs.product) {
+        wisdomBlock += `<div class="paw-tag">🪷 Product option</div><div class="paw-text">${escapeHTML(secs.product)}</div>`;
+      }
+
+      const wCard = document.createElement('div');
+      wCard.className = 'paw-card';
+      wCard.innerHTML = `
+        <div class="paw-label">W — Wisdom</div>
+        ${wisdomBlock || `<div class="paw-text">${escapeHTML(rawText)}</div>`}
+      `;
+      wrapper.appendChild(wCard);
+
+      resultEl.innerHTML = '';
+      resultEl.appendChild(wrapper);
     }
 
     async function analyze() {
@@ -323,7 +475,7 @@
         const lang = data?.lang || 'auto';
 
         if (res.ok && data?.ok && output) {
-          renderMessage(output);
+          renderPAW(output, text, { product: data.product });
           setTheme(theme);
           statusEl.textContent = `Theme: ${theme} • Language: ${lang}`;
 
