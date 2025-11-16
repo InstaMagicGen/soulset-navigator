@@ -233,23 +233,47 @@
       neutral: "🍃"
     };
 
-    const LOADING_MESSAGES = [
-      "⏳ I’m listening… take one soft breath.",
-      "🌬️ Breathe slowly… I’m tuning into your energy.",
-      "✨ Hold for a moment… the horizon is clearing.",
-      "🌫️ I am reading the emotional field… stay still.",
-      "💫 One inhale, one exhale… the guidance is forming.",
-      "🕊️ Soft breath… I’m gathering clarity.",
-      "🌙 Stay with your breath… I’m receiving your dilemma.",
-      "🔮 Let the mind settle… insight is coming.",
-      "🌟 Hold gently… your energy is unfolding.",
-      "🍃 Calm the shoulders… I’m opening the pathway.",
-      "🪷 Stay soft… the Navigator is listening.",
-      "🌤️ Let the tension melt… clarity is approaching."
-    ];
+    const LOADING_MESSAGES = {
+      en: [
+        "⏳ I’m listening… take one soft breath.",
+        "🌬️ Breathe slowly… I’m tuning into your energy.",
+        "✨ Hold for a moment… the horizon is clearing.",
+        "💫 One inhale, one exhale… the guidance is forming.",
+        "🕊️ Soft breath… clarity is approaching."
+      ],
+      fr: [
+        "⏳ Je t’écoute… prends une douce respiration.",
+        "🌬️ Respire lentement… je me connecte à ton énergie.",
+        "✨ Attends un instant… l’horizon se clarifie.",
+        "💫 Inspire, expire… la guidance se forme.",
+        "🕊️ Respire doucement… la clarté arrive."
+      ],
+      es: [
+        "⏳ Te escucho… respira suavemente.",
+        "🌬️ Respira despacio… estoy leyendo tu energía.",
+        "✨ Espera un momento… el horizonte se aclara.",
+        "💫 Inhala y exhala… la guía está llegando.",
+        "🕊️ Suave aliento… la claridad se acerca."
+      ],
+      ar: [
+        "⏳ أنا أصغي… خذ نفسًا هادئًا.",
+        "🌬️ تنفّس ببطء… أقرأ طاقتك.",
+        "✨ لحظة واحدة… الأفق يهدأ.",
+        "💫 شهيق، زفير… الإرشاد يتشكل.",
+        "🕊️ تنفّس بلطف… الوضوح قادم."
+      ],
+      default: [
+        "⏳ I’m listening… breathe softly.",
+        "🌬️ One slow breath… I’m here.",
+        "✨ Clarity is forming, stay still."
+      ]
+    };
 
-    function randomLoadingMessage() {
-      return LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)];
+    function randomLoadingMessage(langSelected) {
+      const list =
+        LOADING_MESSAGES[langSelected] ||
+        LOADING_MESSAGES.default;
+      return list[Math.floor(Math.random() * list.length)];
     }
 
     function setTheme(theme) {
@@ -264,7 +288,6 @@
       card.className = 'bubble';
       const safe = (text || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
-      // Split by blank lines to separate sections
       card.innerHTML = safe
         .split(/\n{2,}/)
         .map(line => `<div class="section">${line}</div>`)
@@ -281,8 +304,10 @@
       btn.disabled = true;
       clearBtn.disabled = true;
       langSelect.disabled = true;
+
+      const selectedLang = langSelect.value || "default";
       statusEl.textContent = 'Reading your energy…';
-      renderMessage(randomLoadingMessage());
+      renderMessage(randomLoadingMessage(selectedLang));
       setTheme('neutral');
 
       try {
@@ -302,7 +327,6 @@
           setTheme(theme);
           statusEl.textContent = `Theme: ${theme} • Language: ${lang}`;
 
-          // Personalized ritual + product from API
           if (ritualChip && data.ritual) {
             ritualChip.textContent = data.ritual;
           }
