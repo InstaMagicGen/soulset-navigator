@@ -26,26 +26,38 @@ Style constraints:
 
 export default async function handler(req) {
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), { status: 405 });
+    return new Response(
+      JSON.stringify({ ok: false, error: "Method not allowed" }),
+      { status: 405 }
+    );
   }
 
   let bodyIn;
   try {
     bodyIn = await req.json();
   } catch {
-    return new Response(JSON.stringify({ ok: false, error: "Invalid JSON body" }), { status: 400 });
+    return new Response(
+      JSON.stringify({ ok: false, error: "Invalid JSON body" }),
+      { status: 400 }
+    );
   }
 
   const text = (bodyIn?.text ?? bodyIn?.dilemma ?? "").trim();
   let lang = (bodyIn?.lang ?? "").toString().trim().toLowerCase(); // "en", "fr", "es", "ar", etc.
 
   if (!text) {
-    return new Response(JSON.stringify({ ok: false, error: "Missing text" }), { status: 400 });
+    return new Response(
+      JSON.stringify({ ok: false, error: "Missing text" }),
+      { status: 400 }
+    );
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    return new Response(JSON.stringify({ ok: false, error: "Missing OPENAI_API_KEY" }), { status: 500 });
+    return new Response(
+      JSON.stringify({ ok: false, error: "Missing OPENAI_API_KEY" }),
+      { status: 500 }
+    );
   }
 
   // 🔍 Emotion detection (FR + EN keywords)
@@ -67,69 +79,205 @@ export default async function handler(req) {
     finalLang = looksFrench ? "fr" : "en";
   }
 
-  // 🧘 Multiple rituals per theme
+  // 🧘 Rich ritual bank (20 per theme)
   const RITUAL_BANK = {
     stress: {
       rituals: [
-        "Sit down for two minutes. Inhale for 4 seconds, hold for 6, and exhale for 8 through the mouth. With every exhale, imagine a layer of workload dropping from your shoulders.",
-        "Place both feet on the floor. For one minute, mentally list every surface that supports you right now: the chair, the ground, the walls, even gravity. Let your body feel carried instead of alone with the pressure.",
-        "Open a note or a paper and write three tasks: “now”, “later”, “not today”. Move each worry into one list. Circle only one “now” action and allow everything else to rest."
+        "Inhale 4 seconds, hold 2, exhale 6. Repeat 6 times while dropping your shoulders each exhale.",
+        "Place your hands on your chest. Whisper: “I soften here.” Breathe into your palms.",
+        "Sit and count 5 objects around you that feel safe or neutral.",
+        "Close your eyes and imagine a warm towel on the back of your neck for 30 seconds.",
+        "Write 3 things you don’t need to finish today and cross them out slowly.",
+        "Stand up, shake your hands for 10 seconds, breathe out like fog.",
+        "Place both feet on the floor. Imagine roots going into the ground.",
+        "Touch something cold (metal, glass) and breathe until your breath stabilizes.",
+        "Look at one point in the room and breathe slowly until your eyes relax.",
+        "Stretch your neck left/right for 10 seconds each side.",
+        "Do 3 cycles of box breathing: 4–4–4–4.",
+        "Place your hand on your belly and breathe until it rises naturally.",
+        "Slowly trace the outline of your dominant hand with a finger.",
+        "Name out loud: 3 things you hear, 2 things you see, 1 thing you feel.",
+        "Write one sentence starting with “Right now, what matters most is…”",
+        "Lean forward slightly, exhale deeply, let your back round.",
+        "Rub your palms together until warm and place on your face.",
+        "Look upward slightly and breathe as if you were watching the sky.",
+        "Set a 1-minute timer and breathe only through your nose.",
+        "Say softly: “I release pressure with each exhale.”"
       ],
       product: "Zen Moon Diffuser"
     },
     fear: {
       rituals: [
-        "Walk 20 slow steps. With each step, name one small thing you already handled in your life. Let your body remember you can move with fear beside you.",
-        "Sit comfortably, put a hand on your heart and whisper: “Right now I am safe enough to breathe.” Repeat it five times, noticing one detail in the room each time.",
-        "Draw a tiny ladder with three steps. On the first step, write the smallest action you could take even with fear. On the second, what you would do once that is done. Leave the third blank for the future."
+        "Put a hand on your heart and say: “I am safe enough in this moment.”",
+        "Walk 10 steps very slowly, feeling each foot touching the ground.",
+        "Write a sentence starting with: “If fear was a friend, it would say…”",
+        "Imagine a soft glowing light surrounding your chest for 30 seconds.",
+        "Name 5 things that are stable in your life today.",
+        "Do 5 long exhales through the mouth.",
+        "Hold something heavy (book, mug) and breathe into the weight.",
+        "Touch your thumb to each finger slowly as you breathe.",
+        "Write down the fear, then rewrite it as a question.",
+        "Sit and imagine placing the fear on a shelf behind you.",
+        "Ask yourself: “What is fear trying to protect?”",
+        "Picture yourself talking to your younger self with kindness.",
+        "Press your feet into the ground for 5 seconds, release.",
+        "Lightly tap your sternum with your fingertips for 20 seconds.",
+        "Whisper: “Fear is not the decision maker.”",
+        "Look gently around the room, naming what's real and present.",
+        "Imagine exhaling the fear as grey smoke.",
+        "Put both hands behind your back and open the chest.",
+        "Breathe with the rhythm: inhale 3, exhale 5 for 1 minute.",
+        "Visualize placing your fear inside a balloon and letting it float up."
       ],
       product: "Warm Focus Lamp"
     },
     guilt: {
       rituals: [
-        "Take a paper and write one sentence of self-forgiveness that begins with “Today I release…”. Read it out loud in a gentle voice.",
-        "Place your hand on your chest and imagine you are talking to a younger version of yourself. Tell them one sentence you needed to hear back then.",
-        "Write two columns: “What I regret” and “What I learned”. Move at least one element from the first into the second."
+        "Write one sentence beginning with: “Today I release…”",
+        "Put a hand on your chest and imagine speaking to your younger self.",
+        "Write two columns: “What happened” vs “What I learned”.",
+        "Exhale slowly 5 times while relaxing your jaw.",
+        "Whisper: “I am allowed to be human.”",
+        "Imagine placing the guilt on a cloud drifting away.",
+        "Place a warm hand over your throat and breathe softly.",
+        "Write one apology to yourself.",
+        "Imagine yourself being forgiven by a future version of you.",
+        "Touch something textured and breathe into the sensation.",
+        "Write the smallest repair action possible.",
+        "Name one value you acted from, even imperfectly.",
+        "Put both hands over your heart and hum softly for 10 seconds.",
+        "Say: “I can grow without punishing myself.”",
+        "Relax the muscles around your eyes and breathe.",
+        "Write one thing you did right today.",
+        "Tap your chest gently with fingertips for grounding.",
+        "Say the sentence: “I’m trying, and that matters.”",
+        "Visualize letting go of a heavy bag you’ve been carrying.",
+        "Sit still and imagine a gentle hand on your back."
       ],
       product: "Clarity Candle"
     },
     uncertainty: {
       rituals: [
-        "Draw two small columns: “Stability now” and “New path later”. Under each, write one concrete action you could take this month. You are not choosing forever, only your next step.",
-        "Set a 3-minute timer. In the first minute, write what you are afraid of losing; second minute, what you might gain; third minute, one thing that would make the choice feel 10% lighter.",
-        "Pick a coin. Before tossing, imagine heads = option A, tails = option B. Notice your body’s reaction while the coin is in the air—that reaction matters more than the result."
+        "Write two columns: “What I fear losing” vs “What I could gain”.",
+        "Set a 2-minute timer and write without stopping.",
+        "Flip a coin and notice your reaction before it lands.",
+        "Write the smallest next step (not the whole decision).",
+        "Breathe with the rhythm: inhale 4, exhale 6.",
+        "Look at one object and imagine it giving you clarity.",
+        "Write: “If I chose calm first, I would…”",
+        "Imagine a horizon slowly becoming clear.",
+        "Put a hand on your belly and breathe into stability.",
+        "Say: “I only need the next step, not the full map.”",
+        "Write 3 outcomes, best/neutral/worst.",
+        "Walk in the room imagining stepping on stones of clarity.",
+        "Set a 1-minute timer: list options without judging.",
+        "Imagine talking to a future self who already knows the answer.",
+        "Cross your arms gently and breathe into the back body.",
+        "Name one thing you are certain about today.",
+        "Touch something steady (table, wall) while breathing.",
+        "Visualize placing the decision inside a bowl of light.",
+        "Whisper: “The path will reveal itself.”",
+        "Look around and find 3 straight lines (symbol of direction)."
       ],
       product: "Horizon Mind Projector"
     },
     anger: {
       rituals: [
-        "Place one hand on your heart and one on your belly. Inhale through the nose, exhale through the mouth with a quiet sigh. Let the heat turn into clear strength instead of explosion.",
-        "Take a sheet of paper and write everything you want to shout, without filtering. When you’re done, crumple or tear it and exhale slowly as if you were emptying the anger from your muscles.",
-        "Do 10 strong exhales through the mouth, like blowing out candles, shaking gently your hands and shoulders, then finish with three slow and silent breaths."
+        "Exhale through the mouth 10 times like blowing out candles.",
+        "Shake your arms for 10 seconds and breathe.",
+        "Write everything you want to shout, then crumple the paper.",
+        "Put your hand on your chest and breathe slow and deep.",
+        "Place a cold object on your wrist for grounding.",
+        "Say: “This feeling is movement, not danger.”",
+        "Walk fast in place for 10 seconds.",
+        "Open your chest by pulling shoulders back and breathing.",
+        "Look upward slightly and breathe slowly.",
+        "Squeeze your fists for 5 seconds, release.",
+        "Write the real hurt beneath the anger.",
+        "Tap your feet firmly on the ground.",
+        "Hum a low note to release tension.",
+        "Imagine steam rising from your shoulders.",
+        "Say: “I can choose my response.”",
+        "Stretch your neck side to side for 10 seconds.",
+        "Place one hand on your belly and breathe into it.",
+        "Imagine giving your anger a safe container.",
+        "Touch something rough and breathe into the sensation.",
+        "Do 5 slow breaths with long exhales."
       ],
       product: "Soft Sandalwood Incense"
     },
     sadness: {
       rituals: [
-        "Put a hand on your chest. Breathe and name, in a whisper, three things that still bring a tiny spark of softness to your day.",
-        "Sit by a window, if possible. For two minutes, simply watch the light change on one object and let your sadness be there without trying to fix it.",
-        "Write one sentence beginning with “Right now, my heart feels…” and allow yourself to complete it honestly, without judging or editing."
+        "Place your hand on your heart and say: “I’m here with you.”",
+        "Sit by a window and focus on light for one minute.",
+        "Write the sentence “Right now, my heart feels…” without correcting.",
+        "Hold something soft (fabric, pillow) and breathe slowly.",
+        "Put a warm hand on your cheek and breathe into it.",
+        "List 3 things that bring a tiny spark, even if small.",
+        "Imagine your sadness as a color and watch it slowly fade.",
+        "Drink a small sip of water consciously and breathe.",
+        "Close your eyes and visualize someone who would hold space for you.",
+        "Stretch your arms forward and round your back gently.",
+        "Let your shoulders drop while exhaling through the mouth.",
+        "Write one gentle sentence to yourself in future tense.",
+        "Slowly rub your hands together and over your forearms.",
+        "Imagine placing your sadness in a small jar, without judgment.",
+        "Put your feet on the floor, breathe into your legs.",
+        "Listen to a calming sound for 20 seconds in the room.",
+        "Squeeze your hands into fists for 5 seconds, then release.",
+        "Say: “Sadness is allowed, and I’m still safe.”",
+        "Circle your wrists gently for 10 seconds.",
+        "Sit upright and imagine a small candle inside your chest."
       ],
       product: "Calm Soul Bracelet"
     },
     inspiration: {
       rituals: [
-        "Open a note and write three crazy ideas you would try if nothing could fail. Circle the one that makes your body feel lighter.",
-        "Set a 3-minute timer and write without stopping: “If my life was a creative project, I would…”. Do not correct, just let it flow.",
-        "Choose one object around you and imagine it has a secret story. In your mind, invent the first three lines of that story."
+        "Write 3 wild ideas without judging.",
+        "Imagine a small spark in your chest growing brighter.",
+        "Write: “If failure didn’t exist, I would…”",
+        "Look at a random object and invent a story about it.",
+        "Close your eyes and imagine your future self smiling.",
+        "Write one creative move you can do in 2 minutes.",
+        "Listen to the nearest sound and follow its rhythm.",
+        "Imagine a sunrise behind your forehead.",
+        "Write a sentence that begins with: “I’m curious about…”",
+        "Stretch your arms upward and breathe into expansion.",
+        "Walk slowly as if discovering a new planet.",
+        "Pick one color in the room and observe it carefully.",
+        "Write 3 micro-steps for your next idea.",
+        "Imagine breathing in golden light.",
+        "Whisper: “I am open to what wants to emerge.”",
+        "Rotate your shoulders backward 10 times.",
+        "Describe your current mood in 3 words.",
+        "Draw one line on paper, turn it into something new.",
+        "Name one thing that excites your body right now.",
+        "Look out the window for 10 seconds and breathe."
       ],
       product: "ASTRO-MIND Projector"
     },
     neutral: {
       rituals: [
-        "Pause for one minute. Notice three details around you that make this moment a little more livable, and breathe into them.",
-        "Take five slow breaths. On each inhale, mentally say “I arrive”. On each exhale, “I soften”.",
-        "Look around and choose one item to put in a small “clarity corner” (desk, shelf, etc.). Let it remind you that you are allowed to reset at any time."
+        "Pause and name 3 neutral things around you.",
+        "Take 5 slow breaths with hand on belly.",
+        "Look around and find one item that feels grounding.",
+        "Write a sentence beginning with “Right now, I arrive.”",
+        "Place a warm hand on your chest and breathe.",
+        "Look at your hands for 10 seconds with curiosity.",
+        "Drink a sip of water consciously.",
+        "Relax your jaw and exhale loudly.",
+        "Trace a small circle with your finger on the table.",
+        "Stretch both arms forward and breathe.",
+        "Name one intention for the next hour.",
+        "Imagine a soft green glow around your body.",
+        "Rub your hands and place them on your eyes.",
+        "Do 3 slow shoulder rolls backward.",
+        "List 3 small things that feel okay today.",
+        "Sit up straight and breathe into your spine.",
+        "Notice the temperature of the air on your skin.",
+        "Touch something with a texture and explore it.",
+        "Say softly: “I reset now.”",
+        "Imagine your thoughts as leaves passing on a river."
       ],
       product: "Zen Moon Diffuser"
     }
@@ -197,6 +345,9 @@ Now produce the 5 sections exactly as described in the system message, in the TA
     );
   } catch (err) {
     console.error("OpenAI error:", err);
-    return new Response(JSON.stringify({ ok: false, error: err.message }), { status: 500 });
+    return new Response(
+      JSON.stringify({ ok: false, error: err.message }),
+      { status: 500 }
+    );
   }
 }
