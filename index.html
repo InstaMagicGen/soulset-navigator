@@ -34,17 +34,15 @@
     header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
     .brand{display:flex;align-items:center;gap:14px}
 
-    /* Nouveau style pour ton logo */
     .brand-logo{
-  width: 84px;
-  height: 84px;
-  border-radius: 50%;
-  padding: 6px;
-  background: #ffffffcc;
-  box-shadow: 0 0 22px rgba(90,163,166,.25);
-  object-fit: contain;      /* au lieu de cover */
-}
-
+      width: 84px;
+      height: 84px;
+      border-radius:50%;
+      padding:6px;
+      background:#ffffffcc;
+      box-shadow:0 0 22px rgba(90,163,166,.25);
+      object-fit:contain;
+    }
 
     h1{font-family:"Playfair Display", serif;font-weight:700;letter-spacing:.2px;margin:0;font-size:clamp(22px,2.7vw,30px)}
     .subtitle{color:var(--muted);font-size:14px}
@@ -87,7 +85,16 @@
     .bubble .section{margin:10px 0}
     .bubble .title{font-weight:700}
 
-    .rituals .chip{display:block;background:#f5fbfb;border:1px dashed #b8e4e6;border-radius:12px;padding:10px 12px;margin:8px 0;color:#426a72;font-size:14px}
+    .rituals .chip{
+      display:block;
+      background:#f5fbfb;
+      border:1px dashed #b8e4e6;
+      border-radius:12px;
+      padding:10px 12px;
+      margin:8px 0;
+      color:#426a72;
+      font-size:14px
+    }
     .wellbeing{display:flex;gap:12px;align-items:center;background:#f7f9ff;border:1px solid #dfe8ff;border-radius:14px;padding:12px}
     .well-ico{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#dfeaff,#c1ffe9);display:grid;place-items:center;color:#5b79c7;font-weight:900}
     .well-cta{font-size:14px;color:#5b6a9b}
@@ -159,8 +166,8 @@
       <section class="card">
         <h2>Step 1</h2>
         <p class="help">
-          Describe your dilemma in one sentence. The navigator will send you an energy reading, a clarity insight,
-          a ritual, and a short guidance phrase.
+          Describe your dilemma in one sentence. The navigator will send you an energy reading, clarity insights,
+          a personalized ritual, and a short guidance phrase.
         </p>
 
         <textarea id="dilemmaInput" placeholder="E.g.: I’m not sure if I should move to a new city for a job."></textarea>
@@ -182,10 +189,13 @@
 
       <aside class="card rituals">
         <div id="themeIcon" class="theme-icon">🍃</div>
-        <h2>Clarity rituals</h2>
-        <span class="chip">Breath 4–6–8: inhale 4 · hold 6 · exhale 8</span>
-        <span class="chip">Grounding: name 3 facts, 2 emotions, 1 tiny action</span>
-        <span class="chip">Journaling: 3 lines starting with “If I chose peace first…”</span>
+        <h2>Personalized ritual</h2>
+        <span id="ritualChip" class="chip">
+          Your micro-ritual will appear here after analysis.
+        </span>
+        <div id="productLine" class="small" style="margin-top:8px;">
+          Product option: —
+        </div>
         <div style="height:8px"></div>
         <div class="wellbeing">
           <div class="well-ico">☽</div>
@@ -209,6 +219,8 @@
     const halo = qs('.halo');
     const langSelect = qs('#langSelect');
     const themeIconEl = qs('#themeIcon');
+    const ritualChip = qs('#ritualChip');
+    const productLine = qs('#productLine');
 
     const themeEmojis = {
       stress: "😰",
@@ -221,6 +233,25 @@
       neutral: "🍃"
     };
 
+    const LOADING_MESSAGES = [
+      "⏳ I’m listening… take one soft breath.",
+      "🌬️ Breathe slowly… I’m tuning into your energy.",
+      "✨ Hold for a moment… the horizon is clearing.",
+      "🌫️ I am reading the emotional field… stay still.",
+      "💫 One inhale, one exhale… the guidance is forming.",
+      "🕊️ Soft breath… I’m gathering clarity.",
+      "🌙 Stay with your breath… I’m receiving your dilemma.",
+      "🔮 Let the mind settle… insight is coming.",
+      "🌟 Hold gently… your energy is unfolding.",
+      "🍃 Calm the shoulders… I’m opening the pathway.",
+      "🪷 Stay soft… the Navigator is listening.",
+      "🌤️ Let the tension melt… clarity is approaching."
+    ];
+
+    function randomLoadingMessage() {
+      return LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)];
+    }
+
     function setTheme(theme) {
       const t = theme || "neutral";
       halo.className = "halo";
@@ -232,7 +263,13 @@
       const card = document.createElement('div');
       card.className = 'bubble';
       const safe = (text || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      card.innerHTML = safe.split(/\n+/).map(line => `<div class="section">${line}</div>`).join('');
+
+      // Split by blank lines to separate sections
+      card.innerHTML = safe
+        .split(/\n{2,}/)
+        .map(line => `<div class="section">${line}</div>`)
+        .join('');
+
       resultEl.innerHTML = '';
       resultEl.appendChild(card);
     }
@@ -245,7 +282,7 @@
       clearBtn.disabled = true;
       langSelect.disabled = true;
       statusEl.textContent = 'Reading your energy…';
-      renderMessage('⏳ I am listening, breathe softly…');
+      renderMessage(randomLoadingMessage());
       setTheme('neutral');
 
       try {
@@ -264,6 +301,14 @@
           renderMessage(output);
           setTheme(theme);
           statusEl.textContent = `Theme: ${theme} • Language: ${lang}`;
+
+          // Personalized ritual + product from API
+          if (ritualChip && data.ritual) {
+            ritualChip.textContent = data.ritual;
+          }
+          if (productLine && data.product) {
+            productLine.textContent = `Product option: ${data.product}`;
+          }
         } else {
           renderMessage('✨ I could not generate guidance. Try again with a simple, clear sentence.');
           setTheme('neutral');
@@ -291,6 +336,8 @@
       resultEl.innerHTML = '';
       statusEl.textContent = '';
       setTheme('neutral');
+      if (ritualChip) ritualChip.textContent = 'Your micro-ritual will appear here after analysis.';
+      if (productLine) productLine.textContent = 'Product option: —';
       inputEl.focus();
     });
   </script>
