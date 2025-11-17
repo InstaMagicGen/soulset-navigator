@@ -204,7 +204,7 @@
       display:none !important;
     }
 
-    /* Sunset Reset overlay */
+    /* Sunset Reset overlay (scaled & more attractive) */
     .sunset-overlay{
       position:fixed;
       inset:0;
@@ -216,20 +216,28 @@
     .sunset-backdrop{
       position:absolute;
       inset:0;
-      background:rgba(6,18,30,0.65);
-      backdrop-filter:blur(10px);
+      background:rgba(6,18,30,0.7);
+      backdrop-filter:blur(14px);
     }
     .sunset-panel{
       position:relative;
       width:100%;
-      max-width:420px;
+      max-width:480px;
       margin:0 16px;
-      border-radius:22px;
-      padding:18px 18px 20px;
-      background:radial-gradient(circle at top,#ffe0b8,#f3a7ff 35%,#0d1630 80%);
+      border-radius:26px;
+      padding:20px 20px 22px;
+      background:radial-gradient(circle at top,#ffe0b8,#f3a7ff 35%,#0b1230 80%);
       color:#fefefe;
-      box-shadow:0 18px 45px rgba(0,0,0,0.55);
+      box-shadow:0 24px 60px rgba(0,0,0,0.75);
       overflow:hidden;
+    }
+    .sunset-panel::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:radial-gradient(circle at 20% 0%,rgba(255,255,255,0.28),transparent 55%);
+      opacity:0.8;
+      pointer-events:none;
     }
     .sunset-close{
       position:absolute;
@@ -246,61 +254,157 @@
       line-height:1;
       display:grid;
       place-items:center;
+      z-index:2;
     }
     .sunset-title{
       font-size:15px;
       font-weight:700;
-      letter-spacing:0.04em;
+      letter-spacing:0.08em;
       text-transform:uppercase;
       opacity:0.95;
-      margin-bottom:4px;
+      margin-bottom:2px;
+      position:relative;
+      z-index:1;
     }
-    .sunset-sub{
-      font-size:13px;
-      opacity:0.9;
-      margin-bottom:10px;
+    .sunset-tagline{
+      font-size:12px;
+      opacity:0.85;
+      margin-bottom:8px;
+      position:relative;
+      z-index:1;
     }
     .sunset-visual{
       margin-top:6px;
-      margin-bottom:10px;
-      height:120px;
-      border-radius:18px;
-      background:linear-gradient(180deg,#ffd9a1,#ff8ca4 45%,#2b3560 80%);
+      margin-bottom:12px;
+      height:140px;
+      border-radius:20px;
+      background:linear-gradient(180deg,#ffd9a1,#ff8ca4 45%,#151c44 80%);
       position:relative;
       overflow:hidden;
+      z-index:1;
     }
-    .sunset-visual::before{
-      content:"";
+    .sunset-sun{
       position:absolute;
-      width:220%;
-      height:220%;
-      top:-60%;
-      left:-40%;
-      background:radial-gradient(circle at 50% 20%,rgba(255,255,255,0.9),rgba(255,255,255,0) 45%);
-      opacity:0.85;
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      top:20px;
+      left:50%;
+      transform:translateX(-50%);
+      background:radial-gradient(circle,#fffaf3,#ffd48c 45%,rgba(255,212,140,0));
+      animation:pulseSun 6s ease-in-out infinite;
+      box-shadow:0 0 40px rgba(255,228,180,0.85);
+    }
+    .sunset-orb-ring{
+      position:absolute;
+      width:200px;
+      height:200px;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,0.35);
+      top:10px;
+      left:50%;
+      transform:translateX(-50%);
+      opacity:0.75;
+      animation:breathRing 8s ease-in-out infinite;
+    }
+    @keyframes pulseSun {
+      0%,100% { transform:translateX(-50%) scale(1); opacity:1; }
+      50% { transform:translateX(-50%) scale(1.05); opacity:0.9; }
+    }
+    @keyframes breathRing {
+      0%,100% { transform:translateX(-50%) scale(0.9); opacity:0.75; }
+      50% { transform:translateX(-50%) scale(1.05); opacity:0.95; }
+    }
+
+    .sunset-timer-row{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:6px;
+      margin-bottom:4px;
+      position:relative;
+      z-index:1;
     }
     .sunset-timer{
       display:flex;
       align-items:baseline;
       gap:4px;
-      font-size:26px;
+      font-size:30px;
       font-weight:700;
-      margin-bottom:4px;
     }
     .sunset-timer span{
       font-variant-numeric:tabular-nums;
     }
     .sunset-phase{
-      font-size:12px;
+      font-size:11px;
       text-transform:uppercase;
-      letter-spacing:0.12em;
+      letter-spacing:0.16em;
       opacity:0.85;
-      margin-bottom:4px;
+      text-align:right;
     }
     .sunset-instruction{
       font-size:13px;
       line-height:1.7;
-      opacity:0.95;
+      opacity:0.96;
+      position:relative;
+      z-index:1;
+    }
+    .sunset-subline{
+      margin-top:6px;
+      font-size:11px;
+      opacity:0.7;
+      position:relative;
+      z-index:1;
+    }
+
+    /* Sunset gallery (random photos on the side) */
+    .sunset-gallery{
+      margin-top:18px;
+      border-top:1px solid rgba(183,210,216,0.5);
+      padding-top:12px;
+    }
+    .sunset-gallery h3{
+      margin:0 0 6px;
+      font-size:14px;
+      font-weight:600;
+      color:#3b6270;
+    }
+    .sunset-photo-frame{
+      position:relative;
+      border-radius:14px;
+      overflow:hidden;
+      height:150px;
+      background:linear-gradient(135deg,#fce3c1,#f9b1ff);
+      box-shadow:var(--shadow);
+      margin-bottom:8px;
+    }
+    .sunset-photo-frame img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .sunset-photo-label{
+      position:absolute;
+      bottom:8px;
+      left:10px;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:11px;
+      background:rgba(0,0,0,0.45);
+      color:#fefefe;
+    }
+    .mini-btn{
+      font-size:11px;
+      padding:5px 9px;
+      border-radius:999px;
+      border:1px solid rgba(90,163,166,0.45);
+      background:#f7fbfb;
+      color:#4b6e77;
+      cursor:pointer;
+    }
+    .mini-btn:hover{
+      background:#e7f3f3;
     }
   </style>
 </head>
@@ -370,6 +474,18 @@
             Well-being tip: soften the lights, slow down your breathing, and read your guidance as if it were a letter from your future self.
           </div>
         </div>
+
+        <!-- Sunset gallery with random photos -->
+        <div class="sunset-gallery">
+          <h3>Sunset snapshots</h3>
+          <div class="sunset-photo-frame">
+            <img id="sunsetPhoto" src="sunset-1.jpg" alt="Soulset sunset">
+            <div class="sunset-photo-label">Soulset moment</div>
+          </div>
+          <button id="shufflePhotoBtn" class="mini-btn" type="button">
+            New sunset image
+          </button>
+        </div>
       </aside>
     </div>
 
@@ -381,15 +497,23 @@
     <div class="sunset-backdrop"></div>
     <div class="sunset-panel" role="dialog" aria-modal="true" aria-labelledby="sunsetTitle">
       <button class="sunset-close" id="sunsetCloseBtn" aria-label="Close Sunset Reset">×</button>
-      <div id="sunsetTitle" class="sunset-title">☀ Sunset Reset · 30 seconds</div>
-      <div class="sunset-sub">1) Look at the light • 2) Breathe • 3) Let it soften.</div>
-      <div class="sunset-visual"></div>
-      <div class="sunset-timer">
-        <span id="sunsetTimer">30</span><span>s</span>
+      <div id="sunsetTitle" class="sunset-title">☀ SUNSET RESET · 30 SECONDS</div>
+      <div class="sunset-tagline">Look · Breathe · Let it soften.</div>
+      <div class="sunset-visual">
+        <div class="sunset-orb-ring"></div>
+        <div class="sunset-sun"></div>
       </div>
-      <div id="sunsetPhase" class="sunset-phase">Phase 1 • Arrival</div>
+      <div class="sunset-timer-row">
+        <div class="sunset-timer">
+          <span id="sunsetTimer">30</span><span>s</span>
+        </div>
+        <div id="sunsetPhase" class="sunset-phase">PHASE 1 • ARRIVAL</div>
+      </div>
       <div id="sunsetInstruction" class="sunset-instruction">
-        Look at the horizon, notice your shoulders, and take one soft breath.
+        Look at the light, feel your shoulders and take one soft breath. You don’t need to fix anything right now.
+      </div>
+      <div class="sunset-subline">
+        Let the colors hold the day for you while you breathe.
       </div>
     </div>
   </div>
@@ -413,6 +537,9 @@
     const sunsetTimerEl = qs('#sunsetTimer');
     const sunsetPhaseEl = qs('#sunsetPhase');
     const sunsetInstructionEl = qs('#sunsetInstruction');
+
+    const sunsetPhotoEl = qs('#sunsetPhoto');
+    const shufflePhotoBtn = qs('#shufflePhotoBtn');
 
     let sunsetInterval = null;
     let sunsetRemaining = 30;
@@ -463,6 +590,14 @@
         "✨ Clarity is forming, stay still."
       ]
     };
+
+    // Random sunset images (à remplacer par tes propres fichiers si tu veux)
+    const SUNSET_IMAGES = [
+      "sunset-1.jpg",
+      "sunset-2.jpg",
+      "sunset-3.jpg",
+      "sunset-4.jpg"
+    ];
 
     function randomLoadingMessage(langSelected) {
       const list =
@@ -662,26 +797,26 @@
       }
     }
 
-    // Sunset Reset logic
+    // Sunset Reset logic (scaled)
     function updateSunsetPhaseUI() {
       if (!sunsetPhaseEl || !sunsetInstructionEl) return;
 
       if (sunsetRemaining > 20) {
-        sunsetPhaseEl.textContent = "Phase 1 • Arrival";
+        sunsetPhaseEl.textContent = "PHASE 1 • ARRIVAL";
         sunsetInstructionEl.textContent =
-          "Just look at the colors and notice your shoulders. Let your gaze soften.";
+          "Look at the colors and notice your shoulders. Let your gaze soften. You don’t have to solve anything right now.";
       } else if (sunsetRemaining > 10) {
-        sunsetPhaseEl.textContent = "Phase 2 • Breathing 4–6";
+        sunsetPhaseEl.textContent = "PHASE 2 • BREATH 4–6";
         sunsetInstructionEl.textContent =
-          "Inhale through the nose for 4, exhale through the mouth for 6. Imagine exhaling the day.";
+          "Inhale through the nose for 4, exhale through the mouth for 6. Imagine breathing the day out of your chest.";
       } else if (sunsetRemaining > 0) {
-        sunsetPhaseEl.textContent = "Phase 3 • Let it soften";
+        sunsetPhaseEl.textContent = "PHASE 3 • LET IT SOFTEN";
         sunsetInstructionEl.textContent =
-          "Whisper inside: “Let it soften.” Keep breathing gently with the fading light.";
+          "Whisper inside: “Let it soften.” Keep your eyes soft on the light while your body unwinds.";
       } else {
-        sunsetPhaseEl.textContent = "Done • Reset complete";
+        sunsetPhaseEl.textContent = "DONE • RESET COMPLETE";
         sunsetInstructionEl.textContent =
-          "Your reset is complete. You can return to your day a little lighter.";
+          "Your reset is complete. Notice one small difference in your body before you return to your day.";
       }
     }
 
@@ -729,6 +864,22 @@
       }
     }
 
+    // Random sunset photo logic
+    function pickRandomSunset(currentSrc) {
+      if (!SUNSET_IMAGES.length) return currentSrc;
+      const others = SUNSET_IMAGES.filter(src => src !== currentSrc);
+      if (!others.length) return currentSrc;
+      const idx = Math.floor(Math.random() * others.length);
+      return others[idx];
+    }
+
+    function shuffleSunsetPhoto() {
+      if (!sunsetPhotoEl) return;
+      const current = sunsetPhotoEl.getAttribute("src") || "";
+      const next = pickRandomSunset(current);
+      sunsetPhotoEl.setAttribute("src", next);
+    }
+
     btn.addEventListener('click', analyze);
     inputEl.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') analyze();
@@ -761,7 +912,15 @@
       });
     }
 
-    // (optionnel) Service worker registration si tu as un service-worker.js
+    if (shufflePhotoBtn) {
+      shufflePhotoBtn.addEventListener('click', shuffleSunsetPhoto);
+    }
+    // Première image aléatoire au chargement
+    window.addEventListener("load", () => {
+      shuffleSunsetPhoto();
+    });
+
+    // Service worker registration (si tu as un service-worker.js)
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
