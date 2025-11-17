@@ -204,7 +204,7 @@
       display:none !important;
     }
 
-    /* Sunset Reset overlay (scaled & more attractive) */
+    /* Sunset Reset overlay USING REAL PHOTO */
     .sunset-overlay{
       position:fixed;
       inset:0;
@@ -235,8 +235,8 @@
       content:"";
       position:absolute;
       inset:-40%;
-      background:radial-gradient(circle at 20% 0%,rgba(255,255,255,0.28),transparent 55%);
-      opacity:0.8;
+      background:radial-gradient(circle at 20% 0%,rgba(255,255,255,0.25),transparent 55%);
+      opacity:0.9;
       pointer-events:none;
     }
     .sunset-close{
@@ -276,46 +276,28 @@
     .sunset-visual{
       margin-top:6px;
       margin-bottom:12px;
-      height:140px;
+      height:160px;
       border-radius:20px;
-      background:linear-gradient(180deg,#ffd9a1,#ff8ca4 45%,#151c44 80%);
       position:relative;
       overflow:hidden;
-      z-index:1;
+      box-shadow:0 14px 40px rgba(0,0,0,0.4);
     }
-    .sunset-sun{
+    .sunset-main-photo{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      transform:scale(1.03);
+      filter:saturate(1.1) contrast(1.05);
+    }
+    .sunset-visual::after{
+      content:"";
       position:absolute;
-      width:120px;
-      height:120px;
-      border-radius:50%;
-      top:20px;
-      left:50%;
-      transform:translateX(-50%);
-      background:radial-gradient(circle,#fffaf3,#ffd48c 45%,rgba(255,212,140,0));
-      animation:pulseSun 6s ease-in-out infinite;
-      box-shadow:0 0 40px rgba(255,228,180,0.85);
+      inset:0;
+      background:radial-gradient(circle at top,rgba(255,255,255,0.32),transparent 55%),
+                 linear-gradient(180deg,rgba(5,8,25,0.05),rgba(1,5,20,0.65));
+      pointer-events:none;
     }
-    .sunset-orb-ring{
-      position:absolute;
-      width:200px;
-      height:200px;
-      border-radius:50%;
-      border:1px solid rgba(255,255,255,0.35);
-      top:10px;
-      left:50%;
-      transform:translateX(-50%);
-      opacity:0.75;
-      animation:breathRing 8s ease-in-out infinite;
-    }
-    @keyframes pulseSun {
-      0%,100% { transform:translateX(-50%) scale(1); opacity:1; }
-      50% { transform:translateX(-50%) scale(1.05); opacity:0.9; }
-    }
-    @keyframes breathRing {
-      0%,100% { transform:translateX(-50%) scale(0.9); opacity:0.75; }
-      50% { transform:translateX(-50%) scale(1.05); opacity:0.95; }
-    }
-
     .sunset-timer-row{
       display:flex;
       align-items:baseline;
@@ -357,7 +339,7 @@
       z-index:1;
     }
 
-    /* Sunset gallery (random photos on the side) */
+    /* Sunset gallery (right column photos) */
     .sunset-gallery{
       margin-top:18px;
       border-top:1px solid rgba(183,210,216,0.5);
@@ -382,7 +364,10 @@
       width:100%;
       height:100%;
       object-fit:cover;
+      object-position:center;
       display:block;
+      transform:scale(1.03);
+      filter:saturate(1.05);
     }
     .sunset-photo-label{
       position:absolute;
@@ -500,8 +485,7 @@
       <div id="sunsetTitle" class="sunset-title">☀ SUNSET RESET · 30 SECONDS</div>
       <div class="sunset-tagline">Look · Breathe · Let it soften.</div>
       <div class="sunset-visual">
-        <div class="sunset-orb-ring"></div>
-        <div class="sunset-sun"></div>
+        <img id="sunsetResetImage" src="sunset-1.jpg" alt="Sunset" class="sunset-main-photo">
       </div>
       <div class="sunset-timer-row">
         <div class="sunset-timer">
@@ -537,6 +521,7 @@
     const sunsetTimerEl = qs('#sunsetTimer');
     const sunsetPhaseEl = qs('#sunsetPhase');
     const sunsetInstructionEl = qs('#sunsetInstruction');
+    const sunsetResetImageEl = qs('#sunsetResetImage');
 
     const sunsetPhotoEl = qs('#sunsetPhoto');
     const shufflePhotoBtn = qs('#shufflePhotoBtn');
@@ -591,16 +576,16 @@
       ]
     };
 
-    // Random sunset images (à remplacer par tes propres fichiers si tu veux)
+    // 👉 mets ici les bons noms si différents
     const SUNSET_IMAGES = [
-  "sunset-1.jpg",
-  "sunset-2.jpg",
-  "sunset-3.jpg",
-  "Sunset-4.jpg",
-  "Sunset-5.jpg",
-  "Sunset-6.jpg",
-  "Sunset-7.jpg"
-];
+      "sunset-1.jpg",
+      "sunset-2.jpg",
+      "sunset-3.jpg",
+      "sunset-4.jpg",
+      "sunset-5.jpg",
+      "sunset-6.jpg",
+      "sunset-7.jpg"
+    ];
 
     function randomLoadingMessage(langSelected) {
       const list =
@@ -669,7 +654,6 @@
       return sections;
     }
 
-    // Fallback simple (bulle unique)
     function renderMessage(text) {
       const card = document.createElement('div');
       card.className = 'bubble';
@@ -689,7 +673,6 @@
       const hasIcons = Object.values(secs).some(v => v && v.length > 0);
 
       if (!hasIcons) {
-        // si le modèle n'a pas respecté le format, on revient au rendu simple
         renderMessage(rawText);
         return;
       }
@@ -697,7 +680,6 @@
       const wrapper = document.createElement('div');
       wrapper.className = 'paw-grid';
 
-      // P — Prompt
       const pCard = document.createElement('div');
       pCard.className = 'paw-card';
       pCard.innerHTML = `
@@ -706,7 +688,6 @@
       `;
       wrapper.appendChild(pCard);
 
-      // A — Awareness (Energy + Clarity)
       const awarenessTextParts = [];
       if (secs.energy) awarenessTextParts.push(secs.energy);
       if (secs.clarity) awarenessTextParts.push(secs.clarity);
@@ -720,7 +701,6 @@
       `;
       wrapper.appendChild(aCard);
 
-      // W — Wisdom (Ritual + Guidance + Product)
       let wisdomBlock = "";
       if (secs.ritual) {
         wisdomBlock += `<div class="paw-tag">🕯 Ritual</div><div class="paw-text">${escapeHTML(secs.ritual)}</div>`;
@@ -800,7 +780,7 @@
       }
     }
 
-    // Sunset Reset logic (scaled)
+    // ——— Sunset Reset logic (photo + phases) ———
     function updateSunsetPhaseUI() {
       if (!sunsetPhaseEl || !sunsetInstructionEl) return;
 
@@ -823,10 +803,27 @@
       }
     }
 
+    function pickRandomSunset(currentSrc) {
+      if (!SUNSET_IMAGES.length) return currentSrc || "";
+      const others = currentSrc
+        ? SUNSET_IMAGES.filter(src => src !== currentSrc)
+        : SUNSET_IMAGES.slice();
+      if (!others.length) return currentSrc || SUNSET_IMAGES[0];
+      const idx = Math.floor(Math.random() * others.length);
+      return others[idx];
+    }
+
     function startSunsetReset() {
       if (!sunsetOverlay) return;
       sunsetOverlay.classList.remove('hidden');
       sunsetOverlay.setAttribute('aria-hidden', 'false');
+
+      // image aléatoire pour le reset
+      if (sunsetResetImageEl) {
+        const current = sunsetResetImageEl.getAttribute("src") || "";
+        const next = pickRandomSunset(current);
+        sunsetResetImageEl.setAttribute("src", next);
+      }
 
       if (sunsetInterval) {
         clearInterval(sunsetInterval);
@@ -867,15 +864,7 @@
       }
     }
 
-    // Random sunset photo logic
-    function pickRandomSunset(currentSrc) {
-      if (!SUNSET_IMAGES.length) return currentSrc;
-      const others = SUNSET_IMAGES.filter(src => src !== currentSrc);
-      if (!others.length) return currentSrc;
-      const idx = Math.floor(Math.random() * others.length);
-      return others[idx];
-    }
-
+    // Random sunset photo for side gallery
     function shuffleSunsetPhoto() {
       if (!sunsetPhotoEl) return;
       const current = sunsetPhotoEl.getAttribute("src") || "";
@@ -883,6 +872,7 @@
       sunsetPhotoEl.setAttribute("src", next);
     }
 
+    // ——— Events ———
     btn.addEventListener('click', analyze);
     inputEl.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') analyze();
@@ -898,14 +888,10 @@
     });
 
     if (sunsetResetBtn) {
-      sunsetResetBtn.addEventListener('click', () => {
-        startSunsetReset();
-      });
+      sunsetResetBtn.addEventListener('click', startSunsetReset);
     }
     if (sunsetCloseBtn) {
-      sunsetCloseBtn.addEventListener('click', () => {
-        closeSunsetReset();
-      });
+      sunsetCloseBtn.addEventListener('click', closeSunsetReset);
     }
     if (sunsetOverlay) {
       sunsetOverlay.addEventListener('click', (e) => {
@@ -918,7 +904,7 @@
     if (shufflePhotoBtn) {
       shufflePhotoBtn.addEventListener('click', shuffleSunsetPhoto);
     }
-    // Première image aléatoire au chargement
+
     window.addEventListener("load", () => {
       shuffleSunsetPhoto();
     });
