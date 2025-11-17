@@ -54,6 +54,41 @@
     .card h2{margin:0 0 8px;font-size:18px}
     .help{font-size:14px;color:var(--muted)}
 
+    /* choix : dilemme ou sunset reset */
+    .choice-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin:10px 0 6px;
+    }
+    .choice-pill{
+      flex:1 1 150px;
+      border-radius:999px;
+      padding:10px 14px;
+      font-size:13px;
+      border:1.5px solid rgba(90,163,166,.4);
+      background:#f7fbfb;
+      color:#355667;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      box-shadow:var(--shadow);
+    }
+    .choice-pill:hover{
+      background:#e7f3f3;
+    }
+    .choice-primary{
+      background:var(--primary);
+      border-color:var(--primary);
+      color:#fff;
+    }
+    .choice-hint{
+      margin-top:0;
+      margin-bottom:4px;
+    }
+
     textarea{
       width:100%;min-height:88px;border-radius:14px;border:1.5px solid rgba(90,163,166,.25);
       padding:14px 14px 12px;font-size:16px;resize:vertical;outline:none;color:var(--text);
@@ -178,27 +213,6 @@
     .theme-sadness::before { background: radial-gradient(circle, #c9e4ff, #a4c6e5); }
     .theme-inspiration::before { background: radial-gradient(circle, #ffd2e6, #f8a8c6); }
     .theme-neutral::before { background: radial-gradient(circle, #dff7d9, #b8e5b0); }
-
-    /* Sunset Reset CTA */
-    .reset-cta{
-      margin-top:10px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      align-items:center;
-    }
-    .btn-reset{
-      padding:8px 14px;
-      font-size:13px;
-      border-radius:999px;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-    }
-    .reset-note{
-      font-size:12px;
-      color:var(--muted);
-    }
 
     .hidden{
       display:none !important;
@@ -415,8 +429,19 @@
       <section class="card">
         <h2>Step 1</h2>
         <p class="help">
-          Describe your dilemma in one sentence. The navigator will reflect your prompt (P), read your inner field (A),
-          and offer grounded guidance (W). Or use the 30-second Sunset Reset if you just need a quick calm.
+          Choose your path: share a dilemma for deep guidance, or take a 30-second Sunset Reset to calm your system.
+        </p>
+
+        <div class="choice-row">
+          <button id="dilemmaModeBtn" class="choice-pill choice-primary" type="button">
+            🧭 Share my dilemma
+          </button>
+          <button id="sunsetResetBtn" class="choice-pill" type="button">
+            ☀ Sunset Reset (30s)
+          </button>
+        </div>
+        <p class="small choice-hint">
+          You can always come back and try the other option.
         </p>
 
         <textarea id="dilemmaInput" placeholder="E.g.: I’m not sure if I should move to a new city for a job."></textarea>
@@ -431,13 +456,6 @@
             <option value="ar">العربية</option>
           </select>
           <span id="status" class="small" aria-live="polite"></span>
-        </div>
-
-        <div class="reset-cta">
-          <button id="sunsetResetBtn" class="btn ghost btn-reset" type="button">
-            ☀ Sunset Reset (30s)
-          </button>
-          <span class="reset-note">Instant 30-second ritual with sunset + breath.</span>
         </div>
 
         <div id="result" class="result"></div>
@@ -464,7 +482,7 @@
         <div class="sunset-gallery">
           <h3>Sunset snapshots</h3>
           <div class="sunset-photo-frame">
-            <img id="sunsetPhoto" src="sunset-1.jpg" alt="Soulset sunset">
+            <img id="sunsetPhoto" src="sunset-1.jpeg" alt="Soulset sunset">
             <div class="sunset-photo-label">Soulset moment</div>
           </div>
           <button id="shufflePhotoBtn" class="mini-btn" type="button">
@@ -485,7 +503,7 @@
       <div id="sunsetTitle" class="sunset-title">☀ SUNSET RESET · 30 SECONDS</div>
       <div class="sunset-tagline">Look · Breathe · Let it soften.</div>
       <div class="sunset-visual">
-        <img id="sunsetResetImage" src="sunset-1.jpg" alt="Sunset" class="sunset-main-photo">
+        <img id="sunsetResetImage" src="sunset-1.jpeg" alt="Sunset" class="sunset-main-photo">
       </div>
       <div class="sunset-timer-row">
         <div class="sunset-timer">
@@ -525,6 +543,8 @@
 
     const sunsetPhotoEl = qs('#sunsetPhoto');
     const shufflePhotoBtn = qs('#shufflePhotoBtn');
+
+    const dilemmaModeBtn = qs('#dilemmaModeBtn');
 
     let sunsetInterval = null;
     let sunsetRemaining = 30;
@@ -576,7 +596,7 @@
       ]
     };
 
-    // 👉 mets ici les bons noms si différents
+    // Noms EXACTS de tes fichiers
     const SUNSET_IMAGES = [
       "sunset-1.jpeg",
       "sunset-2.jpeg",
@@ -780,7 +800,7 @@
       }
     }
 
-    // ——— Sunset Reset logic (photo + phases) ———
+    // Sunset Reset logic
     function updateSunsetPhaseUI() {
       if (!sunsetPhaseEl || !sunsetInstructionEl) return;
 
@@ -818,7 +838,6 @@
       sunsetOverlay.classList.remove('hidden');
       sunsetOverlay.setAttribute('aria-hidden', 'false');
 
-      // image aléatoire pour le reset
       if (sunsetResetImageEl) {
         const current = sunsetResetImageEl.getAttribute("src") || "";
         const next = pickRandomSunset(current);
@@ -872,7 +891,7 @@
       sunsetPhotoEl.setAttribute("src", next);
     }
 
-    // ——— Events ———
+    // Events
     btn.addEventListener('click', analyze);
     inputEl.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') analyze();
@@ -886,6 +905,13 @@
       if (productLine) productLine.textContent = 'Product option: —';
       inputEl.focus();
     });
+
+    if (dilemmaModeBtn) {
+      dilemmaModeBtn.addEventListener('click', () => {
+        inputEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        inputEl.focus();
+      });
+    }
 
     if (sunsetResetBtn) {
       sunsetResetBtn.addEventListener('click', startSunsetReset);
@@ -909,7 +935,7 @@
       shuffleSunsetPhoto();
     });
 
-    // Service worker registration (si tu as un service-worker.js)
+    // Service worker registration
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
