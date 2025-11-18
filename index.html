@@ -55,12 +55,12 @@
       border-radius:18px;
       box-shadow:var(--shadow);
       padding:20px;
-      overflow:hidden; /* évite que le contenu déborde */
+      overflow:hidden;
     }
     .card h2{margin:0 0 8px;font-size:18px}
     .help{font-size:14px;color:var(--muted)}
 
-    /* top choices */
+    /* top choice */
     .choice-row{
       display:flex;
       gap:10px;
@@ -131,6 +131,15 @@
     }
 
     .result{margin-top:16px}
+
+    /* Sunset reset bottom container */
+    .sunset-reset-bottom{
+      margin-top:18px;
+      text-align:center;
+    }
+    .sunset-reset-bottom .btn{
+      min-width:220px;
+    }
 
     .bubble{background:linear-gradient(180deg,#ffffff, #f7fbfb);border-radius:16px;padding:16px 16px;box-shadow:var(--shadow);line-height:1.7}
     .bubble .section{margin:10px 0}
@@ -474,10 +483,6 @@
           <button id="dilemmaModeBtn" class="choice-pill choice-primary" type="button">
             🧭 Share my dilemma
           </button>
-          <!-- hidden at first, shown only after analysis -->
-          <button id="sunsetResetBtn" class="choice-pill hidden" type="button">
-            ☀ Sunset Reset (30s)
-          </button>
         </div>
         <p class="small choice-hint">
           You can always come back and run another dilemma.
@@ -498,6 +503,13 @@
         </div>
 
         <div id="result" class="result"></div>
+
+        <!-- Sunset Reset button at the END of the card, shown only after analysis -->
+        <div id="sunsetResetBottom" class="sunset-reset-bottom hidden">
+          <button id="sunsetResetBtn" class="btn ghost" type="button">
+            ☀ Sunset Reset (30s)
+          </button>
+        </div>
       </section>
 
       <aside class="card rituals">
@@ -572,6 +584,7 @@
     const ritualChip = qs('#ritualChip');
     const productLine = qs('#productLine');
 
+    const sunsetResetBottom = qs('#sunsetResetBottom');
     const sunsetResetBtn = qs('#sunsetResetBtn');
     const sunsetOverlay = qs('#sunsetOverlay');
     const sunsetCloseBtn = qs('#sunsetCloseBtn');
@@ -588,7 +601,6 @@
     let sunsetInterval = null;
     let sunsetRemaining = 30;
 
-    // Langues supportées & détection du téléphone/navigateur
     const SUPPORTED_LANGS = ["en", "fr", "es", "ar"];
     const browserLangCode = (navigator.language || navigator.userLanguage || "en")
       .slice(0, 2)
@@ -733,7 +745,6 @@
       resultEl.appendChild(card);
     }
 
-    // PAW rendering
     function renderPAW(rawText, originalPrompt, extra) {
       const secs = splitByIcons(rawText);
       const hasIcons = Object.values(secs).some(v => v && v.length > 0);
@@ -830,9 +841,9 @@
             productLine.textContent = `Product option: ${data.product}`;
           }
 
-          // 👉 show Sunset Reset button only after a successful analysis
-          if (sunsetResetBtn) {
-            sunsetResetBtn.classList.remove('hidden');
+          // show Sunset Reset button at the bottom after successful analysis
+          if (sunsetResetBottom) {
+            sunsetResetBottom.classList.remove('hidden');
           }
         } else {
           renderMessage('✨ I could not generate guidance. Try again with a simple, clear sentence.');
@@ -953,6 +964,7 @@
       setTheme('neutral');
       if (ritualChip) ritualChip.textContent = 'Your micro-ritual will appear here after analysis.';
       if (productLine) productLine.textContent = 'Product option: —';
+      if (sunsetResetBottom) sunsetResetBottom.classList.add('hidden');
       inputEl.focus();
     });
 
