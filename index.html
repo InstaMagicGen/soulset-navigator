@@ -55,13 +55,12 @@
       border-radius:18px;
       box-shadow:var(--shadow);
       padding:20px;
-      overflow:hidden;          /* important: clips anything that would overflow */
+      overflow:hidden; /* évite que le contenu déborde */
     }
-
     .card h2{margin:0 0 8px;font-size:18px}
     .help{font-size:14px;color:var(--muted)}
 
-    /* choix : dilemme ou sunset reset */
+    /* top choices */
     .choice-row{
       display:flex;
       gap:10px;
@@ -109,8 +108,7 @@
       outline:none;
       color:var(--text);
       background:#fbfeff;
-}
-
+    }
     textarea:focus{box-shadow:0 0 0 4px var(--ring);border-color:transparent}
 
     .actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}
@@ -137,15 +135,6 @@
     .bubble{background:linear-gradient(180deg,#ffffff, #f7fbfb);border-radius:16px;padding:16px 16px;box-shadow:var(--shadow);line-height:1.7}
     .bubble .section{margin:10px 0}
     .bubble .title{font-weight:700}
-    .bubble,
-    .paw-card{
-      box-sizing:border-box;
-      max-width:100%;
-      word-wrap:break-word;
-    }
-.paw-grid{
-  width:100%;
-}
 
     /* PAW layout */
     .paw-grid{
@@ -153,12 +142,24 @@
       flex-direction:column;
       gap:12px;
       margin-top:8px;
+      width:100%;
     }
     .paw-card{
       border-radius:14px;
       background:linear-gradient(180deg,#ffffff,#f7fbfb);
       box-shadow:var(--shadow);
       padding:12px 14px;
+      box-sizing:border-box;
+      max-width:100%;
+      word-wrap:break-word;
+    }
+    .paw-card-wisdom{
+      background:linear-gradient(180deg,#fdf8ff,#f2ecff);
+      border:1px solid rgba(134,111,209,0.3);
+      box-shadow:0 10px 30px rgba(80,63,148,0.18);
+    }
+    .paw-card-wisdom .paw-label{
+      color:#6c52b5;
     }
     .paw-label{
       font-size:11px;
@@ -177,10 +178,15 @@
       opacity:0.9;
     }
     .paw-tag{
-      font-weight:600;
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:999px;
+      background:rgba(90,163,166,0.08);
+      color:#355667;
       margin-top:6px;
-      margin-bottom:2px;
+      margin-bottom:4px;
       font-size:13px;
+      font-weight:600;
     }
 
     .rituals .chip{
@@ -431,12 +437,12 @@
     .mini-btn:hover{
       background:#e7f3f3;
     }
-    @media (max-width: 600px){
-  textarea{
-    font-size:15px;
-  }
-}
 
+    @media (max-width: 600px){
+      textarea{
+        font-size:15px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -461,19 +467,20 @@
       <section class="card">
         <h2>Step 1</h2>
         <p class="help">
-          Choose your path: share a dilemma for deep guidance, or take a 30-second Sunset Reset to calm your system.
+          Share your dilemma below. After the guidance, you’ll unlock a 30-second Sunset Reset.
         </p>
 
         <div class="choice-row">
           <button id="dilemmaModeBtn" class="choice-pill choice-primary" type="button">
             🧭 Share my dilemma
           </button>
-          <button id="sunsetResetBtn" class="choice-pill" type="button">
+          <!-- hidden at first, shown only after analysis -->
+          <button id="sunsetResetBtn" class="choice-pill hidden" type="button">
             ☀ Sunset Reset (30s)
           </button>
         </div>
         <p class="small choice-hint">
-          You can always come back and try the other option.
+          You can always come back and run another dilemma.
         </p>
 
         <textarea id="dilemmaInput" placeholder="E.g.: I’m not sure if I should move to a new city for a job."></textarea>
@@ -637,7 +644,6 @@
       ]
     };
 
-    // Noms EXACTS de tes fichiers
     const SUNSET_IMAGES = [
       "sunset-1.jpeg",
       "sunset-2.jpeg",
@@ -671,7 +677,6 @@
         .replace(/'/g,"&#39;");
     }
 
-    // Découper la réponse du modèle via les emojis 🌫 🪞 🕯 🗣 🪷
     function splitByIcons(rawText = "") {
       const markers = ["🌫", "🪞", "🕯", "🗣", "🪷"];
       const keyMap = {
@@ -728,7 +733,7 @@
       resultEl.appendChild(card);
     }
 
-    // Vue PAW (Prompt / Awareness / Wisdom)
+    // PAW rendering
     function renderPAW(rawText, originalPrompt, extra) {
       const secs = splitByIcons(rawText);
       const hasIcons = Object.values(secs).some(v => v && v.length > 0);
@@ -776,7 +781,7 @@
       }
 
       const wCard = document.createElement('div');
-      wCard.className = 'paw-card';
+      wCard.className = 'paw-card paw-card-wisdom';
       wCard.innerHTML = `
         <div class="paw-label">W — Wisdom</div>
         ${wisdomBlock || `<div class="paw-text">${escapeHTML(rawText)}</div>`}
@@ -824,6 +829,11 @@
           if (productLine && data.product) {
             productLine.textContent = `Product option: ${data.product}`;
           }
+
+          // 👉 show Sunset Reset button only after a successful analysis
+          if (sunsetResetBtn) {
+            sunsetResetBtn.classList.remove('hidden');
+          }
         } else {
           renderMessage('✨ I could not generate guidance. Try again with a simple, clear sentence.');
           setTheme('neutral');
@@ -842,7 +852,6 @@
       }
     }
 
-    // Sunset Reset logic
     function updateSunsetPhaseUI() {
       if (!sunsetPhaseEl || !sunsetInstructionEl) return;
 
@@ -925,7 +934,6 @@
       }
     }
 
-    // Random sunset photo for side gallery
     function shuffleSunsetPhoto() {
       if (!sunsetPhotoEl) return;
       const current = sunsetPhotoEl.getAttribute("src") || "";
@@ -974,14 +982,12 @@
     }
 
     window.addEventListener("load", () => {
-      // si aucune langue n'est choisie, on met celle du téléphone
       if (langSelect && !langSelect.value && SUPPORTED_LANGS.includes(autoLang)) {
         langSelect.value = autoLang;
       }
       shuffleSunsetPhoto();
     });
 
-    // Service worker registration
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
