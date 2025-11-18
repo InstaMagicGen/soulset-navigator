@@ -50,7 +50,14 @@
     .grid{display:grid;grid-template-columns:2fr 1fr;gap:22px}
     @media (max-width: 880px){.grid{grid-template-columns:1fr}}
 
-    .card{background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:20px}
+    .card{
+      background:var(--card);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:20px;
+      overflow:hidden;          /* important: clips anything that would overflow */
+    }
+
     .card h2{margin:0 0 8px;font-size:18px}
     .help{font-size:14px;color:var(--muted)}
 
@@ -90,10 +97,20 @@
     }
 
     textarea{
-      width:100%;min-height:88px;border-radius:14px;border:1.5px solid rgba(90,163,166,.25);
-      padding:14px 14px 12px;font-size:16px;resize:vertical;outline:none;color:var(--text);
+      width:100%;
+      box-sizing:border-box;
+      display:block;
+      min-height:88px;
+      border-radius:14px;
+      border:1.5px solid rgba(90,163,166,.25);
+      padding:14px 14px 12px;
+      font-size:16px;
+      resize:vertical;
+      outline:none;
+      color:var(--text);
       background:#fbfeff;
-    }
+}
+
     textarea:focus{box-shadow:0 0 0 4px var(--ring);border-color:transparent}
 
     .actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}
@@ -120,6 +137,15 @@
     .bubble{background:linear-gradient(180deg,#ffffff, #f7fbfb);border-radius:16px;padding:16px 16px;box-shadow:var(--shadow);line-height:1.7}
     .bubble .section{margin:10px 0}
     .bubble .title{font-weight:700}
+    .bubble,
+    .paw-card{
+      box-sizing:border-box;
+      max-width:100%;
+      word-wrap:break-word;
+    }
+.paw-grid{
+  width:100%;
+}
 
     /* PAW layout */
     .paw-grid{
@@ -405,6 +431,12 @@
     .mini-btn:hover{
       background:#e7f3f3;
     }
+    @media (max-width: 600px){
+  textarea{
+    font-size:15px;
+  }
+}
+
   </style>
 </head>
 <body>
