@@ -126,7 +126,7 @@
       padding:8px 10px;
       font-size:13px;
       background:#f7fbfb;
-      color:#muted;
+      color:var(--muted);
       outline:none;
     }
 
@@ -259,7 +259,7 @@
       display:none !important;
     }
 
-    /* Sunset Reset overlay USING REAL PHOTO */
+    /* Sunset Reset overlay USING REAL PHOTO – bigger */
     .sunset-overlay{
       position:fixed;
       inset:0;
@@ -277,7 +277,7 @@
     .sunset-panel{
       position:relative;
       width:100%;
-      max-width:480px;
+      max-width:520px;
       margin:0 16px;
       border-radius:26px;
       padding:20px 20px 22px;
@@ -331,7 +331,7 @@
     .sunset-visual{
       margin-top:6px;
       margin-bottom:12px;
-      height:160px;
+      height:220px;
       border-radius:20px;
       position:relative;
       overflow:hidden;
@@ -451,6 +451,12 @@
       textarea{
         font-size:15px;
       }
+      .sunset-panel{
+        max-width:100%;
+      }
+      .sunset-visual{
+        height:190px;
+      }
     }
   </style>
 </head>
@@ -474,8 +480,8 @@
 
     <div class="grid">
       <section class="card">
-        <h2>Step 1</h2>
-        <p class="help">
+        <h2 id="stepTitle">Step 1</h2>
+        <p class="help" id="stepHelp">
           Share your dilemma below. After the guidance, you’ll unlock a 30-second Sunset Reset.
         </p>
 
@@ -484,7 +490,7 @@
             🧭 Share my dilemma
           </button>
         </div>
-        <p class="small choice-hint">
+        <p class="small choice-hint" id="choiceHint">
           You can always come back and run another dilemma.
         </p>
 
@@ -493,7 +499,7 @@
           <button id="analyzeBtn" class="btn">Analyze</button>
           <button id="clearBtn" class="btn ghost" type="button">Clear</button>
           <select id="langSelect" class="lang-select">
-            <option value="">Language: auto</option>
+            <option id="langAutoOption" value="">Language: auto</option>
             <option value="en">English</option>
             <option value="fr">Français</option>
             <option value="es">Español</option>
@@ -514,7 +520,7 @@
 
       <aside class="card rituals">
         <div id="themeIcon" class="theme-icon">🍃</div>
-        <h2>Personalized ritual</h2>
+        <h2 id="asideTitle">Personalized ritual</h2>
         <span id="ritualChip" class="chip">
           Your micro-ritual will appear here after analysis.
         </span>
@@ -531,7 +537,7 @@
 
         <!-- Sunset gallery with random photos -->
         <div class="sunset-gallery">
-          <h3>Sunset snapshots</h3>
+          <h3 id="sunsetGalleryTitle">Sunset snapshots</h3>
           <div class="sunset-photo-frame">
             <img id="sunsetPhoto" src="sunset-1.jpeg" alt="Soulset sunset">
             <div class="sunset-photo-label">Soulset moment</div>
@@ -543,7 +549,7 @@
       </aside>
     </div>
 
-    <div class="footer">© SoulsetJourney • Clear & soothing interface • V7</div>
+    <div class="footer" id="footerText">© SoulsetJourney • Clear & soothing interface • V7</div>
   </div>
 
   <!-- Sunset Reset Overlay -->
@@ -580,6 +586,7 @@
     const statusEl = qs('#status');
     const halo = qs('.halo');
     const langSelect = qs('#langSelect');
+    const langAutoOption = qs('#langAutoOption');
     const themeIconEl = qs('#themeIcon');
     const ritualChip = qs('#ritualChip');
     const productLine = qs('#productLine');
@@ -598,16 +605,105 @@
 
     const dilemmaModeBtn = qs('#dilemmaModeBtn');
 
+    const stepTitleEl = qs('#stepTitle');
+    const stepHelpEl = qs('#stepHelp');
+    const choiceHintEl = qs('#choiceHint');
+    const footerEl = qs('#footerText');
+    const asideTitleEl = qs('#asideTitle');
+    const sunsetGalleryTitleEl = qs('#sunsetGalleryTitle');
+    const wellTipEl = qs('.well-cta');
+
     let sunsetInterval = null;
     let sunsetRemaining = 30;
 
-    const SUPPORTED_LANGS = ["en", "fr", "es", "ar"];
+    /* ---------- UI translations (EN / FR) ---------- */
+
+    const UI_STRINGS = {
+      en: {
+        stepTitle: "Step 1",
+        stepHelp: "Share your dilemma below. After the guidance, you’ll unlock a 30-second Sunset Reset.",
+        shareDilemma: "Share my dilemma",
+        choiceHint: "You can always come back and run another dilemma.",
+        placeholder: "E.g.: I’m not sure if I should move to a new city for a job.",
+        analyze: "Analyze",
+        clear: "Clear",
+        langAuto: "Language: auto",
+        footer: "© SoulsetJourney • Clear & soothing interface • V7",
+        asideTitle: "Personalized ritual",
+        asideChip: "Your micro-ritual will appear here after analysis.",
+        productPrefix: "Product option: ",
+        productEmpty: "Product option: —",
+        sunsetBottomBtn: "☀ Sunset Reset (30s)",
+        galleryTitle: "Sunset snapshots",
+        galleryBtn: "New sunset image",
+        statusReading: "Reading your energy…",
+        statusAdjust: "Adjust your text and try again.",
+        statusOffline: "Offline?",
+        wellTip: "Well-being tip: soften the lights, slow down your breathing, and read your guidance as if it were a letter from your future self."
+      },
+      fr: {
+        stepTitle: "Étape 1",
+        stepHelp: "Décris ton dilemme ci-dessous. Après la guidance, tu débloqueras un Sunset Reset de 30 secondes.",
+        shareDilemma: "Partager mon dilemme",
+        choiceHint: "Tu peux toujours revenir et lancer un autre dilemme.",
+        placeholder: "Ex. : Je ne sais pas si je dois déménager dans une nouvelle ville pour un travail.",
+        analyze: "Analyser",
+        clear: "Effacer",
+        langAuto: "Langue : auto",
+        footer: "© SoulsetJourney • Interface claire et apaisante • V7",
+        asideTitle: "Rituel personnalisé",
+        asideChip: "Ton micro-rituel apparaîtra ici après l’analyse.",
+        productPrefix: "Option produit : ",
+        productEmpty: "Option produit : —",
+        sunsetBottomBtn: "☀ Sunset Reset (30 s)",
+        galleryTitle: "Instantanés de coucher de soleil",
+        galleryBtn: "Nouvelle image de sunset",
+        statusReading: "Je lis ton énergie…",
+        statusAdjust: "Ajuste ton texte et réessaie.",
+        statusOffline: "Hors ligne ?",
+        wellTip: "Astuce bien-être : adoucis la lumière, ralentis ta respiration et lis ta guidance comme si c’était une lettre de ton toi du futur."
+      }
+    };
+
+    const UI_LANGS = ["en", "fr"];
+    const SUPPORTED_LANGS = ["en","fr","es","ar"];
+
     const browserLangCode = (navigator.language || navigator.userLanguage || "en")
       .slice(0, 2)
       .toLowerCase();
-    const autoLang = SUPPORTED_LANGS.includes(browserLangCode)
-      ? browserLangCode
-      : "en";
+
+    const autoLang = SUPPORTED_LANGS.includes(browserLangCode) ? browserLangCode : "en";
+    let uiLang = UI_LANGS.includes(browserLangCode) ? browserLangCode : "en";
+    let currentUI = UI_STRINGS[uiLang] || UI_STRINGS.en;
+
+    function applyUILanguage(lang){
+      if (!UI_LANGS.includes(lang)) lang = "en";
+      uiLang = lang;
+      currentUI = UI_STRINGS[lang] || UI_STRINGS.en;
+
+      if (stepTitleEl) stepTitleEl.textContent = currentUI.stepTitle;
+      if (stepHelpEl) stepHelpEl.textContent = currentUI.stepHelp;
+      if (dilemmaModeBtn) dilemmaModeBtn.textContent = "🧭 " + currentUI.shareDilemma;
+      if (choiceHintEl) choiceHintEl.textContent = currentUI.choiceHint;
+      if (inputEl) inputEl.placeholder = currentUI.placeholder;
+      if (btn) btn.textContent = currentUI.analyze;
+      if (clearBtn) clearBtn.textContent = currentUI.clear;
+      if (langAutoOption) langAutoOption.textContent = currentUI.langAuto;
+      if (footerEl) footerEl.textContent = currentUI.footer;
+      if (asideTitleEl) asideTitleEl.textContent = currentUI.asideTitle;
+      if (ritualChip) ritualChip.textContent = currentUI.asideChip;
+      if (productLine) productLine.textContent = currentUI.productEmpty;
+      if (sunsetResetBtn) sunsetResetBtn.textContent = currentUI.sunsetBottomBtn;
+      if (sunsetGalleryTitleEl) sunsetGalleryTitleEl.textContent = currentUI.galleryTitle;
+      if (shufflePhotoBtn) shufflePhotoBtn.textContent = currentUI.galleryBtn;
+      if (wellTipEl) wellTipEl.textContent = currentUI.wellTip;
+
+      if (langSelect && !langSelect.value && SUPPORTED_LANGS.includes(lang)) {
+        langSelect.value = lang;
+      }
+    }
+
+    /* ---------- Rest of logic ---------- */
 
     const themeEmojis = {
       stress: "😰",
@@ -813,7 +909,7 @@
 
       const selectedLang = langSelect.value || autoLang || "default";
 
-      statusEl.textContent = 'Reading your energy…';
+      statusEl.textContent = currentUI.statusReading;
       renderMessage(randomLoadingMessage(selectedLang));
       setTheme('neutral');
 
@@ -838,23 +934,22 @@
             ritualChip.textContent = data.ritual;
           }
           if (productLine && data.product) {
-            productLine.textContent = `Product option: ${data.product}`;
+            productLine.textContent = (currentUI.productPrefix || "Product option: ") + data.product;
           }
 
-          // show Sunset Reset button at the bottom after successful analysis
           if (sunsetResetBottom) {
             sunsetResetBottom.classList.remove('hidden');
           }
         } else {
           renderMessage('✨ I could not generate guidance. Try again with a simple, clear sentence.');
           setTheme('neutral');
-          statusEl.textContent = 'Adjust your text and try again.';
+          statusEl.textContent = currentUI.statusAdjust;
           console.error('Analyze error', data);
         }
       } catch (e) {
         renderMessage('⚠️ Network error — please try again in a moment.');
         setTheme('neutral');
-        statusEl.textContent = 'Offline?';
+        statusEl.textContent = currentUI.statusOffline;
         console.error(e);
       } finally {
         btn.disabled = false;
@@ -962,8 +1057,8 @@
       resultEl.innerHTML = '';
       statusEl.textContent = '';
       setTheme('neutral');
-      if (ritualChip) ritualChip.textContent = 'Your micro-ritual will appear here after analysis.';
-      if (productLine) productLine.textContent = 'Product option: —';
+      if (ritualChip) ritualChip.textContent = currentUI.asideChip;
+      if (productLine) productLine.textContent = currentUI.productEmpty;
       if (sunsetResetBottom) sunsetResetBottom.classList.add('hidden');
       inputEl.focus();
     });
@@ -994,10 +1089,8 @@
     }
 
     window.addEventListener("load", () => {
-      if (langSelect && !langSelect.value && SUPPORTED_LANGS.includes(autoLang)) {
-        langSelect.value = autoLang;
-      }
-      shuffleSunsetPhoto();
+      applyUILanguage(uiLang);          // auto EN/FR based on device
+      shuffleSunsetPhoto();             // random sidebar sunset image
     });
 
     if ("serviceWorker" in navigator) {
