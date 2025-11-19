@@ -590,41 +590,48 @@
   </div>
 
   <!-- Sunset Reset PRO Overlay -->
-  <div id="sunsetOverlay" class="sunset-overlay" aria-hidden="true">
-    <div class="sunset-backdrop"></div>
-    <div class="sunset-panel" role="dialog" aria-modal="true" aria-labelledby="sunsetTitle">
-      <button class="sunset-close" id="sunsetCloseBtn" aria-label="Close Sunset Reset">×</button>
-      <button class="sunset-audio-btn" id="ambientBtn" aria-label="Toggle ambient sound">🔈</button>
+<div id="sunsetOverlay" class="sunset-overlay" aria-hidden="true">
+  <div class="sunset-backdrop"></div>
+  <div class="sunset-panel" role="dialog" aria-modal="true" aria-labelledby="sunsetTitle">
+    <button class="sunset-close" id="sunsetCloseBtn" aria-label="Close Sunset Reset">×</button>
+    <button class="sunset-audio-btn" id="ambientBtn" aria-label="Toggle ambient sound">🔈</button>
 
-      <div id="sunsetTitle" class="sunset-title">☀ SUNSET RESET · 60 SECONDS</div>
-      <div class="sunset-tagline">Cinematic pause · one minute to soften your day.</div>
-      <div class="sunset-visual">
-        <video id="sunsetResetVideo" class="sunset-main-photo" autoplay muted loop playsinline>
-          <source id="sunsetVideoSource" src="Sunset-1V.MP4" type="video/mp4">
-        </video>
-      </div>
-
-      <!-- Ambient video used only for sound -->
-      <video id="sunsetAmbient" style="width:0;height:0;opacity:0;" loop>
-        <source src="Sunset-ambient.MP4" type="video/mp4">
-      </video>
-
-      <div class="sunset-timer-row">
-        <div class="sunset-timer">
-          <span id="sunsetTimer">60</span><span>s</span>
-        </div>
-        <div id="sunsetPhase" class="sunset-phase">PHASE 1 • ARRIVAL</div>
-      </div>
-      <div id="sunsetInstruction" class="sunset-instruction">
-        Let your eyes land softly on the horizon. You don’t have to fix anything yet, just arrive here.
-      </div>
-      <div id="sunsetBreathText" class="sunset-breath">
-        Inhale for 4 · hold for 4 · exhale for 6.
-      </div>
-      <div class="sunset-subline">
-        When the timer reaches zero, notice one tiny thing that feels 2% lighter than before.
-      </div>
+    <div id="sunsetTitle" class="sunset-title">☀ SUNSET RESET · 60 SECONDS</div>
+    <div id="sunsetTagline" class="sunset-tagline">
+      Cinematic pause · one minute to soften your day.
     </div>
+
+    <div class="sunset-visual">
+      <video id="sunsetResetVideo" class="sunset-main-photo" autoplay muted loop playsinline>
+        <!-- ⚠️ ICI : noms EXACTS de tes fichiers -->
+        <source id="sunsetVideoSource" src="Sunset-1V.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- Ambient video used only for sound -->
+    <video id="sunsetAmbient" style="width:0;height:0;opacity:0;" loop playsinline>
+      <!-- ⚠️ ICI aussi : nom exact -->
+      <source src="Sunset-ambient.mp4" type="video/mp4">
+    </video>
+
+    <div class="sunset-timer-row">
+      <div class="sunset-timer">
+        <span id="sunsetTimer">60</span><span>s</span>
+      </div>
+      <div id="sunsetPhase" class="sunset-phase">PHASE 1 • ARRIVAL</div>
+    </div>
+    <div id="sunsetInstruction" class="sunset-instruction">
+      Let your eyes land softly on the horizon. You don’t have to fix anything yet, just arrive here.
+    </div>
+    <div id="sunsetBreathText" class="sunset-breath">
+      Inhale for 4 · hold for 4 · exhale for 6.
+    </div>
+    <div id="sunsetSubline" class="sunset-subline">
+      When the timer reaches zero, notice one tiny thing that feels 2% lighter than before.
+    </div>
+  </div>
+</div>
+
   </div>
 
   <script>
@@ -640,6 +647,11 @@
     const themeIconEl = qs('#themeIcon');
     const ritualChip = qs('#ritualChip');
     const productLine = qs('#productLine');
+
+    const sunsetTitleEl = qs('#sunsetTitle');
+    const sunsetTaglineEl = qs('#sunsetTagline');
+    const sunsetSublineEl = qs('#sunsetSubline');
+
 
     const sunsetResetBottom = qs('#sunsetResetBottom');
     const sunsetResetBtn = qs('#sunsetResetBtn');
@@ -722,6 +734,50 @@
       }
     };
 
+    const SUNSET_TEXT = {
+  en: {
+    title: "☀ SUNSET RESET · 60 SECONDS",
+    tagline: "Cinematic pause · one minute to soften your day.",
+    subline: "When the timer reaches zero, notice one tiny thing that feels 2% lighter than before.",
+    phase1Label: "PHASE 1 • ARRIVAL",
+    phase1Instr: "Let your eyes soften on the horizon. You don’t have to solve anything yet, just arrive here with your breath.",
+    phase1Breath: "Simply breathe at your own rhythm.",
+    phase2Label: "PHASE 2 • BREATH 4–4–6",
+    phase2Instr: "Inhale through the nose for 4, hold gently for 4, then exhale through the mouth for 6. Let each exhale carry one worry out of your chest.",
+    phase2Breath: "Inhale 4 · hold 4 · exhale 6 · repeat.",
+    phase3Label: "PHASE 3 • LET IT SOFTEN",
+    phase3Instr: "Imagine the light absorbing what you can’t control today. With each exhale, whisper inside: “I let it soften.”",
+    phase3Breath: "Whisper inside: “Let it soften.”",
+    doneLabel: "DONE • RESET COMPLETE",
+    doneInstr: "Your reset is complete. Notice one tiny difference in your body before you return to your day.",
+    doneBreath: "Stay still for one more soft breath."
+  },
+  fr: {
+    title: "☀ SUNSET RESET · 60 SECONDES",
+    tagline: "Pause cinématographique · une minute pour adoucir ta journée.",
+    subline: "Quand le minuteur arrive à zéro, remarque une petite chose qui te semble 2 % plus légère qu’avant.",
+    phase1Label: "PHASE 1 • ARRIVÉE",
+    phase1Instr: "Laisse ton regard se poser doucement sur l’horizon. Tu n’as rien à résoudre pour l’instant, juste arriver ici avec ta respiration.",
+    phase1Breath: "Respire simplement à ton propre rythme.",
+    phase2Label: "PHASE 2 • RESPIRATION 4–4–6",
+    phase2Instr: "Inspire par le nez pendant 4, retiens délicatement pendant 4, puis expire par la bouche pendant 6. À chaque expiration, laisse sortir une inquiétude de ta poitrine.",
+    phase2Breath: "Inspire 4 · retiens 4 · expire 6 · répète.",
+    phase3Label: "PHASE 3 • LAISSE RAMOLLIR",
+    phase3Instr: "Imagine la lumière absorber ce que tu ne peux pas contrôler aujourd’hui. À chaque expiration, murmure intérieurement : « Je laisse ramollir. »",
+    phase3Breath: "Murmure intérieurement : « Je laisse ramollir. »",
+    doneLabel: "FIN • RESET TERMINÉ",
+    doneInstr: "Ton reset est terminé. Remarque une toute petite différence dans ton corps avant de revenir à ta journée.",
+    doneBreath: "Reste immobile pour un dernier souffle doux."
+  }
+};
+
+function getSunsetText(lang){
+  return SUNSET_TEXT[lang] || SUNSET_TEXT.en;
+}
+
+let sunsetText = SUNSET_TEXT.en;
+
+
     const UI_LANGS = ["en", "fr"];
     const SUPPORTED_LANGS = ["en","fr","es","ar"];
 
@@ -758,6 +814,7 @@
       if (langSelect && !langSelect.value && SUPPORTED_LANGS.includes(lang)) {
         langSelect.value = lang;
       }
+      
     }
 
     /* ---------- Theming & helpers ---------- */
@@ -820,10 +877,10 @@
     ];
 
     const SUNSET_VIDEOS = [
-      "Sunset-1V.MP4",
-      "Sunset-2V.MP4",
-      "Sunset-3V.MP4",
-      "Sunset-4V.MP4"
+      "Sunset-1V.mp4",
+      "Sunset-2V.mp4",
+      "Sunset-3V.mp4",
+      "Sunset-4V.mp4"
     ];
 
     function randomLoadingMessage(langSelected) {
