@@ -240,9 +240,9 @@
       border-radius: 50%;
       filter: blur(90px);
       opacity: 0.6;
-      animation: breathe 10s ease-in-out infinite;
+      animation: breatheHalo 10s ease-in-out infinite;
     }
-    @keyframes breathe {
+    @keyframes breatheHalo {
       0%,100% { transform: translate(-50%, -50%) scale(1); opacity: 0.45; }
       50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
     }
@@ -259,7 +259,7 @@
       display:none !important;
     }
 
-    /* Sunset Reset overlay USING REAL PHOTO – bigger */
+    /* Sunset Reset overlay DELUXE */
     .sunset-overlay{
       position:fixed;
       inset:0;
@@ -267,12 +267,19 @@
       display:flex;
       align-items:center;
       justify-content:center;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .45s ease;
+    }
+    .sunset-overlay.is-visible{
+      opacity:1;
+      pointer-events:auto;
     }
     .sunset-backdrop{
       position:absolute;
       inset:0;
-      background:rgba(6,18,30,0.7);
-      backdrop-filter:blur(14px);
+      background:rgba(6,18,30,0.78);
+      backdrop-filter:blur(16px);
     }
     .sunset-panel{
       position:relative;
@@ -309,7 +316,24 @@
       line-height:1;
       display:grid;
       place-items:center;
-      z-index:2;
+      z-index:3;
+    }
+    .sunset-audio-btn{
+      position:absolute;
+      top:10px;
+      right:50px;
+      background:rgba(0,0,0,0.35);
+      border:0;
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      cursor:pointer;
+      color:#fefefe;
+      font-size:15px;
+      line-height:1;
+      display:grid;
+      place-items:center;
+      z-index:3;
     }
     .sunset-title{
       font-size:15px;
@@ -331,26 +355,29 @@
     .sunset-visual{
       margin-top:6px;
       margin-bottom:12px;
-      height:220px;
+      height:auto;
       border-radius:20px;
       position:relative;
       overflow:hidden;
       box-shadow:0 14px 40px rgba(0,0,0,0.4);
     }
-    .sunset-main-photo{
+    .sunset-main-photo {
       width:100%;
-      height:100%;
+      max-width:900px;
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      margin-bottom:0;
       object-fit:cover;
-      object-position:center;
-      transform:scale(1.03);
-      filter:saturate(1.1) contrast(1.05);
+      max-height:70vh;
+      aspect-ratio:16/9;
+      display:block;
     }
     .sunset-visual::after{
       content:"";
       position:absolute;
       inset:0;
-      background:radial-gradient(circle at top,rgba(255,255,255,0.32),transparent 55%),
-                 linear-gradient(180deg,rgba(5,8,25,0.05),rgba(1,5,20,0.65));
+      background:radial-gradient(circle at top,rgba(255,255,255,0.25),transparent 55%),
+                 linear-gradient(180deg,rgba(5,8,25,0.0),rgba(1,5,20,0.55));
       pointer-events:none;
     }
     .sunset-timer-row{
@@ -366,7 +393,7 @@
       display:flex;
       align-items:baseline;
       gap:4px;
-      font-size:30px;
+      font-size:28px;
       font-weight:700;
     }
     .sunset-timer span{
@@ -385,6 +412,15 @@
       opacity:0.96;
       position:relative;
       z-index:1;
+      margin-top:6px;
+    }
+    .sunset-breath{
+      font-size:13px;
+      margin-top:4px;
+      opacity:0.9;
+      position:relative;
+      z-index:1;
+      animation:breatheText 4s ease-in-out infinite;
     }
     .sunset-subline{
       margin-top:6px;
@@ -392,6 +428,10 @@
       opacity:0.7;
       position:relative;
       z-index:1;
+    }
+    @keyframes breatheText{
+      0%,100%{transform:translateY(0);opacity:0.85;}
+      50%{transform:translateY(-2px);opacity:1;}
     }
 
     /* Sunset gallery (right column photos) */
@@ -454,9 +494,6 @@
       .sunset-panel{
         max-width:100%;
       }
-      .sunset-visual{
-        height:190px;
-      }
     }
   </style>
 </head>
@@ -473,7 +510,7 @@
         />
         <div>
           <h1>The Soulset Navigator</h1>
-          <div class="subtitle">PAW Mode • Prompt · Awareness · Wisdom · Sunset Reset</div>
+          <div class="subtitle">PAW Mode • Prompt · Awareness · Wisdom · Sunset Reset PRO</div>
         </div>
       </div>
     </header>
@@ -482,7 +519,7 @@
       <section class="card">
         <h2 id="stepTitle">Step 1</h2>
         <p class="help" id="stepHelp">
-          Share your dilemma below. After the guidance, you’ll unlock a 30-second Sunset Reset.
+          Share your dilemma below. After the guidance, you’ll unlock a 60-second Sunset Reset.
         </p>
 
         <div class="choice-row">
@@ -513,7 +550,7 @@
         <!-- Sunset Reset button at the END of the card, shown only after analysis -->
         <div id="sunsetResetBottom" class="sunset-reset-bottom hidden">
           <button id="sunsetResetBtn" class="btn ghost" type="button">
-            ☀ Sunset Reset (30s)
+            ☀ Sunset Reset PRO (60s)
           </button>
         </div>
       </section>
@@ -552,27 +589,40 @@
     <div class="footer" id="footerText">© SoulsetJourney • Clear & soothing interface • V7</div>
   </div>
 
-  <!-- Sunset Reset Overlay -->
-  <div id="sunsetOverlay" class="sunset-overlay hidden" aria-hidden="true">
+  <!-- Sunset Reset PRO Overlay -->
+  <div id="sunsetOverlay" class="sunset-overlay" aria-hidden="true">
     <div class="sunset-backdrop"></div>
     <div class="sunset-panel" role="dialog" aria-modal="true" aria-labelledby="sunsetTitle">
       <button class="sunset-close" id="sunsetCloseBtn" aria-label="Close Sunset Reset">×</button>
-      <div id="sunsetTitle" class="sunset-title">☀ SUNSET RESET · 30 SECONDS</div>
-      <div class="sunset-tagline">Look · Breathe · Let it soften.</div>
+      <button class="sunset-audio-btn" id="ambientBtn" aria-label="Toggle ambient sound">🔈</button>
+
+      <div id="sunsetTitle" class="sunset-title">☀ SUNSET RESET · 60 SECONDS</div>
+      <div class="sunset-tagline">Cinematic pause · one minute to soften your day.</div>
       <div class="sunset-visual">
-        <img id="sunsetResetImage" src="sunset-1.jpeg" alt="Sunset" class="sunset-main-photo">
+        <video id="sunsetResetVideo" class="sunset-main-photo" autoplay muted loop playsinline>
+          <source id="sunsetVideoSource" src="Sunset-1V.MP4" type="video/mp4">
+        </video>
       </div>
+
+      <!-- Ambient video used only for sound -->
+      <video id="sunsetAmbient" style="width:0;height:0;opacity:0;" loop>
+        <source src="Sunset-ambient.MP4" type="video/mp4">
+      </video>
+
       <div class="sunset-timer-row">
         <div class="sunset-timer">
-          <span id="sunsetTimer">30</span><span>s</span>
+          <span id="sunsetTimer">60</span><span>s</span>
         </div>
         <div id="sunsetPhase" class="sunset-phase">PHASE 1 • ARRIVAL</div>
       </div>
       <div id="sunsetInstruction" class="sunset-instruction">
-        Look at the light, feel your shoulders and take one soft breath. You don’t need to fix anything right now.
+        Let your eyes land softly on the horizon. You don’t have to fix anything yet, just arrive here.
+      </div>
+      <div id="sunsetBreathText" class="sunset-breath">
+        Inhale for 4 · hold for 4 · exhale for 6.
       </div>
       <div class="sunset-subline">
-        Let the colors hold the day for you while you breathe.
+        When the timer reaches zero, notice one tiny thing that feels 2% lighter than before.
       </div>
     </div>
   </div>
@@ -593,12 +643,18 @@
 
     const sunsetResetBottom = qs('#sunsetResetBottom');
     const sunsetResetBtn = qs('#sunsetResetBtn');
+
     const sunsetOverlay = qs('#sunsetOverlay');
     const sunsetCloseBtn = qs('#sunsetCloseBtn');
     const sunsetTimerEl = qs('#sunsetTimer');
     const sunsetPhaseEl = qs('#sunsetPhase');
     const sunsetInstructionEl = qs('#sunsetInstruction');
-    const sunsetResetImageEl = qs('#sunsetResetImage');
+    const sunsetBreathTextEl = qs('#sunsetBreathText');
+    const sunsetResetVideoEl = qs('#sunsetResetVideo');
+    const sunsetVideoSourceEl = qs('#sunsetVideoSource');
+
+    const sunsetAmbientEl = qs('#sunsetAmbient');
+    const ambientBtn = qs('#ambientBtn');
 
     const sunsetPhotoEl = qs('#sunsetPhoto');
     const shufflePhotoBtn = qs('#shufflePhotoBtn');
@@ -614,14 +670,15 @@
     const wellTipEl = qs('.well-cta');
 
     let sunsetInterval = null;
-    let sunsetRemaining = 30;
+    let sunsetRemaining = 60;
+    let ambientPlaying = false;
 
     /* ---------- UI translations (EN / FR) ---------- */
 
     const UI_STRINGS = {
       en: {
         stepTitle: "Step 1",
-        stepHelp: "Share your dilemma below. After the guidance, you’ll unlock a 30-second Sunset Reset.",
+        stepHelp: "Share your dilemma below. After the guidance, you’ll unlock a 60-second Sunset Reset.",
         shareDilemma: "Share my dilemma",
         choiceHint: "You can always come back and run another dilemma.",
         placeholder: "E.g.: I’m not sure if I should move to a new city for a job.",
@@ -633,7 +690,7 @@
         asideChip: "Your micro-ritual will appear here after analysis.",
         productPrefix: "Product option: ",
         productEmpty: "Product option: —",
-        sunsetBottomBtn: "☀ Sunset Reset (30s)",
+        sunsetBottomBtn: "☀ Sunset Reset PRO (60s)",
         galleryTitle: "Sunset snapshots",
         galleryBtn: "New sunset image",
         statusReading: "Reading your energy…",
@@ -643,7 +700,7 @@
       },
       fr: {
         stepTitle: "Étape 1",
-        stepHelp: "Décris ton dilemme ci-dessous. Après la guidance, tu débloqueras un Sunset Reset de 30 secondes.",
+        stepHelp: "Décris ton dilemme ci-dessous. Après la guidance, tu débloqueras un Sunset Reset de 60 secondes.",
         shareDilemma: "Partager mon dilemme",
         choiceHint: "Tu peux toujours revenir et lancer un autre dilemme.",
         placeholder: "Ex. : Je ne sais pas si je dois déménager dans une nouvelle ville pour un travail.",
@@ -655,7 +712,7 @@
         asideChip: "Ton micro-rituel apparaîtra ici après l’analyse.",
         productPrefix: "Option produit : ",
         productEmpty: "Option produit : —",
-        sunsetBottomBtn: "☀ Sunset Reset (30 s)",
+        sunsetBottomBtn: "☀ Sunset Reset PRO (60 s)",
         galleryTitle: "Instantanés de coucher de soleil",
         galleryBtn: "Nouvelle image de sunset",
         statusReading: "Je lis ton énergie…",
@@ -703,7 +760,7 @@
       }
     }
 
-    /* ---------- Rest of logic ---------- */
+    /* ---------- Theming & helpers ---------- */
 
     const themeEmojis = {
       stress: "😰",
@@ -760,6 +817,13 @@
       "Sunset-5.jpeg",
       "Sunset-6.jpeg",
       "Sunset-7.jpeg"
+    ];
+
+    const SUNSET_VIDEOS = [
+      "Sunset-1V.MP4",
+      "Sunset-2V.MP4",
+      "Sunset-3V.MP4",
+      "Sunset-4V.MP4"
     ];
 
     function randomLoadingMessage(langSelected) {
@@ -899,6 +963,156 @@
       resultEl.appendChild(wrapper);
     }
 
+    /* ---------- Sunset Reset Deluxe: videos + ambient + 60s flow ---------- */
+
+    function pickRandomSunsetVideo(current) {
+      const list = current ? SUNSET_VIDEOS.filter(v => v !== current) : SUNSET_VIDEOS.slice();
+      if (!list.length) return current || SUNSET_VIDEOS[0];
+      const idx = Math.floor(Math.random() * list.length);
+      return list[idx];
+    }
+
+    function loadRandomSunsetVideo() {
+      if (!sunsetResetVideoEl || !sunsetVideoSourceEl) return;
+      const current = sunsetVideoSourceEl.getAttribute("src") || "";
+      const next = pickRandomSunsetVideo(current);
+      sunsetVideoSourceEl.setAttribute("src", next);
+      sunsetResetVideoEl.load();
+      sunsetResetVideoEl.play().catch(() => {});
+    }
+
+    function resetAmbient() {
+      if (!sunsetAmbientEl) return;
+      sunsetAmbientEl.pause();
+      sunsetAmbientEl.currentTime = 0;
+      ambientPlaying = false;
+      if (ambientBtn) ambientBtn.textContent = "🔈";
+    }
+
+    if (ambientBtn && sunsetAmbientEl) {
+      ambientBtn.addEventListener("click", () => {
+        if (!ambientPlaying) {
+          sunsetAmbientEl.play().then(() => {
+            ambientPlaying = true;
+            ambientBtn.textContent = "🔊";
+          }).catch(() => {});
+        } else {
+          sunsetAmbientEl.pause();
+          ambientPlaying = false;
+          ambientBtn.textContent = "🔈";
+        }
+      });
+    }
+
+    function updateSunsetPhaseUI() {
+      if (!sunsetPhaseEl || !sunsetInstructionEl || !sunsetBreathTextEl) return;
+
+      const total = 60;
+      const remaining = sunsetRemaining;
+      const elapsed = total - remaining;
+
+      if (remaining <= 0) {
+        sunsetPhaseEl.textContent = "DONE • RESET COMPLETE";
+        sunsetInstructionEl.textContent =
+          "Your reset is complete. Notice one tiny difference in your body before you return to your day.";
+        sunsetBreathTextEl.textContent =
+          "Stay still for one more soft breath.";
+        return;
+      }
+
+      if (elapsed <= 10) {
+        sunsetPhaseEl.textContent = "PHASE 1 • ARRIVAL";
+        sunsetInstructionEl.textContent =
+          "Let your eyes soften on the horizon. You don’t have to solve anything yet, just arrive here with your breath.";
+        sunsetBreathTextEl.textContent =
+          "Simply breathe at your own rhythm.";
+      } else if (elapsed <= 35) {
+        sunsetPhaseEl.textContent = "PHASE 2 • BREATH 4–4–6";
+        sunsetInstructionEl.textContent =
+          "Inhale through the nose for 4, hold gently for 4, then exhale through the mouth for 6. Let each exhale carry one worry out of your chest.";
+        sunsetBreathTextEl.textContent =
+          "Inhale 4 · hold 4 · exhale 6 · repeat.";
+      } else {
+        sunsetPhaseEl.textContent = "PHASE 3 • LET IT SOFTEN";
+        sunsetInstructionEl.textContent =
+          "Imagine the light absorbing what you can’t control today. With each exhale, whisper inside: “I let it soften.”";
+        sunsetBreathTextEl.textContent =
+          "Whisper inside: “Let it soften.”";
+      }
+    }
+
+    function startSunsetReset() {
+      if (!sunsetOverlay) return;
+
+      // prepare overlay
+      sunsetOverlay.classList.add('is-visible');
+      sunsetOverlay.setAttribute('aria-hidden', 'false');
+
+      // reset timer
+      sunsetRemaining = 60;
+      if (sunsetTimerEl) {
+        sunsetTimerEl.textContent = String(sunsetRemaining);
+      }
+
+      // random video + reset ambient
+      loadRandomSunsetVideo();
+      resetAmbient();
+      updateSunsetPhaseUI();
+
+      // clear previous interval
+      if (sunsetInterval) {
+        clearInterval(sunsetInterval);
+        sunsetInterval = null;
+      }
+
+      sunsetInterval = setInterval(() => {
+        sunsetRemaining -= 1;
+        if (sunsetRemaining < 0) {
+          sunsetRemaining = 0;
+        }
+        if (sunsetTimerEl) {
+          sunsetTimerEl.textContent = String(sunsetRemaining);
+        }
+        updateSunsetPhaseUI();
+
+        if (sunsetRemaining <= 0 && sunsetInterval) {
+          clearInterval(sunsetInterval);
+          sunsetInterval = null;
+        }
+      }, 1000);
+    }
+
+    function closeSunsetReset() {
+      if (sunsetInterval) {
+        clearInterval(sunsetInterval);
+        sunsetInterval = null;
+      }
+      resetAmbient();
+      if (sunsetOverlay) {
+        sunsetOverlay.classList.remove('is-visible');
+        sunsetOverlay.setAttribute('aria-hidden', 'true');
+      }
+    }
+
+    function pickRandomSunsetPhoto(currentSrc) {
+      if (!SUNSET_IMAGES.length) return currentSrc || "";
+      const others = currentSrc
+        ? SUNSET_IMAGES.filter(src => src !== currentSrc)
+        : SUNSET_IMAGES.slice();
+      if (!others.length) return currentSrc || SUNSET_IMAGES[0];
+      const idx = Math.floor(Math.random() * others.length);
+      return others[idx];
+    }
+
+    function shuffleSunsetPhoto() {
+      if (!sunsetPhotoEl) return;
+      const current = sunsetPhotoEl.getAttribute("src") || "";
+      const next = pickRandomSunsetPhoto(current);
+      sunsetPhotoEl.setAttribute("src", next);
+    }
+
+    /* ---------- Analyze / API call ---------- */
+
     async function analyze() {
       const text = (inputEl.value || '').trim();
       if (!text) { inputEl.focus(); return; }
@@ -958,96 +1172,8 @@
       }
     }
 
-    function updateSunsetPhaseUI() {
-      if (!sunsetPhaseEl || !sunsetInstructionEl) return;
+    /* ---------- Events ---------- */
 
-      if (sunsetRemaining > 20) {
-        sunsetPhaseEl.textContent = "PHASE 1 • ARRIVAL";
-        sunsetInstructionEl.textContent =
-          "Look at the colors and notice your shoulders. Let your gaze soften. You don’t have to solve anything right now.";
-      } else if (sunsetRemaining > 10) {
-        sunsetPhaseEl.textContent = "PHASE 2 • BREATH 4–6";
-        sunsetInstructionEl.textContent =
-          "Inhale through the nose for 4, exhale through the mouth for 6. Imagine breathing the day out of your chest.";
-      } else if (sunsetRemaining > 0) {
-        sunsetPhaseEl.textContent = "PHASE 3 • LET IT SOFTEN";
-        sunsetInstructionEl.textContent =
-          "Whisper inside: “Let it soften.” Keep your eyes soft on the light while your body unwinds.";
-      } else {
-        sunsetPhaseEl.textContent = "DONE • RESET COMPLETE";
-        sunsetInstructionEl.textContent =
-          "Your reset is complete. Notice one small difference in your body before you return to your day.";
-      }
-    }
-
-    function pickRandomSunset(currentSrc) {
-      if (!SUNSET_IMAGES.length) return currentSrc || "";
-      const others = currentSrc
-        ? SUNSET_IMAGES.filter(src => src !== currentSrc)
-        : SUNSET_IMAGES.slice();
-      if (!others.length) return currentSrc || SUNSET_IMAGES[0];
-      const idx = Math.floor(Math.random() * others.length);
-      return others[idx];
-    }
-
-    function startSunsetReset() {
-      if (!sunsetOverlay) return;
-      sunsetOverlay.classList.remove('hidden');
-      sunsetOverlay.setAttribute('aria-hidden', 'false');
-
-      if (sunsetResetImageEl) {
-        const current = sunsetResetImageEl.getAttribute("src") || "";
-        const next = pickRandomSunset(current);
-        sunsetResetImageEl.setAttribute("src", next);
-      }
-
-      if (sunsetInterval) {
-        clearInterval(sunsetInterval);
-        sunsetInterval = null;
-      }
-
-      sunsetRemaining = 30;
-      if (sunsetTimerEl) {
-        sunsetTimerEl.textContent = String(sunsetRemaining);
-      }
-      updateSunsetPhaseUI();
-
-      sunsetInterval = setInterval(() => {
-        sunsetRemaining -= 1;
-        if (sunsetRemaining < 0) {
-          sunsetRemaining = 0;
-        }
-        if (sunsetTimerEl) {
-          sunsetTimerEl.textContent = String(sunsetRemaining);
-        }
-        updateSunsetPhaseUI();
-
-        if (sunsetRemaining <= 0 && sunsetInterval) {
-          clearInterval(sunsetInterval);
-          sunsetInterval = null;
-        }
-      }, 1000);
-    }
-
-    function closeSunsetReset() {
-      if (sunsetInterval) {
-        clearInterval(sunsetInterval);
-        sunsetInterval = null;
-      }
-      if (sunsetOverlay) {
-        sunsetOverlay.classList.add('hidden');
-        sunsetOverlay.setAttribute('aria-hidden', 'true');
-      }
-    }
-
-    function shuffleSunsetPhoto() {
-      if (!sunsetPhotoEl) return;
-      const current = sunsetPhotoEl.getAttribute("src") || "";
-      const next = pickRandomSunset(current);
-      sunsetPhotoEl.setAttribute("src", next);
-    }
-
-    // Events
     btn.addEventListener('click', analyze);
     inputEl.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') analyze();
