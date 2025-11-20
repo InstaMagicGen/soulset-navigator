@@ -56,7 +56,6 @@
       z-index:-1;
     }
 
-    /* Layout container */
     .page{
       min-height:100vh;
     }
@@ -228,12 +227,83 @@
       text-shadow:0 2px 10px rgba(0,0,0,0.6);
     }
 
+    .sunset-quote{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0 22px;
+      text-align:center;
+      color:#ffffff;
+      font-size:18px;
+      font-weight:500;
+      text-shadow:0 2px 14px rgba(0,0,0,0.85);
+    }
+
+    /* Sound controls */
+    .sunset-controls{
+      position:absolute;
+      top:22px;
+      left:20px;
+      background:rgba(6,10,30,0.72);
+      border-radius:18px;
+      padding:10px 12px;
+      color:#f5f7ff;
+      font-size:12px;
+      border:1px solid rgba(220,230,255,0.3);
+      backdrop-filter:blur(12px);
+      max-width:260px;
+    }
+    .sound-label{
+      margin-bottom:6px;
+      opacity:0.9;
+      font-size:11px;
+      letter-spacing:0.05em;
+      text-transform:uppercase;
+    }
+    .sound-options{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-bottom:6px;
+    }
+    .sound-chip,
+    .voice-chip{
+      border-radius:999px;
+      border:1px solid rgba(220,230,255,0.4);
+      background:transparent;
+      color:#f5f7ff;
+      font-size:11px;
+      padding:4px 10px;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .sound-chip.active,
+    .voice-chip.active{
+      background:#fefefe;
+      color:#11152b;
+    }
+    .voice-chip{
+      margin-top:2px;
+      font-size:11px;
+    }
+
     @media (max-width:600px){
       .card{
         padding:18px 16px;
       }
       .sunset-timer{
         bottom:40px;
+      }
+      .sunset-controls{
+        max-width:90%;
+        left:50%;
+        transform:translateX(-50%);
+      }
+      .sunset-quote{
+        font-size:16px;
+        padding:0 18px;
       }
     }
   </style>
@@ -289,9 +359,24 @@
     <video id="sunsetVideo" autoplay muted playsinline>
       <source src="Sunset-1V.mp4" type="video/mp4">
     </video>
+    <div class="sunset-quote" id="sunsetQuote"></div>
     <div class="sunset-timer" id="sunsetTimer">60</div>
     <div class="sunset-close" id="sunsetClose">×</div>
+
+    <div class="sunset-controls">
+      <div class="sound-label" id="soundLabel">Sound</div>
+      <div class="sound-options">
+        <button class="sound-chip active" data-sound="soft" id="soundSoft">Soft</button>
+        <button class="sound-chip" data-sound="ocean" id="soundOcean">Ocean</button>
+        <button class="sound-chip" data-sound="deep" id="soundDeep">Deep</button>
+        <button class="sound-chip" data-sound="ambient" id="soundAmbient">Ambient</button>
+      </div>
+      <button class="voice-chip" id="voiceToggle">🎧 Voice guide (coming soon)</button>
+    </div>
   </div>
+
+  <!-- AUDIO (one element, source changed in JS) -->
+  <audio id="sunsetAudio" preload="auto"></audio>
 
   <script>
     // ---------- Language + UI ----------
@@ -304,6 +389,13 @@
       const analyzeBtn = document.getElementById("analyzeBtn");
       const clearBtn = document.getElementById("clearBtn");
       const inputText = document.getElementById("inputText");
+      const sunsetBtn = document.getElementById("sunsetBtn");
+      const soundLabel = document.getElementById("soundLabel");
+      const soundSoft = document.getElementById("soundSoft");
+      const soundOcean = document.getElementById("soundOcean");
+      const soundDeep = document.getElementById("soundDeep");
+      const soundAmbient = document.getElementById("soundAmbient");
+      const voiceToggle = document.getElementById("voiceToggle");
 
       if(lang === "fr"){
         subtitle.textContent = "Avant de parler à un thérapeute, parlez à votre guide intérieur. Il vous écoute vraiment.";
@@ -312,6 +404,13 @@
         analyzeBtn.textContent = "Explorer avec moi";
         clearBtn.textContent = "Effacer";
         inputText.placeholder = "Ex : Je me sens submergé(e)…";
+        sunsetBtn.textContent = "🌅 Pause Sunset (60 s)";
+        soundLabel.textContent = "Ambiance sonore";
+        soundSoft.textContent = "Doux";
+        soundOcean.textContent = "Océan";
+        soundDeep.textContent = "Profond";
+        soundAmbient.textContent = "Ambient";
+        voiceToggle.textContent = "🎧 Guide vocal (bientôt)";
       } else if(lang === "es"){
         subtitle.textContent = "Antes de hablar con un terapeuta, habla con tu guía interior. Él realmente te escucha.";
         checkTitle.textContent = "Revisión emocional";
@@ -319,6 +418,13 @@
         analyzeBtn.textContent = "Explorar conmigo";
         clearBtn.textContent = "Borrar";
         inputText.placeholder = "Ej: Me siento abrumado(a)…";
+        sunsetBtn.textContent = "🌅 Pausa Sunset (60 s)";
+        soundLabel.textContent = "Ambiente sonoro";
+        soundSoft.textContent = "Suave";
+        soundOcean.textContent = "Océano";
+        soundDeep.textContent = "Profundo";
+        soundAmbient.textContent = "Ambiental";
+        voiceToggle.textContent = "🎧 Guía de voz (pronto)";
       } else if(lang === "ar"){
         subtitle.textContent = "قبل أن تتحدث مع معالج، تحدّث إلى دليلك الداخلي. إنه ينصت إليك حقًا.";
         checkTitle.textContent = "تقييم عاطفي";
@@ -326,6 +432,13 @@
         analyzeBtn.textContent = "استكشِف معي";
         clearBtn.textContent = "مسح";
         inputText.placeholder = "مثال: أشعر بأنني مُرهق…";
+        sunsetBtn.textContent = "🌅 استراحة الغروب (60 ثانية)";
+        soundLabel.textContent = "الأجواء الصوتية";
+        soundSoft.textContent = "هادئ";
+        soundOcean.textContent = "بحر";
+        soundDeep.textContent = "عميق";
+        soundAmbient.textContent = "محـيطي";
+        voiceToggle.textContent = "🎧 مرشد صوتي (قريباً)";
       } else {
         subtitle.textContent = "Before talking to a therapist, speak to your inner guide. It truly listens to you.";
         checkTitle.textContent = "Emotional Check-In";
@@ -333,9 +446,98 @@
         analyzeBtn.textContent = "Reflect with me";
         clearBtn.textContent = "Clear";
         inputText.placeholder = "Ex: I feel overwhelmed…";
+        sunsetBtn.textContent = "🌅 Sunset Reset (60s)";
+        soundLabel.textContent = "Sound ambience";
+        soundSoft.textContent = "Soft";
+        soundOcean.textContent = "Ocean";
+        soundDeep.textContent = "Deep";
+        soundAmbient.textContent = "Ambient";
+        voiceToggle.textContent = "🎧 Voice guide (coming soon)";
       }
     }
     applyLanguageUI();
+
+    // ---------- Quotes by language ----------
+    const QUOTES = {
+      en: [
+        "You don’t have to fix everything in this minute.",
+        "Your feelings are valid, even when no one else sees them.",
+        "Rest is not a reward. It’s a right.",
+        "You are allowed to be a work in progress and still be worthy.",
+        "Softening is not weakness. It is how light gets in.",
+        "You have survived 100% of your hardest days.",
+        "Your pace is sacred. You do not have to rush healing.",
+        "Some chapters close so your nervous system can finally breathe.",
+        "Even when the mind is loud, the body whispers the truth.",
+        "You can start again at any breath.",
+        "You are not behind. You are right on time for your own story.",
+        "Tenderness with yourself is already a form of therapy.",
+        "Every exhale is a small letting go.",
+        "You are allowed to take up emotional space.",
+        "Your sensitivity is not a flaw, it’s a compass.",
+        "You are learning to stay with yourself, and that is huge."
+      ],
+      fr: [
+        "Vous n’avez pas besoin de tout régler dans cette minute.",
+        "Vos émotions sont légitimes, même si personne ne les voit.",
+        "Le repos n’est pas une récompense. C’est un droit.",
+        "Vous avez le droit d’être en chantier et déjà digne d’amour.",
+        "S’adoucir n’est pas une faiblesse. C’est ainsi que la lumière entre.",
+        "Vous avez survécu à 100 % de vos jours les plus difficiles.",
+        "Votre cadence est sacrée. Vous n’avez pas à précipiter votre guérison.",
+        "Certains chapitres se ferment pour que votre système nerveux respire enfin.",
+        "Même quand le mental crie, le corps murmure la vérité.",
+        "Vous pouvez recommencer à chaque respiration.",
+        "Vous n’êtes pas en retard. Vous êtes à l’heure de votre propre histoire.",
+        "La douceur envers vous-même est déjà une forme de thérapie.",
+        "Chaque expiration est un petit lâcher-prise.",
+        "Vous avez le droit de prendre de la place, aussi dans vos émotions.",
+        "Votre sensibilité n’est pas un défaut, c’est une boussole.",
+        "Vous apprenez à rester avec vous-même, et c’est immense."
+      ],
+      es: [
+        "No tienes que arreglarlo todo en este minuto.",
+        "Tus emociones son válidas, aunque nadie más las vea.",
+        "El descanso no es una recompensa. Es un derecho.",
+        "Tienes derecho a estar en construcción y seguir siendo digno de amor.",
+        "Suavizarte no es debilidad. Es la forma en que entra la luz.",
+        "Has sobrevivido al 100 % de tus días más difíciles.",
+        "Tu ritmo es sagrado. No tienes que apresurar tu sanación.",
+        "Algunos capítulos se cierran para que tu sistema nervioso pueda respirar.",
+        "Aunque la mente grite, el cuerpo susurra la verdad.",
+        "Puedes empezar de nuevo en cualquier respiración.",
+        "No vas tarde. Vas al tiempo de tu propia historia.",
+        "La ternura contigo mismo ya es una forma de terapia.",
+        "Cada exhalación es un pequeño soltar.",
+        "Tienes derecho a ocupar espacio emocional.",
+        "Tu sensibilidad no es un defecto, es una brújula.",
+        "Estás aprendiendo a quedarte contigo mismo, y eso es enorme."
+      ],
+      ar: [
+        "لستَ مضطرًا لحلّ كل شيء في هذه الدقيقة.",
+        "مشاعرك حقيقية حتى لو لم يَرَها أحد.",
+        "الراحة ليست مكافأة، إنها حق.",
+        "يحقّ لك أن تكون في حالة بناء وما زلتَ أهلًا للحب.",
+        "اللين ليس ضعفًا، هكذا يدخل النور إلى قلبك.",
+        "لقد نجوتَ من 100٪ من أصعب أيامك.",
+        "إيقاعك مقدّس، لا حاجة لأن تُسرِع شفاءك.",
+        "أحيانًا تُغلَق الفصول كي يتمكّن جهازك العصبي من التنفّس.",
+        "حتى عندما يصرخ العقل، يهمس الجسد بالحقيقة.",
+        "يمكنك أن تبدأ من جديد مع كل شهيق وزفير.",
+        "أنت لست متأخرًا، أنت في وقتك الخاص.",
+        "الرفق بنفسك هو بالفعل شكل من أشكال العلاج.",
+        "كل زفير هو إفراج صغير.",
+        "يحقّ لك أن تأخذ مكانًا أيضًا في مشاعرك.",
+        "حساسيّتك ليست عيبًا، إنها بوصلة.",
+        "أنت تتعلّم أن تبقى مع نفسك، وهذا إنجاز كبير."
+      ]
+    };
+
+    function getRandomQuote(langKey){
+      const key = QUOTES[langKey] ? langKey : "en";
+      const arr = QUOTES[key];
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
 
     // ---------- Background slideshow ----------
     const slidesBG = document.querySelectorAll(".background-slideshow .slide");
@@ -349,12 +551,12 @@
     }
 
     // ---------- Helper render ----------
-    const resultEl = document.getElementById("result");
-    const statusEl = document.getElementById("status");
-    const sunsetBlock = document.getElementById("sunsetBlock");
+    const resultEl   = document.getElementById("result");
+    const statusEl   = document.getElementById("status");
+    const sunsetBlock= document.getElementById("sunsetBlock");
     const analyzeBtn = document.getElementById("analyzeBtn");
-    const clearBtn = document.getElementById("clearBtn");
-    const inputEl = document.getElementById("inputText");
+    const clearBtn   = document.getElementById("clearBtn");
+    const inputEl    = document.getElementById("inputText");
 
     function renderMessage(text){
       const div = document.createElement("div");
@@ -370,9 +572,15 @@
       if(!text) return;
 
       analyzeBtn.disabled = true;
-      clearBtn.disabled = true;
-      statusEl.textContent = (lang === "fr") ? "Analyse en cours…" : "Analyzing…";
-      renderMessage("⏳ " + ((lang === "fr") ? "Je t’écoute…" : "I’m listening…"));
+      clearBtn.disabled   = true;
+      statusEl.textContent = (lang === "fr") ? "Analyse en cours…" :
+                             (lang === "es") ? "Analizando…" :
+                             (lang === "ar") ? "جاري التحليل..." :
+                             "Analyzing…";
+      renderMessage("⏳ " + ((lang === "fr") ? "Je t’écoute…" :
+                             (lang === "es") ? "Te escucho…" :
+                             (lang === "ar") ? "أنا أستمع إليك..." :
+                             "I’m listening…"));
 
       try{
         const res = await fetch("/api/analyze", {
@@ -396,7 +604,7 @@
         statusEl.textContent = "";
       } finally{
         analyzeBtn.disabled = false;
-        clearBtn.disabled = false;
+        clearBtn.disabled   = false;
       }
     };
 
@@ -407,40 +615,95 @@
       sunsetBlock.style.display = "none";
     };
 
+    // ---------- Sound selection ----------
+    const SOUND_MAP = {
+      soft:    "sunset-soft.mp3",
+      ocean:   "sunset-ocean.mp3",
+      deep:    "sunset-deep.mp3",
+      ambient: "Sunset-ambient.mp4"   // tu peux le remplacer plus tard par un .mp3
+    };
+
+    // optionnel : voix guidée par langue (à ajouter plus tard)
+    const VOICE_MAP = {
+      fr: "voice-fr.mp3",
+      en: "voice-en.mp3",
+      es: "voice-es.mp3",
+      ar: "voice-ar.mp3"
+    };
+
+    const soundChips  = document.querySelectorAll(".sound-chip");
+    const voiceToggle = document.getElementById("voiceToggle");
+    let currentSoundKey = "soft";
+    let voiceEnabled = false;
+
+    soundChips.forEach(btn => {
+      btn.addEventListener("click", () => {
+        soundChips.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentSoundKey = btn.dataset.sound;
+      });
+    });
+
+    voiceToggle.addEventListener("click", () => {
+      voiceEnabled = !voiceEnabled;
+      voiceToggle.classList.toggle("active", voiceEnabled);
+    });
+
     // ---------- Sunset Reset immersive ----------
-    const FS = document.getElementById("sunsetFS");
-    const video = document.getElementById("sunsetVideo");
-    const timer = document.getElementById("sunsetTimer");
-    const sunsetBtn = document.getElementById("sunsetBtn");
-    const sunsetClose = document.getElementById("sunsetClose");
+    const FS         = document.getElementById("sunsetFS");
+    const video      = document.getElementById("sunsetVideo");
+    const timer      = document.getElementById("sunsetTimer");
+    const sunsetBtn  = document.getElementById("sunsetBtn");
+    const sunsetClose= document.getElementById("sunsetClose");
+    const quoteEl    = document.getElementById("sunsetQuote");
+    const audioEl    = document.getElementById("sunsetAudio");
     let countdown;
 
-    if(sunsetBtn){
-      sunsetBtn.onclick = () => {
-        FS.style.display = "flex";
-        video.currentTime = 0;
-        video.play();
+    function startSunsetReset(){
+      FS.style.display = "flex";
+      video.currentTime = 0;
+      video.play();
 
-        let time = 60;
+      // quote
+      const quote = getRandomQuote(lang);
+      quoteEl.textContent = quote;
+      quoteEl.style.direction = (lang === "ar") ? "rtl" : "ltr";
+
+      // choose sound or voice
+      const langKey = QUOTES[lang] ? lang : "en";
+      let src = SOUND_MAP[currentSoundKey] || SOUND_MAP.soft;
+      if(voiceEnabled && VOICE_MAP[langKey]){
+        src = VOICE_MAP[langKey];   // à utiliser quand tu ajouteras les fichiers voix
+      }
+      audioEl.src = src;
+      audioEl.currentTime = 0;
+      audioEl.volume = 1;
+      audioEl.play().catch(()=>{ /* iOS peut bloquer si pas d’interaction */ });
+
+      let time = 60;
+      timer.textContent = time;
+
+      clearInterval(countdown);
+      countdown = setInterval(() => {
+        time--;
         timer.textContent = time;
-
-        clearInterval(countdown);
-        countdown = setInterval(() => {
-          time--;
-          timer.textContent = time;
-          if(time <= 0){
-            closeSunset();
-          }
-        }, 1000);
-      };
+        if(time <= 0){
+          closeSunset();
+        }
+      }, 1000);
     }
 
     function closeSunset(){
       FS.style.display = "none";
       video.pause();
+      audioEl.pause();
+      audioEl.currentTime = 0;
       clearInterval(countdown);
     }
 
+    if(sunsetBtn){
+      sunsetBtn.onclick = startSunsetReset;
+    }
     if(sunsetClose){
       sunsetClose.onclick = closeSunset;
     }
