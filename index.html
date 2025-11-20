@@ -13,129 +13,181 @@
     body{
       margin:0;
       font-family:Nunito, sans-serif;
-      background:#f5f6f8;
-      color:#334;
+      background:#050811;
+      color:#f3f6ff;
       -webkit-font-smoothing:antialiased;
     }
 
-    /* HERO IMAGE CAROUSEL */
-    .hero{
-      position:relative;
-      height:45vh;
-      max-height:420px;
-      overflow:hidden;
-      border-bottom-left-radius:28px;
-      border-bottom-right-radius:28px;
-      box-shadow:0 8px 20px rgba(0,0,0,0.2);
+    /* BACKGROUND SLIDESHOW – FULLSCREEN + KEN BURNS EFFECT */
+    .background-slideshow {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      z-index: -2;
     }
-    .hero img{
+    .background-slideshow .slide{
       position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
+      top:-5%;
+      left:-5%;
+      width:110%;
+      height:110%;
       object-fit:cover;
       opacity:0;
-      transition:opacity 1.4s ease;
+      transition:opacity 2.5s ease-in-out;
+      animation:kenburns 22s ease-in-out infinite;
     }
-    .hero img.active{ opacity:1; }
+    .background-slideshow .slide.active{
+      opacity:1;
+    }
+    @keyframes kenburns{
+      0%{transform:scale(1);}
+      50%{transform:scale(1.08);}
+      100%{transform:scale(1);}
+    }
 
+    /* Dark gradient overlay to keep text readable */
+    .bg-overlay{
+      position:fixed;
+      inset:0;
+      background:radial-gradient(circle at top, rgba(120,150,255,0.35), transparent 55%),
+                 linear-gradient(to bottom, rgba(0,0,0,0.78), rgba(0,0,0,0.9));
+      z-index:-1;
+    }
+
+    /* Layout container */
+    .page{
+      min-height:100vh;
+    }
     header{
       text-align:center;
-      padding:26px 20px 10px;
+      padding:30px 20px 8px;
     }
     header h1{
       font-family:"Playfair Display", serif;
       font-size:clamp(28px,4.8vw,38px);
       margin:0;
+      letter-spacing:.04em;
     }
     header .subtitle{
-      opacity:0.8;
+      opacity:0.9;
       font-size:15px;
-      margin-top:8px;
+      margin-top:10px;
+      max-width:520px;
+      margin-left:auto;
+      margin-right:auto;
     }
 
-    /* Cards */
     .container{
       max-width:860px;
       margin:0 auto;
-      padding:20px;
+      padding:18px 20px 80px;
     }
 
     .card{
-      background:white;
-      border-radius:20px;
+      background:rgba(6,12,28,0.92);
+      border-radius:22px;
       padding:22px 20px;
-      box-shadow:0 6px 20px rgba(0,0,0,0.08);
-      margin-bottom:28px;
+      box-shadow:0 16px 40px rgba(0,0,0,0.45);
+      margin-bottom:26px;
+      border:1px solid rgba(255,255,255,0.04);
+      backdrop-filter:blur(18px);
     }
 
     .card h2{
-      margin:0 0 14px;
+      margin:0 0 10px;
       font-size:20px;
       font-family:"Playfair Display", serif;
+      letter-spacing:.03em;
+    }
+
+    .card p{
+      margin-top:0;
+      font-size:14px;
+      color:#ccd4ff;
     }
 
     textarea{
       width:100%;
-      min-height:100px;
+      min-height:110px;
       border-radius:14px;
-      border:1.5px solid #ccd7dd;
+      border:1.5px solid rgba(190,205,255,0.45);
       padding:14px;
       font-size:16px;
-      background:#f9fbfc;
+      background:rgba(5,10,30,0.9);
       resize:vertical;
       outline:none;
-      color:#334;
+      color:#f3f6ff;
+    }
+    textarea::placeholder{
+      color:#8992c5;
     }
 
     .actions{
       display:flex;
       gap:12px;
       margin-top:14px;
+      flex-wrap:wrap;
     }
 
     .btn{
       flex:1;
       border:0;
-      padding:14px;
+      padding:13px 16px;
       border-radius:14px;
       font-size:15px;
       font-weight:700;
       cursor:pointer;
       background:#5aa3a6;
       color:white;
+      box-shadow:0 10px 24px rgba(0,0,0,0.45);
     }
     .btn.secondary{
-      background:#e9f1f1;
-      color:#355;
+      background:transparent;
+      border:1px solid rgba(190,205,255,0.45);
+      color:#d7e0ff;
+    }
+    .btn:disabled{
+      opacity:0.6;
+      cursor:not-allowed;
+    }
+
+    #status{
+      margin-top:10px;
+      font-size:13px;
+      color:#d0d8ff;
     }
 
     #result .bubble{
       margin-top:18px;
-      background:#ffffff;
+      background:rgba(4,10,30,0.96);
       padding:16px 18px;
       border-radius:16px;
-      box-shadow:0 4px 16px rgba(0,0,0,0.08);
-      line-height:1.6;
+      box-shadow:0 10px 30px rgba(0,0,0,0.6);
+      line-height:1.65;
       white-space:pre-line;
+      border:1px solid rgba(163,186,255,0.28);
+      color:#eef2ff;
+      font-size:15px;
     }
 
-    /* Sunset Reset Button */
     .sunset-block{
       display:none;
       text-align:center;
-      margin-bottom:60px;
+      margin-top:10px;
     }
     .sunset-btn{
-      background:#ffffffcc;
-      padding:14px 22px;
+      background:rgba(9,20,55,0.9);
+      padding:12px 22px;
       border-radius:18px;
       font-weight:700;
-      box-shadow:0 6px 16px rgba(0,0,0,0.15);
-      backdrop-filter:blur(10px);
-      color:#334;
+      box-shadow:0 10px 26px rgba(0,0,0,0.6);
+      backdrop-filter:blur(14px);
+      color:#f3f6ff;
+      border:1px solid rgba(190,205,255,0.4);
+      font-size:15px;
     }
-
 
     /* IMMERSIVE SUNSET RESET */
     .sunset-fullscreen{
@@ -157,15 +209,15 @@
     }
     .sunset-close{
       position:absolute;
-      top:30px;
-      right:30px;
-      font-size:30px;
+      top:26px;
+      right:24px;
+      font-size:28px;
       color:white;
-      padding:8px 16px;
+      padding:6px 14px;
       background:#ffffff33;
       border-radius:12px;
       cursor:pointer;
-      backdrop-filter:blur(8px);
+      backdrop-filter:blur(10px);
     }
     .sunset-timer{
       position:absolute;
@@ -175,102 +227,61 @@
       font-weight:700;
       text-shadow:0 2px 10px rgba(0,0,0,0.6);
     }
+
+    @media (max-width:600px){
+      .card{
+        padding:18px 16px;
+      }
+      .sunset-timer{
+        bottom:40px;
+      }
+    }
   </style>
 </head>
 
 <body>
-
-  <!-- HERO WITH RANDOM IMAGES -->
-  <div class="hero">
-    <img src="sunset1.jpg" class="active">
-    <img src="sunset2.jpg">
-    <img src="sunset3.jpg">
-    <img src="sunset4.jpg">
-    <img src="sunset5.jpg">
+  <!-- FULLSCREEN BACKGROUND IMAGES -->
+  <div class="background-slideshow">
+    <img src="sunset-1.jpeg" class="slide active" alt="Sunset 1">
+    <img src="sunset-2.jpeg" class="slide" alt="Sunset 2">
+    <img src="sunset-3.jpeg" class="slide" alt="Sunset 3">
+    <img src="Sunset-4.jpeg" class="slide" alt="Sunset 4">
+    <img src="Sunset-5.jpeg" class="slide" alt="Sunset 5">
+    <img src="Sunset-6.jpeg" class="slide" alt="Sunset 6">
+    <img src="Sunset-7.jpeg" class="slide" alt="Sunset 7">
   </div>
+  <div class="bg-overlay"></div>
 
-  <header>
-    <h1 id="title">Soulset Navigator</h1>
-    <div class="subtitle" id="subtitle"></div>
+  <div class="page">
+    <header>
+      <h1 id="title">Soulset Navigator</h1>
+      <div class="subtitle" id="subtitle"></div>
+    </header>
 
-<script>
-  // Detect system language
-  let lang = navigator.language.substring(0,2);
+    <div class="container">
+      <!-- EMOTIONAL CHECK-IN -->
+      <section class="card">
+        <h2 id="check-title">Emotional Check-In</h2>
+        <p id="check-desc">
+          Describe what you're feeling. You will receive emotional reflection and therapeutic micro-practices.
+        </p>
 
-  function applyLanguageUI(){
-    const title = document.getElementById("title");
-    const subtitle = document.getElementById("subtitle");
-    const checkTitle = document.getElementById("check-title");
-    const checkDesc = document.getElementById("check-desc");
-    const analyzeBtn = document.getElementById("analyzeBtn");
-    const clearBtn = document.getElementById("clearBtn");
-    const inputText = document.getElementById("inputText");
+        <textarea id="inputText" placeholder="Ex: I feel overwhelmed…"></textarea>
 
-    if(lang === "fr"){
-      subtitle.textContent = "Avant de parler à un thérapeute, parlez à votre guide intérieur. Il vous écoute vraiment.";
-      checkTitle.textContent = "Bilan émotionnel";
-      checkDesc.textContent = "Décrivez ce que vous ressentez. Vous recevrez un miroir émotionnel et des micro-pratiques thérapeutiques.";
-      analyzeBtn.textContent = "Explorer avec moi";
-      clearBtn.textContent = "Effacer";
-      inputText.placeholder = "Ex : Je me sens submergé(e)…";
-    }
-    else if(lang === "es"){
-      subtitle.textContent = "Antes de hablar con un terapeuta, habla con tu guía interior. Él realmente te escucha.";
-      checkTitle.textContent = "Revisión emocional";
-      checkDesc.textContent = "Describe lo que sientes. Recibirás un espejo emocional y microprácticas terapéuticas.";
-      analyzeBtn.textContent = "Explorar conmigo";
-      clearBtn.textContent = "Borrar";
-      inputText.placeholder = "Ej: Me siento abrumado(a)…";
-    }
-    else if(lang === "ar"){
-      subtitle.textContent = "قبل أن تتحدث مع معالج، تحدّث إلى دليلك الداخلي. إنه ينصت إليك حقًا.";
-      checkTitle.textContent = "تقييم عاطفي";
-      checkDesc.textContent = "صف ما تشعر به. ستحصل على انعكاس عاطفي وممارسات علاجية صغيرة.";
-      analyzeBtn.textContent = "استكشِف معي";
-      clearBtn.textContent = "مسح";
-      inputText.placeholder = "مثال: أشعر بأنني مُرهق…";
-    }
-    else {
-      // DEFAULT: ENGLISH
-      subtitle.textContent = "Before talking to a therapist, speak to your inner guide. It truly listens to you.";
-      checkTitle.textContent = "Emotional Check-In";
-      checkDesc.textContent = "Describe what you're feeling. You'll receive emotional reflection and therapeutic micro-practices.";
-      analyzeBtn.textContent = "Reflect with me";
-      clearBtn.textContent = "Clear";
-      inputText.placeholder = "Ex: I feel overwhelmed…";
-    }
-  }
+        <div class="actions">
+          <button class="btn" id="analyzeBtn">Reflect with me</button>
+          <button class="btn secondary" id="clearBtn">Clear</button>
+        </div>
 
-  // Run on load
-  applyLanguageUI();
-</script>
+        <div id="status"></div>
+        <div id="result"></div>
+      </section>
 
-  </header>
-
-  <div class="container">
-
-    <!-- EMOTIONAL CHECK-IN -->
-    <section class="card">
-      <h2 id="check-title">Emotional Check-In</h2>
-      <p id="check-desc" style="color:#667;">
-        Describe what you're feeling. You will receive emotional reflection and therapeutic micro-practices.
-      </p>
-
-      <textarea id="inputText" placeholder="Ex: I feel overwhelmed…"></textarea>
-
-      <div class="actions">
-        <button class="btn" id="analyzeBtn">Reflect with me</button>
-        <button class="btn secondary" id="clearBtn">Clear</button>
+      <!-- SUNSET RESET BUTTON -->
+      <div class="sunset-block" id="sunsetBlock">
+        <button class="sunset-btn" id="sunsetBtn">🌅 Sunset Reset (60s)</button>
       </div>
-      <div id="status" style="margin-top:12px;color:#555;font-size:14px;"></div>
-      <div id="result"></div>
-    </section>
-
-    <!-- SUNSET RESET BUTTON -->
-    <div class="sunset-block" id="sunsetBlock">
-      <button class="sunset-btn" id="sunsetBtn">🌅 Sunset Reset (60s)</button>
     </div>
-
   </div>
 
   <!-- IMMERSIVE SUNSET FULLSCREEN -->
@@ -283,49 +294,85 @@
   </div>
 
   <script>
-    /* ——— Language Auto Detection ——— */
-    let lang = navigator.language.substring(0,2);
+    // ---------- Language + UI ----------
+    const lang = (navigator.language || navigator.userLanguage || "en").substring(0,2).toLowerCase();
 
-    function applyLang(l){
-      if(l === "fr"){
-        document.getElementById("title").textContent = "Soulset Navigator";
-        document.getElementById("subtitle").textContent = "Votre soutien thérapeutique, même avant une consultation.";
-        document.getElementById("check-title").textContent = "Bilan émotionnel";
-        document.getElementById("check-desc").textContent = "Décrivez ce que vous ressentez. Vous recevrez un miroir émotionnel et des micro-pratiques thérapeutiques.";
-        document.getElementById("analyzeBtn").textContent = "Explorer avec moi";
-        document.getElementById("clearBtn").textContent = "Effacer";
-        document.getElementById("inputText").placeholder = "Ex : Je me sens vidé(e)…";
+    function applyLanguageUI(){
+      const subtitle = document.getElementById("subtitle");
+      const checkTitle = document.getElementById("check-title");
+      const checkDesc = document.getElementById("check-desc");
+      const analyzeBtn = document.getElementById("analyzeBtn");
+      const clearBtn = document.getElementById("clearBtn");
+      const inputText = document.getElementById("inputText");
+
+      if(lang === "fr"){
+        subtitle.textContent = "Avant de parler à un thérapeute, parlez à votre guide intérieur. Il vous écoute vraiment.";
+        checkTitle.textContent = "Bilan émotionnel";
+        checkDesc.textContent = "Décrivez ce que vous ressentez. Vous recevrez un miroir émotionnel et des micro-pratiques thérapeutiques.";
+        analyzeBtn.textContent = "Explorer avec moi";
+        clearBtn.textContent = "Effacer";
+        inputText.placeholder = "Ex : Je me sens submergé(e)…";
+      } else if(lang === "es"){
+        subtitle.textContent = "Antes de hablar con un terapeuta, habla con tu guía interior. Él realmente te escucha.";
+        checkTitle.textContent = "Revisión emocional";
+        checkDesc.textContent = "Describe lo que sientes. Recibirás un espejo emocional y microprácticas terapéuticas.";
+        analyzeBtn.textContent = "Explorar conmigo";
+        clearBtn.textContent = "Borrar";
+        inputText.placeholder = "Ej: Me siento abrumado(a)…";
+      } else if(lang === "ar"){
+        subtitle.textContent = "قبل أن تتحدث مع معالج، تحدّث إلى دليلك الداخلي. إنه ينصت إليك حقًا.";
+        checkTitle.textContent = "تقييم عاطفي";
+        checkDesc.textContent = "صف ما تشعر به. ستحصل على انعكاس عاطفي وممارسات علاجية صغيرة.";
+        analyzeBtn.textContent = "استكشِف معي";
+        clearBtn.textContent = "مسح";
+        inputText.placeholder = "مثال: أشعر بأنني مُرهق…";
+      } else {
+        subtitle.textContent = "Before talking to a therapist, speak to your inner guide. It truly listens to you.";
+        checkTitle.textContent = "Emotional Check-In";
+        checkDesc.textContent = "Describe what you're feeling. You'll receive emotional reflection and therapeutic micro-practices.";
+        analyzeBtn.textContent = "Reflect with me";
+        clearBtn.textContent = "Clear";
+        inputText.placeholder = "Ex: I feel overwhelmed…";
       }
     }
-    applyLang(lang);
+    applyLanguageUI();
 
+    // ---------- Background slideshow ----------
+    const slidesBG = document.querySelectorAll(".background-slideshow .slide");
+    let bgIndex = 0;
+    if(slidesBG.length > 0){
+      setInterval(() => {
+        slidesBG[bgIndex].classList.remove("active");
+        bgIndex = (bgIndex + 1) % slidesBG.length;
+        slidesBG[bgIndex].classList.add("active");
+      }, 9000);
+    }
 
-    /* ——— HERO CAROUSEL ——— */
-    const slides = document.querySelectorAll(".hero img");
-    let idx = 0;
-    setInterval(()=>{
-      slides[idx].classList.remove("active");
-      idx = (idx+1) % slides.length;
-      slides[idx].classList.add("active");
-    }, 5000);
+    // ---------- Helper render ----------
+    const resultEl = document.getElementById("result");
+    const statusEl = document.getElementById("status");
+    const sunsetBlock = document.getElementById("sunsetBlock");
+    const analyzeBtn = document.getElementById("analyzeBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const inputEl = document.getElementById("inputText");
 
-    /* ——— RENDER MESSAGE ——— */
     function renderMessage(text){
       const div = document.createElement("div");
       div.className = "bubble";
       div.innerHTML = text;
-      result.innerHTML = "";
-      result.appendChild(div);
+      resultEl.innerHTML = "";
+      resultEl.appendChild(div);
     }
 
-
-    /* ——— AI ANALYSIS ——— */
-    document.getElementById("analyzeBtn").onclick = async ()=>{
-      const text = document.getElementById("inputText").value.trim();
+    // ---------- AI Analysis ----------
+    analyzeBtn.onclick = async () => {
+      const text = inputEl.value.trim();
       if(!text) return;
 
-      status.innerText = (lang==="fr") ? "Analyse en cours…" : "Analyzing…";
-      renderMessage("⏳ " + ((lang==="fr") ? "Je t’écoute…" : "I’m listening…"));
+      analyzeBtn.disabled = true;
+      clearBtn.disabled = true;
+      statusEl.textContent = (lang === "fr") ? "Analyse en cours…" : "Analyzing…";
+      renderMessage("⏳ " + ((lang === "fr") ? "Je t’écoute…" : "I’m listening…"));
 
       try{
         const res = await fetch("/api/analyze", {
@@ -337,53 +384,66 @@
 
         if(data.ok){
           renderMessage(data.text);
-          document.getElementById("sunsetBlock").style.display = "block";
+          sunsetBlock.style.display = "block";
+          statusEl.textContent = "";
+        } else {
+          renderMessage("⚠️ Something went wrong.");
+          statusEl.textContent = "";
         }
-        status.innerText = "";
-      }catch(e){
-        renderMessage("⚠️ Error");
+      }catch(err){
+        console.error(err);
+        renderMessage("⚠️ Network error, please try again.");
+        statusEl.textContent = "";
+      } finally{
+        analyzeBtn.disabled = false;
+        clearBtn.disabled = false;
       }
     };
 
-
-    /* ——— CLEAR ——— */
-    document.getElementById("clearBtn").onclick = ()=>{
-      document.getElementById("inputText").value="";
-      result.innerHTML="";
-      status.innerHTML="";
-      document.getElementById("sunsetBlock").style.display = "none";
+    clearBtn.onclick = () => {
+      inputEl.value = "";
+      resultEl.innerHTML = "";
+      statusEl.textContent = "";
+      sunsetBlock.style.display = "none";
     };
 
-
-    /* ——— SUNSET RESET IMMERSIVE ——— */
+    // ---------- Sunset Reset immersive ----------
     const FS = document.getElementById("sunsetFS");
     const video = document.getElementById("sunsetVideo");
     const timer = document.getElementById("sunsetTimer");
-
+    const sunsetBtn = document.getElementById("sunsetBtn");
+    const sunsetClose = document.getElementById("sunsetClose");
     let countdown;
 
-    document.getElementById("sunsetBtn").onclick = ()=>{
-      FS.style.display="flex";
-      video.currentTime=0;
-      video.play();
+    if(sunsetBtn){
+      sunsetBtn.onclick = () => {
+        FS.style.display = "flex";
+        video.currentTime = 0;
+        video.play();
 
-      let time=60;
-      timer.innerText=time;
+        let time = 60;
+        timer.textContent = time;
 
-      countdown=setInterval(()=>{
-        time--;
-        timer.innerText=time;
-        if(time<=0) closeSunset();
-      },1000);
-    };
+        clearInterval(countdown);
+        countdown = setInterval(() => {
+          time--;
+          timer.textContent = time;
+          if(time <= 0){
+            closeSunset();
+          }
+        }, 1000);
+      };
+    }
 
     function closeSunset(){
-      FS.style.display="none";
+      FS.style.display = "none";
       video.pause();
       clearInterval(countdown);
     }
 
-    document.getElementById("sunsetClose").onclick = closeSunset;
+    if(sunsetClose){
+      sunsetClose.onclick = closeSunset;
+    }
   </script>
 </body>
 </html>
