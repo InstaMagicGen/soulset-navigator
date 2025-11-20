@@ -3,243 +3,313 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Soulset Companion • Emotional Wellness App</title>
+  <title>Soulset Navigator • Therapeutic Support</title>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --text: #2e3d45;
-      --muted: #708a94;
-      --card: rgba(255,255,255,0.75);
-      --bg: #f1f6f8;
-      --primary:#5aa3a6;
-      --shadow: 0 10px 28px rgba(0,0,0,0.15);
-    }
-
     body{
       margin:0;
-      font-family: Nunito, sans-serif;
-      color:var(--text);
-      background: var(--bg);
-      -webkit-font-smoothing: antialiased;
+      font-family:Nunito, sans-serif;
+      background:#f5f6f8;
+      color:#334;
+      -webkit-font-smoothing:antialiased;
     }
 
-    /* ————————————————————————————————————————————————
-       Hero full-screen video background
-    ———————————————————————————————————————————————— */
-
-    .hero-video{
-      position:fixed;
-      top:0; left:0;
-      width:100%; height:100%;
+    /* HERO IMAGE CAROUSEL */
+    .hero{
+      position:relative;
+      height:45vh;
+      max-height:420px;
+      overflow:hidden;
+      border-bottom-left-radius:28px;
+      border-bottom-right-radius:28px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.2);
+    }
+    .hero img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
       object-fit:cover;
-      filter:brightness(0.72) saturate(1.15) blur(1px);
-      z-index:-2;
+      opacity:0;
+      transition:opacity 1.4s ease;
     }
-
-    .gradient-overlay{
-      position:fixed;
-      top:0; left:0;
-      width:100%; height:100%;
-      background:linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.15), rgba(255,255,255,0.2));
-      z-index:-1;
-    }
-
-    /* ————————————————————————————————————————————————
-       Main Container
-    ———————————————————————————————————————————————— */
-    .container{
-      max-width:850px;
-      margin:0 auto;
-      padding:40px 22px 120px;
-    }
+    .hero img.active{ opacity:1; }
 
     header{
       text-align:center;
-      padding-top:28px;
-      margin-bottom:28px;
-      color:white;
+      padding:26px 20px 10px;
     }
     header h1{
       font-family:"Playfair Display", serif;
-      font-size:clamp(30px, 5vw, 42px);
+      font-size:clamp(28px,4.8vw,38px);
       margin:0;
     }
     header .subtitle{
+      opacity:0.8;
       font-size:15px;
-      opacity:0.85;
       margin-top:8px;
     }
 
-    /* ————————————————————————————————————————————————
-       Emotional Check-In Card
-    ———————————————————————————————————————————————— */
-    .card{
-      background:var(--card);
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
-      padding:24px 22px;
-      border-radius:22px;
-      box-shadow:var(--shadow);
-      margin-bottom:26px;
+    /* Cards */
+    .container{
+      max-width:860px;
+      margin:0 auto;
+      padding:20px;
     }
+
+    .card{
+      background:white;
+      border-radius:20px;
+      padding:22px 20px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.08);
+      margin-bottom:28px;
+    }
+
     .card h2{
-      margin:0 0 12px;
-      font-size:22px;
+      margin:0 0 14px;
+      font-size:20px;
       font-family:"Playfair Display", serif;
     }
+
     textarea{
       width:100%;
-      border:0;
-      border-radius:16px;
-      padding:16px;
-      font-size:17px;
-      min-height:110px;
+      min-height:100px;
+      border-radius:14px;
+      border:1.5px solid #ccd7dd;
+      padding:14px;
+      font-size:16px;
+      background:#f9fbfc;
       resize:vertical;
-      color:var(--text);
-      background:rgba(255,255,255,0.7);
-      backdrop-filter:blur(6px);
       outline:none;
+      color:#334;
     }
 
-    /* Buttons */
     .actions{
       display:flex;
-      flex-wrap:wrap;
       gap:12px;
-      margin-top:12px;
-    }
-    .btn{
-      appearance:none;
-      border:0;
-      padding:14px 20px;
-      border-radius:16px;
-      font-weight:700;
-      cursor:pointer;
-      background:var(--primary);
-      color:white;
-      box-shadow:var(--shadow);
-      font-size:15px;
-    }
-    .btn:disabled{
-      opacity:0.6;
-      cursor:not-allowed;
-    }
-    .secondary-btn{
-      background:rgba(255,255,255,0.4);
-      color:var(--text);
-      font-weight:600;
+      margin-top:14px;
     }
 
-    /* Results */
+    .btn{
+      flex:1;
+      border:0;
+      padding:14px;
+      border-radius:14px;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+      background:#5aa3a6;
+      color:white;
+    }
+    .btn.secondary{
+      background:#e9f1f1;
+      color:#355;
+    }
+
     #result .bubble{
-      margin-top:20px;
-      background:white;
-      padding:18px 20px;
-      border-radius:18px;
-      box-shadow:var(--shadow);
-      line-height:1.65;
+      margin-top:18px;
+      background:#ffffff;
+      padding:16px 18px;
+      border-radius:16px;
+      box-shadow:0 4px 16px rgba(0,0,0,0.08);
+      line-height:1.6;
       white-space:pre-line;
     }
 
-    /* Sunset Reset Button Block */
+    /* Sunset Reset Button */
     .sunset-block{
       display:none;
       text-align:center;
-      margin-top:28px;
+      margin-bottom:60px;
     }
     .sunset-btn{
-      background:#ffffffaa;
-      color:#000;
+      background:#ffffffcc;
       padding:14px 22px;
-      border-radius:20px;
-      font-size:16px;
+      border-radius:18px;
       font-weight:700;
-      backdrop-filter:blur(12px);
-      box-shadow:var(--shadow);
+      box-shadow:0 6px 16px rgba(0,0,0,0.15);
+      backdrop-filter:blur(10px);
+      color:#334;
     }
 
+
+    /* IMMERSIVE SUNSET RESET */
+    .sunset-fullscreen{
+      position:fixed;
+      inset:0;
+      background:black;
+      display:none;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      z-index:9999;
+    }
+    .sunset-fullscreen video{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    .sunset-close{
+      position:absolute;
+      top:30px;
+      right:30px;
+      font-size:30px;
+      color:white;
+      padding:8px 16px;
+      background:#ffffff33;
+      border-radius:12px;
+      cursor:pointer;
+      backdrop-filter:blur(8px);
+    }
+    .sunset-timer{
+      position:absolute;
+      bottom:60px;
+      color:white;
+      font-size:40px;
+      font-weight:700;
+      text-shadow:0 2px 10px rgba(0,0,0,0.6);
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Fullscreen background video -->
-  <video class="hero-video" autoplay muted loop playsinline>
-    <source src="Sunset-1V.mp4" type="video/mp4">
-  </video>
-  <div class="gradient-overlay"></div>
+  <!-- HERO WITH RANDOM IMAGES -->
+  <div class="hero">
+    <img src="sunset1.jpg" class="active">
+    <img src="sunset2.jpg">
+    <img src="sunset3.jpg">
+    <img src="sunset4.jpg">
+    <img src="sunset5.jpg">
+  </div>
+
+  <header>
+    <h1 id="title">Soulset Navigator</h1>
+    <div class="subtitle" id="subtitle"></div>
+
+<script>
+  // Detect system language
+  let lang = navigator.language.substring(0,2);
+
+  function applyLanguageUI(){
+    const title = document.getElementById("title");
+    const subtitle = document.getElementById("subtitle");
+    const checkTitle = document.getElementById("check-title");
+    const checkDesc = document.getElementById("check-desc");
+    const analyzeBtn = document.getElementById("analyzeBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const inputText = document.getElementById("inputText");
+
+    if(lang === "fr"){
+      subtitle.textContent = "Avant de parler à un thérapeute, parlez à votre guide intérieur. Il vous écoute vraiment.";
+      checkTitle.textContent = "Bilan émotionnel";
+      checkDesc.textContent = "Décrivez ce que vous ressentez. Vous recevrez un miroir émotionnel et des micro-pratiques thérapeutiques.";
+      analyzeBtn.textContent = "Explorer avec moi";
+      clearBtn.textContent = "Effacer";
+      inputText.placeholder = "Ex : Je me sens submergé(e)…";
+    }
+    else if(lang === "es"){
+      subtitle.textContent = "Antes de hablar con un terapeuta, habla con tu guía interior. Él realmente te escucha.";
+      checkTitle.textContent = "Revisión emocional";
+      checkDesc.textContent = "Describe lo que sientes. Recibirás un espejo emocional y microprácticas terapéuticas.";
+      analyzeBtn.textContent = "Explorar conmigo";
+      clearBtn.textContent = "Borrar";
+      inputText.placeholder = "Ej: Me siento abrumado(a)…";
+    }
+    else if(lang === "ar"){
+      subtitle.textContent = "قبل أن تتحدث مع معالج، تحدّث إلى دليلك الداخلي. إنه ينصت إليك حقًا.";
+      checkTitle.textContent = "تقييم عاطفي";
+      checkDesc.textContent = "صف ما تشعر به. ستحصل على انعكاس عاطفي وممارسات علاجية صغيرة.";
+      analyzeBtn.textContent = "استكشِف معي";
+      clearBtn.textContent = "مسح";
+      inputText.placeholder = "مثال: أشعر بأنني مُرهق…";
+    }
+    else {
+      // DEFAULT: ENGLISH
+      subtitle.textContent = "Before talking to a therapist, speak to your inner guide. It truly listens to you.";
+      checkTitle.textContent = "Emotional Check-In";
+      checkDesc.textContent = "Describe what you're feeling. You'll receive emotional reflection and therapeutic micro-practices.";
+      analyzeBtn.textContent = "Reflect with me";
+      clearBtn.textContent = "Clear";
+      inputText.placeholder = "Ex: I feel overwhelmed…";
+    }
+  }
+
+  // Run on load
+  applyLanguageUI();
+</script>
+
+  </header>
 
   <div class="container">
 
-    <header>
-      <h1>Soulset Companion</h1>
-      <div class="subtitle" id="subtitle">
-        Emotional wellness • Gentle therapeutic guidance
-      </div>
-    </header>
-
-    <!-- Emotional Check-in -->
+    <!-- EMOTIONAL CHECK-IN -->
     <section class="card">
-      <h2 id="step-title">Emotional Check-In</h2>
-      <p id="step-desc" style="margin-top:-6px; font-size:14px; color:var(--muted);">
-        Describe what you're feeling or what happened. The Soulset Companion will mirror your emotions
-        and offer therapeutic micro-practices.
+      <h2 id="check-title">Emotional Check-In</h2>
+      <p id="check-desc" style="color:#667;">
+        Describe what you're feeling. You will receive emotional reflection and therapeutic micro-practices.
       </p>
 
-      <textarea id="inputText" placeholder="Ex: I feel overwhelmed and emotionally tired..."></textarea>
+      <textarea id="inputText" placeholder="Ex: I feel overwhelmed…"></textarea>
 
       <div class="actions">
         <button class="btn" id="analyzeBtn">Reflect with me</button>
-        <button class="btn secondary-btn" id="clearBtn">Clear</button>
+        <button class="btn secondary" id="clearBtn">Clear</button>
       </div>
-
-      <div id="status" style="margin-top:10px; font-size:13px; color:white;"></div>
-
+      <div id="status" style="margin-top:12px;color:#555;font-size:14px;"></div>
       <div id="result"></div>
     </section>
 
-    <!-- Sunset Reset Block -->
+    <!-- SUNSET RESET BUTTON -->
     <div class="sunset-block" id="sunsetBlock">
-      <button class="sunset-btn" id="sunsetBtn">🌅 Sunset Reset (60 seconds)</button>
+      <button class="sunset-btn" id="sunsetBtn">🌅 Sunset Reset (60s)</button>
     </div>
 
   </div>
 
+  <!-- IMMERSIVE SUNSET FULLSCREEN -->
+  <div class="sunset-fullscreen" id="sunsetFS">
+    <video id="sunsetVideo" autoplay muted playsinline>
+      <source src="Sunset-1V.mp4" type="video/mp4">
+    </video>
+    <div class="sunset-timer" id="sunsetTimer">60</div>
+    <div class="sunset-close" id="sunsetClose">×</div>
+  </div>
+
   <script>
-    const qs = s => document.querySelector(s);
-    const input = qs("#inputText");
-    const result = qs("#result");
-    const statusEl = qs("#status");
-    const sunsetBlock = qs("#sunsetBlock");
-    const stepTitle = qs("#step-title");
-    const stepDesc = qs("#step-desc");
-    const subtitle = qs("#subtitle");
+    /* ——— Language Auto Detection ——— */
+    let lang = navigator.language.substring(0,2);
 
-    /* ——————————————————————————————————————————
-       Auto language detection (based on system)
-    ——————————————————————————————————————————— */
-    let userLang = navigator.language.toLowerCase().substring(0,2);
-
-    function applyLanguageUI(lang){
-      if(lang === "fr"){
-        stepTitle.textContent = "Bilan Émotionnel";
-        stepDesc.textContent = "Décris ce que tu ressens ou ce qu'il s'est passé. Le Soulset Companion te renverra un miroir émotionnel et quelques micro-pratiques thérapeutiques.";
-        subtitle.textContent = "Bien-être émotionnel • Guidance thérapeutique douce";
-        qs("#analyzeBtn").textContent = "Explorer avec moi";
-        qs("#clearBtn").textContent = "Effacer";
-        input.placeholder = "Ex : Je me sens vidé(e), anxieux(se), et j’ai du mal à me recentrer...";
+    function applyLang(l){
+      if(l === "fr"){
+        document.getElementById("title").textContent = "Soulset Navigator";
+        document.getElementById("subtitle").textContent = "Votre soutien thérapeutique, même avant une consultation.";
+        document.getElementById("check-title").textContent = "Bilan émotionnel";
+        document.getElementById("check-desc").textContent = "Décrivez ce que vous ressentez. Vous recevrez un miroir émotionnel et des micro-pratiques thérapeutiques.";
+        document.getElementById("analyzeBtn").textContent = "Explorer avec moi";
+        document.getElementById("clearBtn").textContent = "Effacer";
+        document.getElementById("inputText").placeholder = "Ex : Je me sens vidé(e)…";
       }
     }
-    applyLanguageUI(userLang);
+    applyLang(lang);
 
-    /* ——————————————————————————————————————————
-       Helper to render messages
-    ——————————————————————————————————————————— */
+
+    /* ——— HERO CAROUSEL ——— */
+    const slides = document.querySelectorAll(".hero img");
+    let idx = 0;
+    setInterval(()=>{
+      slides[idx].classList.remove("active");
+      idx = (idx+1) % slides.length;
+      slides[idx].classList.add("active");
+    }, 5000);
+
+    /* ——— RENDER MESSAGE ——— */
     function renderMessage(text){
       const div = document.createElement("div");
       div.className = "bubble";
@@ -248,165 +318,72 @@
       result.appendChild(div);
     }
 
-    /* ——————————————————————————————————————————
-       Button actions
-    ——————————————————————————————————————————— */
-    qs("#analyzeBtn").onclick = async () => {
-      const text = input.value.trim();
-      if(!text){ input.focus(); return; }
 
-      statusEl.textContent = (userLang==="fr") ? "Analyse en cours…" : "Reading…";
-      renderMessage("⏳ " + ((userLang==="fr") ? "Je t’écoute…" : "I’m listening…"));
+    /* ——— AI ANALYSIS ——— */
+    document.getElementById("analyzeBtn").onclick = async ()=>{
+      const text = document.getElementById("inputText").value.trim();
+      if(!text) return;
 
-      try {
+      status.innerText = (lang==="fr") ? "Analyse en cours…" : "Analyzing…";
+      renderMessage("⏳ " + ((lang==="fr") ? "Je t’écoute…" : "I’m listening…"));
+
+      try{
         const res = await fetch("/api/analyze", {
           method:"POST",
           headers:{ "Content-Type":"application/json" },
-          body:JSON.stringify({ text, lang: userLang })
+          body:JSON.stringify({ text, lang })
         });
         const data = await res.json();
 
         if(data.ok){
           renderMessage(data.text);
-          sunsetBlock.style.display = "block";
-          statusEl.textContent = "";
-        } else {
-          renderMessage("⚠️ Error generating guidance.");
+          document.getElementById("sunsetBlock").style.display = "block";
         }
-      } catch(err){
-        renderMessage("⚠️ Connection error.");
+        status.innerText = "";
+      }catch(e){
+        renderMessage("⚠️ Error");
       }
     };
 
-    qs("#clearBtn").onclick = () => {
-      input.value = "";
-      result.innerHTML = "";
-      statusEl.textContent = "";
-      sunsetBlock.style.display = "none";
+
+    /* ——— CLEAR ——— */
+    document.getElementById("clearBtn").onclick = ()=>{
+      document.getElementById("inputText").value="";
+      result.innerHTML="";
+      status.innerHTML="";
+      document.getElementById("sunsetBlock").style.display = "none";
     };
 
-    /* ——————————————————————————————————————————
-       Sunset Reset Button (full screen video soon)
-    ——————————————————————————————————————————— */
-    qs("#sunsetBtn").onclick = () => {
-      window.scrollTo({ top: 0, behavior:"smooth" });
+
+    /* ——— SUNSET RESET IMMERSIVE ——— */
+    const FS = document.getElementById("sunsetFS");
+    const video = document.getElementById("sunsetVideo");
+    const timer = document.getElementById("sunsetTimer");
+
+    let countdown;
+
+    document.getElementById("sunsetBtn").onclick = ()=>{
+      FS.style.display="flex";
+      video.currentTime=0;
+      video.play();
+
+      let time=60;
+      timer.innerText=time;
+
+      countdown=setInterval(()=>{
+        time--;
+        timer.innerText=time;
+        if(time<=0) closeSunset();
+      },1000);
     };
+
+    function closeSunset(){
+      FS.style.display="none";
+      video.pause();
+      clearInterval(countdown);
+    }
+
+    document.getElementById("sunsetClose").onclick = closeSunset;
   </script>
-  <!-- ——————————————————————————————————————————————
-    FULLSCREEN SUNSET RESET EXPERIENCE
-—————————————————————————————————————————————— -->
-<style>
-  .sunset-fullscreen {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: black;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    overflow: hidden;
-    animation: fadeIn 0.4s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; } to { opacity: 1; }
-  }
-  @keyframes fadeOut {
-    from { opacity: 1; } to { opacity: 0; }
-  }
-
-  .sunset-fullscreen video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(1.05) saturate(1.22);
-  }
-
-  .sunset-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0.15));
-  }
-
-  .sunset-close {
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    background: rgba(255,255,255,0.2);
-    border: 1px solid rgba(255,255,255,0.4);
-    color: white;
-    font-size: 22px;
-    font-weight: 700;
-    padding: 10px 16px;
-    border-radius: 14px;
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-  }
-
-  .sunset-timer {
-    position: absolute;
-    bottom: 60px;
-    text-align: center;
-    color: white;
-    font-size: 28px;
-    font-weight: 700;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.65);
-  }
-</style>
-
-<div class="sunset-fullscreen" id="sunsetFS">
-  <video id="sunsetFSVideo" autoplay muted playsinline>
-    <source src="Sunset-1V.mp4" type="video/mp4">
-  </video>
-  <div class="sunset-overlay"></div>
-  <div class="sunset-timer" id="sunsetTimer">60</div>
-  <div class="sunset-close" id="sunsetClose">×</div>
-</div>
-
-<script>
-  const sunsetFS = document.getElementById("sunsetFS");
-  const sunsetFSVideo = document.getElementById("sunsetFSVideo");
-  const sunsetTimer = document.getElementById("sunsetTimer");
-  const sunsetClose = document.getElementById("sunsetClose");
-
-  let sunsetInterval;
-
-  function startSunsetReset(){
-    sunsetFS.style.display = "flex";
-    sunsetFS.style.animation = "fadeIn 0.4s ease";
-
-    sunsetFSVideo.currentTime = 0;
-    sunsetFSVideo.play();
-
-    let time = 60;
-    sunsetTimer.textContent = time;
-
-    sunsetInterval = setInterval(() => {
-      time--;
-      sunsetTimer.textContent = time;
-      if(time <= 0){
-        clearInterval(sunsetInterval);
-        closeSunsetReset();
-      }
-    }, 1000);
-  }
-
-  function closeSunsetReset(){
-    sunsetFS.style.animation = "fadeOut 0.4s ease";
-    setTimeout(() => {
-      sunsetFS.style.display = "none";
-      sunsetFSVideo.pause();
-    }, 400);
-
-    clearInterval(sunsetInterval);
-  }
-
-  document.getElementById("sunsetBtn").onclick = startSunsetReset;
-  sunsetClose.onclick = closeSunsetReset;
-</script>
-
 </body>
 </html>
