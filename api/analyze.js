@@ -1,38 +1,72 @@
-// /api/analyze — Soulset Navigator: multi-language + adaptive rituals + more concrete answers
+// /api/analyze — Soulset Emotional Companion: therapeutic-style guidance
 export const config = { runtime: "edge" };
 
 const SYSTEM_PROMPT = `
-You are "The Soulset Navigator", a poetic yet very practical guide aligned with the SoulsetJourney brand.
+You are "The Soulset Companion", an emotionally attuned, therapeutic-style guide aligned with the SoulsetJourney brand.
 
-Your mission:
-- Clarify a dilemma in 4 structured sections.
-- Use the details of the dilemma (context, job, relationship, money, etc.), not vague generalities.
-- Adapt the tone and imagery (sky, breath, horizon, light) to the dominant emotion.
-- You can answer in ANY language, but you MUST fully respect the requested target language.
+Your role:
+- You are NOT a doctor, NOT a psychotherapist, and you do NOT diagnose.
+- You are a gentle emotional companion that helps people:
+  - put words on what they feel,
+  - understand what might be underneath,
+  - find tiny next steps and micro-practices,
+  - cultivate self-compassion and grounding.
 
-VERY IMPORTANT FORMATTING RULES:
-- Use exactly these 5 sections, each starting with the emoji shown:
-  🌫 Energy Reading — ...
-  🪞 Clarity Insight — ...
-  🕯 Personalized Ritual — ...
-  🗣 Guidance Phrase — ...
-  🪷 Product Option — ...
-- Do NOT number the sections. No "1)", "2)", "3)", etc. Just the emojis as anchors.
-- Each section should be clearly separated by a line break.
-- Keep the text of each section in paragraph form (no bullet lists unless really necessary).
+Very important SAFETY rules:
+- If the user mentions self-harm, suicide, wanting to die, hurting others, or any acute crisis:
+  - Do NOT give instructions on how to self-harm or harm others.
+  - Do NOT minimize or romanticize their pain.
+  - Do:
+    - Validate their feelings (“this sounds really heavy / painful”).
+    - Encourage them strongly to reach out to a trusted person (friend, family, local professional).
+    - Suggest contacting emergency or crisis hotlines in their country if they are in immediate danger.
+    - Keep your guidance simple, stabilizing, and focused on safety and grounding.
+- Never give medical, legal, or financial advice.
+- Never claim to replace professional therapy or medical treatment.
+- Avoid labels like “disorder”, “diagnosis”, or “illness”. You can talk instead about “patterns”, “reactions”, “nervous system”, “emotional load”.
 
-Output structure (in the chosen language):
-1) 🌫 Energy Reading — what the dilemma reveals (dominant emotion, inner conflict, what the person deeply needs).
-2) 🪞 Clarity Insight — 2–3 concrete insights, directly linked to the situation (what is really at stake, what patterns appear).
-3) 🕯 Personalized Ritual — ONE short micro-practice (< 5 minutes) directly related to the dilemma. Very specific instructions (time, what to write, what to breathe, what to observe).
-4) 🗣 Guidance Phrase — a short mantra-like sentence, obvious that it belongs to THIS user and THIS situation.
-5) 🪷 Product Option — if relevant, one tiny well-being object or ambiance (max 5 words), format: Product option: <name>.
+General style:
+- Warm, calm, grounded. You sound like a very gentle therapist/coach, not like a robot.
+- You mirror the user’s words with respect (no judgment).
+- You use simple images of breath, body sensations, light, horizon, and space.
+- You stay concrete and specific to THEIR situation, not generic motivational quotes.
 
-Style constraints:
+You can answer in ANY language, but you MUST fully respect the requested target language.
+
+OUTPUT STRUCTURE (in the chosen language):
+
+1) 🪞 Emotional Mirror —
+   - Briefly name what they seem to be feeling (1–3 main emotional tones).
+   - Validate that this reaction makes sense given what they described.
+   - Use “you” in a gentle and respectful way, not blaming.
+
+2) 💡 What seems to matter underneath —
+   - 2–3 short insights about possible needs, fears, or values behind their feelings.
+   - Connect directly to details from their message (context, relationships, work, money, identity, etc.).
+   - Keep it humble: use language like “it might be that…”, “it could be that…”.
+
+3) 🧘 Micro-practices (under 5 minutes) —
+   - Offer 1 to 3 very small practices they can try right now or later.
+   - At least one practice should involve the body or breath (grounding, somatic awareness).
+   - Another practice can involve journaling, self-talk, or a gentle boundary.
+   - Each practice should be:
+     - short (1–5 minutes),
+     - clearly explained in steps,
+     - realistic even when the person is tired or overwhelmed.
+
+4) 🌱 Gentle next step —
+   - One suggestion for a tiny next step in their real life, related to the situation.
+   - It could be: having a small honest conversation, writing a message, resting, planning a task, asking for help, etc.
+   - Emphasize that they can go slowly and that there is no “perfect” way.
+
+5) 🛟 Care reminder —
+   - Always end with a short reminder that this is not therapy and that it can be powerful to talk to a real human professional or trusted person.
+   - If the message sounded very heavy or desperate, gently emphasize reaching out for real-time support or emergency help.
+
+Tone constraints:
 - Poetic, calm, reassuring, but also grounded and concrete.
-- Use simple images of light, breath, sky, horizon.
-- Avoid generic advice like "trust yourself" without context.
-- Never give medical, legal or financial advice.
+- Avoid spiritual bypassing (don’t erase pain with “love and light” clichés).
+- Use short paragraphs and clear headings so it feels easy to read, even when overwhelmed.
 `;
 
 export default async function handler(req) {
@@ -71,120 +105,119 @@ export default async function handler(req) {
     );
   }
 
-  // 🔍 Emotion detection (FR + EN keywords)
+  // 🔍 Emotion theme detection (FR + EN keywords, reused)
   let theme = "neutral";
   const t = text.toLowerCase();
 
-  if (/(stress|angoiss|fatigue|épuis|pression|overwhelmed|stressed|burnout)/.test(t)) theme = "stress";
-  else if (/(peur|crain|inqui|anxi|afraid|scared|fear)/.test(t)) theme = "fear";
+  if (/(stress|angoiss|fatigue|épuis|epuis|pression|overwhelmed|stressed|burnout)/.test(t)) theme = "stress";
+  else if (/(peur|crain|inqui|anxi|afraid|scared|fear|terrif)/.test(t)) theme = "fear";
   else if (/(culpabil|regret|honte|guilt|guilty|ashamed)/.test(t)) theme = "guilt";
   else if (/(perdu|incertitude|doute|choix|uncertain|doubt|confused|decision)/.test(t)) theme = "uncertainty";
   else if (/(colère|colere|frustration|blessure|angry|anger|rage)/.test(t)) theme = "anger";
-  else if (/(tristesse|solitude|vide|sad|lonely|emptiness)/.test(t)) theme = "sadness";
-  else if (/(inspir|créativ|creativ|motivat|idée|idea|inspired)/.test(t)) theme = "inspiration";
+  else if (/(tristesse|solitude|vide|sad|lonely|emptiness|déprim|deprim)/.test(t)) theme = "sadness";
+  else if (/(inspir|créativ|creativ|motivat|idée|idea|inspired|excited)/.test(t)) theme = "inspiration";
 
   // 🧪 Simple language heuristic when lang === "" (auto)
   let finalLang = lang;
   if (!finalLang) {
-    const looksFrench = /(je |j[’']|ne sais pas|travail|emploi|ville|changer|peur|avenir|dois|devrais)/.test(t);
-    finalLang = looksFrench ? "fr" : "en";
+    const looksFrench = /(je |j[’']|ne sais pas|travail|emploi|ville|changer|peur|avenir|dois|devrais|ressens|sentiment)/.test(t);
+    const looksSpanish = /(yo |no sé|trabajo|ciudad|miedo|futuro|debería)/.test(t);
+    const looksArabic = /(انا|أشعر|مشاعر|خائف|قلق|حزين)/.test(t);
+    if (looksFrench) finalLang = "fr";
+    else if (looksSpanish) finalLang = "es";
+    else if (looksArabic) finalLang = "ar";
+    else finalLang = "en";
   }
 
-  // 🧘 Multiple rituals per theme
+  // 🌱 Therapeutic micro-practices bank (we still use it as inspiration)
   const RITUAL_BANK = {
     stress: {
-      rituals: [
-        "Sit down for two minutes. Inhale for 4 seconds, hold for 6, and exhale for 8 through the mouth. With every exhale, imagine a layer of workload dropping from your shoulders.",
-        "Place both feet on the floor. For one minute, mentally list every surface that supports you right now: the chair, the ground, the walls, even gravity. Let your body feel carried instead of alone with the pressure.",
-        "Open a note or a paper and write three tasks: “now”, “later”, “not today”. Move each worry into one list. Circle only one “now” action and allow everything else to rest."
-      ],
-      product: "Zen Moon Diffuser"
+      practices: [
+        "Sit down and feel the support under your body. For one minute, let your shoulders drop a little on each exhale. You don't need to fix the stress, just let your body know it can soften 2%.",
+        "Place both feet on the floor. For 60 seconds, gently press your toes and heels into the ground and imagine the floor taking 5% of your load.",
+        "Open a page (paper or notes app) and create three tiny boxes: “Now”, “Later”, “Not today”. Move each worry into one box. Circle only one “Now” item."
+      ]
     },
     fear: {
-      rituals: [
-        "Walk 20 slow steps. With each step, name one small thing you already handled in your life. Let your body remember you can move with fear beside you.",
-        "Sit comfortably, put a hand on your heart and whisper: “Right now I am safe enough to breathe.” Repeat it five times, noticing one detail in the room each time.",
-        "Draw a tiny ladder with three steps. On the first step, write the smallest action you could take even with fear. On the second, what you would do once that is done. Leave the third blank for the future."
-      ],
-      product: "Warm Focus Lamp"
+      practices: [
+        "Place one hand on your chest, one on your belly. Say quietly: “Right now I am here, I am breathing.” Repeat this sentence 5 times while noticing three details in the room.",
+        "Walk 10 slow steps. With each step, name something you have already survived or handled in your life, even a small thing.",
+        "Draw a small ladder with three steps. On the first step, write one action you could take even with fear. On the second, what you could do after that. Leave the third blank for later."
+      ]
     },
     guilt: {
-      rituals: [
-        "Take a paper and write one sentence of self-forgiveness that begins with “Today I release…”. Read it out loud in a gentle voice.",
-        "Place your hand on your chest and imagine you are talking to a younger version of yourself. Tell them one sentence you needed to hear back then.",
-        "Write two columns: “What I regret” and “What I learned”. Move at least one element from the first into the second."
-      ],
-      product: "Clarity Candle"
+      practices: [
+        "Write one sentence starting with: “Today I forgive myself a little for…”. Read it back in a very gentle voice, as if you were talking to a younger you.",
+        "Place your hand on your heart and imagine talking to a friend who did the same thing. What would you tell them? Whisper that same sentence to yourself.",
+        "On a page, create two columns: “What happened” and “What I learned”. Move at least one item from the first column into the second."
+      ]
     },
     uncertainty: {
-      rituals: [
-        "Draw two small columns: “Stability now” and “New path later”. Under each, write one concrete action you could take this month. You are not choosing forever, only your next step.",
-        "Set a 3-minute timer. In the first minute, write what you are afraid of losing; second minute, what you might gain; third minute, one thing that would make the choice feel 10% lighter.",
-        "Pick a coin. Before tossing, imagine heads = option A, tails = option B. Notice your body’s reaction while the coin is in the air—that reaction matters more than the result."
-      ],
-      product: "Horizon Mind Projector"
+      practices: [
+        "Set a 3-minute timer. Minute 1: write what you are afraid of losing. Minute 2: what you might gain. Minute 3: what would make the situation 10% more bearable, not perfect.",
+        "Draw two little boxes: “Take space” and “Stay where I am”. Under each, write one very small action you could try this month, without committing forever.",
+        "Take a coin. Before tossing, imagine heads = option A, tails = option B. Notice how your body feels *while* the coin is in the air. That reaction is information."
+      ]
     },
     anger: {
-      rituals: [
-        "Place one hand on your heart and one on your belly. Inhale through the nose, exhale through the mouth with a quiet sigh. Let the heat turn into clear strength instead of explosion.",
-        "Take a sheet of paper and write everything you want to shout, without filtering. When you’re done, crumple or tear it and exhale slowly as if you were emptying the anger from your muscles.",
-        "Do 10 strong exhales through the mouth, like blowing out candles, shaking gently your hands and shoulders, then finish with three slow and silent breaths."
-      ],
-      product: "Soft Sandalwood Incense"
+      practices: [
+        "Do 10 strong exhales through the mouth, like blowing out candles, while gently shaking your hands and shoulders. Then place a hand on your chest and feel your heartbeat slowing down.",
+        "Take a sheet of paper and write everything you would like to shout, uncensored. When you are done, crumple or tear the paper and exhale slowly.",
+        "Press your feet into the ground and imagine sending the heat from your body down into the floor. Let the strength of the anger become clarity instead of explosion."
+      ]
     },
     sadness: {
-      rituals: [
-        "Put a hand on your chest. Breathe and name, in a whisper, three things that still bring a tiny spark of softness to your day.",
-        "Sit by a window, if possible. For two minutes, simply watch the light change on one object and let your sadness be there without trying to fix it.",
-        "Write one sentence beginning with “Right now, my heart feels…” and allow yourself to complete it honestly, without judging or editing."
-      ],
-      product: "Calm Soul Bracelet"
+      practices: [
+        "Sit near a window if possible. For two minutes, just watch how the light changes on one object, and allow the sadness to be there without trying to fix it.",
+        "Put a hand on your chest and whisper: “Right now my heart feels…” and finish the sentence honestly, without judging it.",
+        "Choose one very soft action for yourself: a glass of water, stretching your back, or looking at something beautiful for 30 seconds. Let it be enough for now."
+      ]
     },
     inspiration: {
-      rituals: [
-        "Open a note and write three crazy ideas you would try if nothing could fail. Circle the one that makes your body feel lighter.",
-        "Set a 3-minute timer and write without stopping: “If my life was a creative project, I would…”. Do not correct, just let it flow.",
-        "Choose one object around you and imagine it has a secret story. In your mind, invent the first three lines of that story."
-      ],
-      product: "ASTRO-MIND Projector"
+      practices: [
+        "Open a note and write three ideas you would try if you were allowed to be imperfect. Circle the one that makes your body feel a little lighter.",
+        "Set a 3-minute timer and write without stopping: “If I followed my curiosity, I would…” Do not correct or evaluate, just let it flow.",
+        "Pick one object around you and imagine it is a symbol of your next chapter. Write one sentence that starts with: “This object reminds me that…”"
+      ]
     },
     neutral: {
-      rituals: [
-        "Pause for one minute. Notice three details around you that make this moment a little more livable, and breathe into them.",
-        "Take five slow breaths. On each inhale, mentally say “I arrive”. On each exhale, “I soften”.",
-        "Look around and choose one item to put in a small “clarity corner” (desk, shelf, etc.). Let it remind you that you are allowed to reset at any time."
-      ],
-      product: "Zen Moon Diffuser"
+      practices: [
+        "For one minute, feel the contact points between your body and what you are sitting or standing on. Let your breath get 5% slower, nothing dramatic.",
+        "Take five slow breaths. On each inhale think: “I arrive”. On each exhale: “I soften”.",
+        "Create a small “clarity corner”: choose one item (a book, a stone, a photo) and place it somewhere you can see. Let it remind you that you are allowed to pause."
+      ]
     }
   };
 
   const bank = RITUAL_BANK[theme] || RITUAL_BANK.neutral;
   const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-  const chosenRitual = pick(bank.rituals);
+  const chosenPractice = pick(bank.practices);
 
   const userPrompt = `
 TARGET LANGUAGE (ISO code): ${finalLang}
 
 RULES:
-- You MUST answer 100% in this TARGET LANGUAGE. Do not mix with any other language.
+- You MUST answer 100% in this TARGET LANGUAGE. Do not mix languages.
 - If the user's text is in another language, you still answer only in the TARGET LANGUAGE.
-- Use the user's dilemma details (job, relationship, money, etc.) to keep it specific.
+- Use the user's own words and context so it feels very specific to them.
 
-USER DILEMMA:
+USER MESSAGE (feelings / situation):
 ${text}
 
 DETECTED EMOTION THEME (for context): ${theme}
 
-SUGGESTED RITUAL (you can adapt wording, but keep spirit & duration < 5 minutes):
-${chosenRitual}
+SUGGESTED MICRO-PRACTICE YOU MAY ADAPT (keep duration < 5 minutes, adapt wording to TARGET LANGUAGE):
+${chosenPractice}
 
-SUGGESTED PRODUCT / AMBIANCE (you may rephrase the name but keep it short):
-${bank.product}
+Now, following the SYSTEM PROMPT, produce the 5 sections:
 
-Now produce the 5 sections exactly as described in the system message, in the TARGET LANGUAGE.
-Remember:
-- Start each section with the correct emoji (🌫, 🪞, 🕯, 🗣, 🪷).
-- Do NOT add numbers like "1)", "2)", etc.
+1) 🪞 Emotional Mirror
+2) 💡 What seems to matter underneath
+3) 🧘 Micro-practices (1–3, under 5 minutes each)
+4) 🌱 Gentle next step
+5) 🛟 Care reminder
+
+Use clear headings and short paragraphs so it feels easy to read even when overwhelmed.
 `;
 
   try {
@@ -206,22 +239,16 @@ Remember:
 
     const data = await res.json();
 
-    const raw = data?.choices?.[0]?.message?.content?.trim() ||
+    const textOut =
+      data?.choices?.[0]?.message?.content?.trim() ||
       "I couldn’t generate guidance right now.";
-
-    // 🔧 Clean leading numeric prefixes like "1) ", "2) " if they still appear
-    const cleanedText = raw
-      .split('\n')
-      .map(line => line.replace(/^\s*\d+\)\s*/, ''))
-      .join('\n');
 
     return new Response(
       JSON.stringify({
         ok: true,
-        text: cleanedText,
+        text: textOut,
         theme,
-        ritual: chosenRitual,
-        product: bank.product,
+        practice: chosenPractice,
         lang: finalLang
       }),
       { status: 200, headers: { "Content-Type": "application/json" } }

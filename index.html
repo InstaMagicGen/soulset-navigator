@@ -3,1288 +3,410 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Soulset Navigator • Clear Interface</title>
+  <title>Soulset Companion • Emotional Wellness App</title>
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg-1:#f6f9fc;
-      --bg-2:#eef7f6;
-      --card:#ffffff;
-      --text:#335566;
-      --muted:#6f8791;
+      --text: #2e3d45;
+      --muted: #708a94;
+      --card: rgba(255,255,255,0.75);
+      --bg: #f1f6f8;
       --primary:#5aa3a6;
-      --primary-strong:#428c8f;
-      --accent:#c9d7ff;
-      --ring:#a7d9db;
-      --shadow: 0 8px 24px rgba(82,126,133,.12);
+      --shadow: 0 10px 28px rgba(0,0,0,0.15);
     }
-    html,body{height:100%}
+
     body{
       margin:0;
-      font-family: Nunito, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family: Nunito, sans-serif;
       color:var(--text);
-      background: radial-gradient(1200px 800px at 15% -10%, var(--bg-2), transparent 60%),
-                  radial-gradient(900px 700px at 100% 0%, var(--accent), transparent 55%),
-                  linear-gradient(180deg, var(--bg-1), #ffffff);
-    }
-    .container{max-width:1100px;margin:0 auto;padding:32px 20px;  position:relative; z-index:1}
-    header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
-    .brand{display:flex;align-items:center;gap:14px}
-
-    .brand-logo{
-      width: 84px;
-      height: 84px;
-      border-radius:50%;
-      padding:6px;
-      background:#ffffffcc;
-      box-shadow:0 0 22px rgba(90,163,166,.25);
-      object-fit:contain;
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
     }
 
-    h1{font-family:"Playfair Display", serif;font-weight:700;letter-spacing:.2px;margin:0;font-size:clamp(22px,2.7vw,30px)}
-    .subtitle{color:var(--muted);font-size:14px}
+    /* ————————————————————————————————————————————————
+       Hero full-screen video background
+    ———————————————————————————————————————————————— */
 
-    .grid{display:grid;grid-template-columns:2fr 1fr;gap:22px}
-    @media (max-width: 880px){.grid{grid-template-columns:1fr}}
+    .hero-video{
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      object-fit:cover;
+      filter:brightness(0.72) saturate(1.15) blur(1px);
+      z-index:-2;
+    }
 
+    .gradient-overlay{
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.15), rgba(255,255,255,0.2));
+      z-index:-1;
+    }
+
+    /* ————————————————————————————————————————————————
+       Main Container
+    ———————————————————————————————————————————————— */
+    .container{
+      max-width:850px;
+      margin:0 auto;
+      padding:40px 22px 120px;
+    }
+
+    header{
+      text-align:center;
+      padding-top:28px;
+      margin-bottom:28px;
+      color:white;
+    }
+    header h1{
+      font-family:"Playfair Display", serif;
+      font-size:clamp(30px, 5vw, 42px);
+      margin:0;
+    }
+    header .subtitle{
+      font-size:15px;
+      opacity:0.85;
+      margin-top:8px;
+    }
+
+    /* ————————————————————————————————————————————————
+       Emotional Check-In Card
+    ———————————————————————————————————————————————— */
     .card{
       background:var(--card);
-      border-radius:18px;
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      padding:24px 22px;
+      border-radius:22px;
       box-shadow:var(--shadow);
-      padding:20px;
-      overflow:hidden;
+      margin-bottom:26px;
     }
-    .card h2{margin:0 0 8px;font-size:18px}
-    .help{font-size:14px;color:var(--muted)}
-
-    /* top choice */
-    .choice-row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin:10px 0 6px;
+    .card h2{
+      margin:0 0 12px;
+      font-size:22px;
+      font-family:"Playfair Display", serif;
     }
-    .choice-pill{
-      flex:1 1 150px;
-      border-radius:999px;
-      padding:10px 14px;
-      font-size:13px;
-      border:1.5px solid rgba(90,163,166,.4);
-      background:#f7fbfb;
-      color:#355667;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      box-shadow:var(--shadow);
-    }
-    .choice-pill:hover{
-      background:#e7f3f3;
-    }
-    .choice-primary{
-      background:var(--primary);
-      border-color:var(--primary);
-      color:#fff;
-    }
-    .choice-hint{
-      margin-top:0;
-      margin-bottom:4px;
-    }
-
     textarea{
       width:100%;
-      box-sizing:border-box;
-      display:block;
-      min-height:88px;
-      border-radius:14px;
-      border:1.5px solid rgba(90,163,166,.25);
-      padding:14px 14px 12px;
-      font-size:16px;
-      resize:vertical;
-      outline:none;
-      color:var(--text);
-      background:#fbfeff;
-    }
-    textarea:focus{box-shadow:0 0 0 4px var(--ring);border-color:transparent}
-
-    .actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}
-    .btn{
-      appearance:none;border:0;border-radius:14px;padding:12px 18px;font-weight:700;cursor:pointer;
-      background:var(--primary);color:#fff;box-shadow:var(--shadow);transition:transform .06s ease, background .2s ease, box-shadow .2s ease
-    }
-    .btn:hover{background:var(--primary-strong);transform:translateY(-1px)}
-    .btn:disabled{opacity:.65;cursor:not-allowed;transform:none}
-    .ghost{background:transparent;color:var(--primary);border:1.5px solid var(--primary);}
-
-    .lang-select{
-      border-radius:999px;
-      border:1px solid rgba(90,163,166,.3);
-      padding:8px 10px;
-      font-size:13px;
-      background:#f7fbfb;
-      color:var(--muted);
-      outline:none;
-    }
-
-    .result{margin-top:16px}
-
-    /* Sunset reset bottom container */
-    .sunset-reset-bottom{
-      margin-top:18px;
-      text-align:center;
-    }
-    .sunset-reset-bottom .btn{
-      min-width:220px;
-    }
-
-    .bubble{background:linear-gradient(180deg,#ffffff, #f7fbfb);border-radius:16px;padding:16px 16px;box-shadow:var(--shadow);line-height:1.7}
-    .bubble .section{margin:10px 0}
-    .bubble .title{font-weight:700}
-
-    /* PAW layout */
-    .paw-grid{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      margin-top:8px;
-      width:100%;
-    }
-    .paw-card{
-      border-radius:14px;
-      background:linear-gradient(180deg,#ffffff,#f7fbfb);
-      box-shadow:var(--shadow);
-      padding:12px 14px;
-      box-sizing:border-box;
-      max-width:100%;
-      word-wrap:break-word;
-    }
-    .paw-card-wisdom{
-      background:linear-gradient(180deg,#fdf8ff,#f2ecff);
-      border:1px solid rgba(134,111,209,0.3);
-      box-shadow:0 10px 30px rgba(80,63,148,0.18);
-    }
-    .paw-card-wisdom .paw-label{
-      color:#6c52b5;
-    }
-    .paw-label{
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:0.12em;
-      color:var(--muted);
-      margin-bottom:6px;
-    }
-    .paw-text{
-      font-size:14px;
-      line-height:1.6;
-      white-space:pre-wrap;
-    }
-    .paw-prompt{
-      font-style:italic;
-      opacity:0.9;
-    }
-    .paw-tag{
-      display:inline-block;
-      padding:4px 8px;
-      border-radius:999px;
-      background:rgba(90,163,166,0.08);
-      color:#355667;
-      margin-top:6px;
-      margin-bottom:4px;
-      font-size:13px;
-      font-weight:600;
-    }
-
-    .rituals .chip{
-      display:block;
-      background:#f5fbfb;
-      border:1px dashed #b8e4e6;
-      border-radius:12px;
-      padding:10px 12px;
-      margin:8px 0;
-      color:#426a72;
-      font-size:14px
-    }
-    .wellbeing{display:flex;gap:12px;align-items:center;background:#f7f9ff;border:1px solid #dfe8ff;border-radius:14px;padding:12px}
-    .well-ico{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#dfeaff,#c1ffe9);display:grid;place-items:center;color:#5b79c7;font-weight:900}
-    .well-cta{font-size:14px;color:#5b6a9b}
-
-    .theme-icon{
-      font-size:40px;
-      text-align:center;
-      margin-bottom:8px;
-    }
-
-    .footer{margin-top:28px;font-size:12.5px;color:var(--muted);text-align:center}
-    .small{font-size:13px;color:var(--muted)}
-
-    /* Halo background */
-    .halo {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .halo::before {
-      content: "";
-      position: absolute;
-      width: 120vmax;
-      height: 120vmax;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.6;
-      animation: breatheHalo 10s ease-in-out infinite;
-    }
-    @keyframes breatheHalo {
-      0%,100% { transform: translate(-50%, -50%) scale(1); opacity: 0.45; }
-      50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
-    }
-    .theme-stress::before { background: radial-gradient(circle, #a8d8ff, #80b5d6); }
-    .theme-fear::before { background: radial-gradient(circle, #ffe2b0, #f7c87b); }
-    .theme-guilt::before { background: radial-gradient(circle, #dcbcff, #b89adb); }
-    .theme-uncertainty::before { background: radial-gradient(circle, #fff4b3, #ffe480); }
-    .theme-anger::before { background: radial-gradient(circle, #ffb3b3, #ff8686); }
-    .theme-sadness::before { background: radial-gradient(circle, #c9e4ff, #a4c6e5); }
-    .theme-inspiration::before { background: radial-gradient(circle, #ffd2e6, #f8a8c6); }
-    .theme-neutral::before { background: radial-gradient(circle, #dff7d9, #b8e5b0); }
-
-    .hidden{
-      display:none !important;
-    }
-
-    /* Sunset Reset overlay DELUXE */
-    .sunset-overlay{
-      position:fixed;
-      inset:0;
-      z-index:30;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .45s ease;
-    }
-    .sunset-overlay.is-visible{
-      opacity:1;
-      pointer-events:auto;
-    }
-    .sunset-backdrop{
-      position:absolute;
-      inset:0;
-      background:rgba(6,18,30,0.78);
-      backdrop-filter:blur(16px);
-    }
-    .sunset-panel{
-      position:relative;
-      width:100%;
-      max-width:520px;
-      margin:0 16px;
-      border-radius:26px;
-      padding:20px 20px 22px;
-      background:radial-gradient(circle at top,#ffe0b8,#f3a7ff 35%,#0b1230 80%);
-      color:#fefefe;
-      box-shadow:0 24px 60px rgba(0,0,0,0.75);
-      overflow:hidden;
-    }
-    .sunset-panel::after{
-      content:"";
-      position:absolute;
-      inset:-40%;
-      background:radial-gradient(circle at 20% 0%,rgba(255,255,255,0.25),transparent 55%);
-      opacity:0.9;
-      pointer-events:none;
-    }
-    .sunset-close{
-      position:absolute;
-      top:10px;
-      right:10px;
-      background:rgba(0,0,0,0.35);
       border:0;
-      width:26px;
-      height:26px;
-      border-radius:999px;
-      cursor:pointer;
-      color:#fefefe;
-      font-size:16px;
-      line-height:1;
-      display:grid;
-      place-items:center;
-      z-index:3;
-    }
-    .sunset-audio-btn{
-      position:absolute;
-      top:10px;
-      right:50px;
-      background:rgba(0,0,0,0.35);
-      border:0;
-      width:28px;
-      height:28px;
-      border-radius:999px;
-      cursor:pointer;
-      color:#fefefe;
-      font-size:15px;
-      line-height:1;
-      display:grid;
-      place-items:center;
-      z-index:3;
-    }
-    .sunset-title{
-      font-size:15px;
-      font-weight:700;
-      letter-spacing:0.08em;
-      text-transform:uppercase;
-      opacity:0.95;
-      margin-bottom:2px;
-      position:relative;
-      z-index:1;
-    }
-    .sunset-tagline{
-      font-size:12px;
-      opacity:0.85;
-      margin-bottom:8px;
-      position:relative;
-      z-index:1;
-    }
-    .sunset-visual{
-      margin-top:6px;
-      margin-bottom:12px;
-      height:auto;
-      border-radius:20px;
-      position:relative;
-      overflow:hidden;
-      box-shadow:0 14px 40px rgba(0,0,0,0.4);
-    }
-    .sunset-main-photo {
-      width:100%;
-      max-width:900px;
       border-radius:16px;
-      box-shadow:var(--shadow);
-      margin-bottom:0;
-      object-fit:cover;
-      max-height:70vh;
-      aspect-ratio:16/9;
-      display:block;
+      padding:16px;
+      font-size:17px;
+      min-height:110px;
+      resize:vertical;
+      color:var(--text);
+      background:rgba(255,255,255,0.7);
+      backdrop-filter:blur(6px);
+      outline:none;
     }
-    .sunset-visual::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:radial-gradient(circle at top,rgba(255,255,255,0.25),transparent 55%),
-                 linear-gradient(180deg,rgba(5,8,25,0.0),rgba(1,5,20,0.55));
-      pointer-events:none;
-    }
-    .sunset-timer-row{
+
+    /* Buttons */
+    .actions{
       display:flex;
-      align-items:baseline;
-      justify-content:space-between;
-      gap:6px;
-      margin-bottom:4px;
-      position:relative;
-      z-index:1;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:12px;
     }
-    .sunset-timer{
-      display:flex;
-      align-items:baseline;
-      gap:4px;
-      font-size:28px;
+    .btn{
+      appearance:none;
+      border:0;
+      padding:14px 20px;
+      border-radius:16px;
       font-weight:700;
-    }
-    .sunset-timer span{
-      font-variant-numeric:tabular-nums;
-    }
-    .sunset-phase{
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:0.16em;
-      opacity:0.85;
-      text-align:right;
-    }
-    .sunset-instruction{
-      font-size:13px;
-      line-height:1.7;
-      opacity:0.96;
-      position:relative;
-      z-index:1;
-      margin-top:6px;
-    }
-    .sunset-breath{
-      font-size:13px;
-      margin-top:4px;
-      opacity:0.9;
-      position:relative;
-      z-index:1;
-      animation:breatheText 4s ease-in-out infinite;
-    }
-    .sunset-subline{
-      margin-top:6px;
-      font-size:11px;
-      opacity:0.7;
-      position:relative;
-      z-index:1;
-    }
-    @keyframes breatheText{
-      0%,100%{transform:translateY(0);opacity:0.85;}
-      50%{transform:translateY(-2px);opacity:1;}
-    }
-
-    /* Sunset gallery (right column photos) */
-    .sunset-gallery{
-      margin-top:18px;
-      border-top:1px solid rgba(183,210,216,0.5);
-      padding-top:12px;
-    }
-    .sunset-gallery h3{
-      margin:0 0 6px;
-      font-size:14px;
-      font-weight:600;
-      color:#3b6270;
-    }
-    .sunset-photo-frame{
-      position:relative;
-      border-radius:14px;
-      overflow:hidden;
-      height:150px;
-      background:linear-gradient(135deg,#fce3c1,#f9b1ff);
-      box-shadow:var(--shadow);
-      margin-bottom:8px;
-    }
-    .sunset-photo-frame img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      object-position:center;
-      display:block;
-      transform:scale(1.03);
-      filter:saturate(1.05);
-    }
-    .sunset-photo-label{
-      position:absolute;
-      bottom:8px;
-      left:10px;
-      padding:4px 8px;
-      border-radius:999px;
-      font-size:11px;
-      background:rgba(0,0,0,0.45);
-      color:#fefefe;
-    }
-    .mini-btn{
-      font-size:11px;
-      padding:5px 9px;
-      border-radius:999px;
-      border:1px solid rgba(90,163,166,0.45);
-      background:#f7fbfb;
-      color:#4b6e77;
       cursor:pointer;
+      background:var(--primary);
+      color:white;
+      box-shadow:var(--shadow);
+      font-size:15px;
     }
-    .mini-btn:hover{
-      background:#e7f3f3;
+    .btn:disabled{
+      opacity:0.6;
+      cursor:not-allowed;
+    }
+    .secondary-btn{
+      background:rgba(255,255,255,0.4);
+      color:var(--text);
+      font-weight:600;
     }
 
-    @media (max-width: 600px){
-      textarea{
-        font-size:15px;
-      }
-      .sunset-panel{
-        max-width:100%;
-      }
+    /* Results */
+    #result .bubble{
+      margin-top:20px;
+      background:white;
+      padding:18px 20px;
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      line-height:1.65;
+      white-space:pre-line;
     }
+
+    /* Sunset Reset Button Block */
+    .sunset-block{
+      display:none;
+      text-align:center;
+      margin-top:28px;
+    }
+    .sunset-btn{
+      background:#ffffffaa;
+      color:#000;
+      padding:14px 22px;
+      border-radius:20px;
+      font-size:16px;
+      font-weight:700;
+      backdrop-filter:blur(12px);
+      box-shadow:var(--shadow);
+    }
+
   </style>
 </head>
+
 <body>
-  <div class="halo"></div>
+
+  <!-- Fullscreen background video -->
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="Sunset-1V.mp4" type="video/mp4">
+  </video>
+  <div class="gradient-overlay"></div>
 
   <div class="container">
+
     <header>
-      <div class="brand">
-        <img
-          src="soulset-icon-512.png"
-          alt="Soulset Navigator logo"
-          class="brand-logo"
-        />
-        <div>
-          <h1>The Soulset Navigator</h1>
-          <div class="subtitle">PAW Mode • Prompt · Awareness · Wisdom · Sunset Reset PRO</div>
-        </div>
+      <h1>Soulset Companion</h1>
+      <div class="subtitle" id="subtitle">
+        Emotional wellness • Gentle therapeutic guidance
       </div>
     </header>
 
-    <div class="grid">
-      <section class="card">
-        <h2 id="stepTitle">Step 1</h2>
-        <p class="help" id="stepHelp">
-          Share your dilemma below. After the guidance, you’ll unlock a 60-second Sunset Reset.
-        </p>
+    <!-- Emotional Check-in -->
+    <section class="card">
+      <h2 id="step-title">Emotional Check-In</h2>
+      <p id="step-desc" style="margin-top:-6px; font-size:14px; color:var(--muted);">
+        Describe what you're feeling or what happened. The Soulset Companion will mirror your emotions
+        and offer therapeutic micro-practices.
+      </p>
 
-        <div class="choice-row">
-          <button id="dilemmaModeBtn" class="choice-pill choice-primary" type="button">
-            🧭 Share my dilemma
-          </button>
-        </div>
-        <p class="small choice-hint" id="choiceHint">
-          You can always come back and run another dilemma.
-        </p>
+      <textarea id="inputText" placeholder="Ex: I feel overwhelmed and emotionally tired..."></textarea>
 
-        <textarea id="dilemmaInput" placeholder="E.g.: I’m not sure if I should move to a new city for a job."></textarea>
-        <div class="actions">
-          <button id="analyzeBtn" class="btn">Analyze</button>
-          <button id="clearBtn" class="btn ghost" type="button">Clear</button>
-          <select id="langSelect" class="lang-select">
-            <option id="langAutoOption" value="">Language: auto</option>
-            <option value="en">English</option>
-            <option value="fr">Français</option>
-            <option value="es">Español</option>
-            <option value="ar">العربية</option>
-          </select>
-          <span id="status" class="small" aria-live="polite"></span>
-        </div>
-
-        <div id="result" class="result"></div>
-
-        <!-- Sunset Reset button at the END of the card, shown only after analysis -->
-        <div id="sunsetResetBottom" class="sunset-reset-bottom hidden">
-          <button id="sunsetResetBtn" class="btn ghost" type="button">
-            ☀ Sunset Reset PRO (60s)
-          </button>
-        </div>
-      </section>
-
-      <aside class="card rituals">
-        <div id="themeIcon" class="theme-icon">🍃</div>
-        <h2 id="asideTitle">Personalized ritual</h2>
-        <span id="ritualChip" class="chip">
-          Your micro-ritual will appear here after analysis.
-        </span>
-        <div id="productLine" class="small" style="margin-top:8px;">
-          Product option: —
-        </div>
-        <div style="height:8px"></div>
-        <div class="wellbeing">
-          <div class="well-ico">☽</div>
-          <div class="well-cta">
-            Well-being tip: soften the lights, slow down your breathing, and read your guidance as if it were a letter from your future self.
-          </div>
-        </div>
-
-        <!-- Sunset gallery with random photos -->
-        <div class="sunset-gallery">
-          <h3 id="sunsetGalleryTitle">Sunset snapshots</h3>
-          <div class="sunset-photo-frame">
-            <img id="sunsetPhoto" src="sunset-1.jpeg" alt="Soulset sunset">
-            <div class="sunset-photo-label">Soulset moment</div>
-          </div>
-          <button id="shufflePhotoBtn" class="mini-btn" type="button">
-            New sunset image
-          </button>
-        </div>
-      </aside>
-    </div>
-
-    <div class="footer" id="footerText">© SoulsetJourney • Clear & soothing interface • V7</div>
-  </div>
-
-  <!-- Sunset Reset PRO Overlay -->
-<div id="sunsetOverlay" class="sunset-overlay" aria-hidden="true">
-  <div class="sunset-backdrop"></div>
-  <div class="sunset-panel" role="dialog" aria-modal="true" aria-labelledby="sunsetTitle">
-    <button class="sunset-close" id="sunsetCloseBtn" aria-label="Close Sunset Reset">×</button>
-    <button class="sunset-audio-btn" id="ambientBtn" aria-label="Toggle ambient sound">🔈</button>
-
-    <div id="sunsetTitle" class="sunset-title">☀ SUNSET RESET · 60 SECONDS</div>
-    <div id="sunsetTagline" class="sunset-tagline">
-      Cinematic pause · one minute to soften your day.
-    </div>
-
-    <div class="sunset-visual">
-      <video id="sunsetResetVideo" class="sunset-main-photo" autoplay muted loop playsinline>
-        <!-- ⚠️ ICI : noms EXACTS de tes fichiers -->
-        <source id="sunsetVideoSource" src="Sunset-1V.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <!-- Ambient video used only for sound -->
-    <video id="sunsetAmbient" style="width:0;height:0;opacity:0;" loop playsinline>
-      <!-- ⚠️ ICI aussi : nom exact -->
-      <source src="Sunset-ambient.mp4" type="video/mp4">
-    </video>
-
-    <div class="sunset-timer-row">
-      <div class="sunset-timer">
-        <span id="sunsetTimer">60</span><span>s</span>
+      <div class="actions">
+        <button class="btn" id="analyzeBtn">Reflect with me</button>
+        <button class="btn secondary-btn" id="clearBtn">Clear</button>
       </div>
-      <div id="sunsetPhase" class="sunset-phase">PHASE 1 • ARRIVAL</div>
+
+      <div id="status" style="margin-top:10px; font-size:13px; color:white;"></div>
+
+      <div id="result"></div>
+    </section>
+
+    <!-- Sunset Reset Block -->
+    <div class="sunset-block" id="sunsetBlock">
+      <button class="sunset-btn" id="sunsetBtn">🌅 Sunset Reset (60 seconds)</button>
     </div>
-    <div id="sunsetInstruction" class="sunset-instruction">
-      Let your eyes land softly on the horizon. You don’t have to fix anything yet, just arrive here.
-    </div>
-    <div id="sunsetBreathText" class="sunset-breath">
-      Inhale for 4 · hold for 4 · exhale for 6.
-    </div>
-    <div id="sunsetSubline" class="sunset-subline">
-      When the timer reaches zero, notice one tiny thing that feels 2% lighter than before.
-    </div>
-  </div>
-</div>
 
   </div>
 
   <script>
-    const qs = sel => document.querySelector(sel);
-    const inputEl = qs('#dilemmaInput');
-    const resultEl = qs('#result');
-    const btn = qs('#analyzeBtn');
-    const clearBtn = qs('#clearBtn');
-    const statusEl = qs('#status');
-    const halo = qs('.halo');
-    const langSelect = qs('#langSelect');
-    const langAutoOption = qs('#langAutoOption');
-    const themeIconEl = qs('#themeIcon');
-    const ritualChip = qs('#ritualChip');
-    const productLine = qs('#productLine');
+    const qs = s => document.querySelector(s);
+    const input = qs("#inputText");
+    const result = qs("#result");
+    const statusEl = qs("#status");
+    const sunsetBlock = qs("#sunsetBlock");
+    const stepTitle = qs("#step-title");
+    const stepDesc = qs("#step-desc");
+    const subtitle = qs("#subtitle");
 
-    const sunsetTitleEl = qs('#sunsetTitle');
-    const sunsetTaglineEl = qs('#sunsetTagline');
-    const sunsetSublineEl = qs('#sunsetSubline');
+    /* ——————————————————————————————————————————
+       Auto language detection (based on system)
+    ——————————————————————————————————————————— */
+    let userLang = navigator.language.toLowerCase().substring(0,2);
 
-
-    const sunsetResetBottom = qs('#sunsetResetBottom');
-    const sunsetResetBtn = qs('#sunsetResetBtn');
-
-    const sunsetOverlay = qs('#sunsetOverlay');
-    const sunsetCloseBtn = qs('#sunsetCloseBtn');
-    const sunsetTimerEl = qs('#sunsetTimer');
-    const sunsetPhaseEl = qs('#sunsetPhase');
-    const sunsetInstructionEl = qs('#sunsetInstruction');
-    const sunsetBreathTextEl = qs('#sunsetBreathText');
-    const sunsetResetVideoEl = qs('#sunsetResetVideo');
-    const sunsetVideoSourceEl = qs('#sunsetVideoSource');
-
-    const sunsetAmbientEl = qs('#sunsetAmbient');
-    const ambientBtn = qs('#ambientBtn');
-
-    const sunsetPhotoEl = qs('#sunsetPhoto');
-    const shufflePhotoBtn = qs('#shufflePhotoBtn');
-
-    const dilemmaModeBtn = qs('#dilemmaModeBtn');
-
-    const stepTitleEl = qs('#stepTitle');
-    const stepHelpEl = qs('#stepHelp');
-    const choiceHintEl = qs('#choiceHint');
-    const footerEl = qs('#footerText');
-    const asideTitleEl = qs('#asideTitle');
-    const sunsetGalleryTitleEl = qs('#sunsetGalleryTitle');
-    const wellTipEl = qs('.well-cta');
-
-    let sunsetInterval = null;
-    let sunsetRemaining = 60;
-    let ambientPlaying = false;
-
-    /* ---------- UI translations (EN / FR) ---------- */
-
-    const UI_STRINGS = {
-      en: {
-        stepTitle: "Step 1",
-        stepHelp: "Share your dilemma below. After the guidance, you’ll unlock a 60-second Sunset Reset.",
-        shareDilemma: "Share my dilemma",
-        choiceHint: "You can always come back and run another dilemma.",
-        placeholder: "E.g.: I’m not sure if I should move to a new city for a job.",
-        analyze: "Analyze",
-        clear: "Clear",
-        langAuto: "Language: auto",
-        footer: "© SoulsetJourney • Clear & soothing interface • V7",
-        asideTitle: "Personalized ritual",
-        asideChip: "Your micro-ritual will appear here after analysis.",
-        productPrefix: "Product option: ",
-        productEmpty: "Product option: —",
-        sunsetBottomBtn: "☀ Sunset Reset PRO (60s)",
-        galleryTitle: "Sunset snapshots",
-        galleryBtn: "New sunset image",
-        statusReading: "Reading your energy…",
-        statusAdjust: "Adjust your text and try again.",
-        statusOffline: "Offline?",
-        wellTip: "Well-being tip: soften the lights, slow down your breathing, and read your guidance as if it were a letter from your future self."
-      },
-      fr: {
-        stepTitle: "Étape 1",
-        stepHelp: "Décris ton dilemme ci-dessous. Après la guidance, tu débloqueras un Sunset Reset de 60 secondes.",
-        shareDilemma: "Partager mon dilemme",
-        choiceHint: "Tu peux toujours revenir et lancer un autre dilemme.",
-        placeholder: "Ex. : Je ne sais pas si je dois déménager dans une nouvelle ville pour un travail.",
-        analyze: "Analyser",
-        clear: "Effacer",
-        langAuto: "Langue : auto",
-        footer: "© SoulsetJourney • Interface claire et apaisante • V7",
-        asideTitle: "Rituel personnalisé",
-        asideChip: "Ton micro-rituel apparaîtra ici après l’analyse.",
-        productPrefix: "Option produit : ",
-        productEmpty: "Option produit : —",
-        sunsetBottomBtn: "☀ Sunset Reset PRO (60 s)",
-        galleryTitle: "Instantanés de coucher de soleil",
-        galleryBtn: "Nouvelle image de sunset",
-        statusReading: "Je lis ton énergie…",
-        statusAdjust: "Ajuste ton texte et réessaie.",
-        statusOffline: "Hors ligne ?",
-        wellTip: "Astuce bien-être : adoucis la lumière, ralentis ta respiration et lis ta guidance comme si c’était une lettre de ton toi du futur."
-      }
-    };
-
-    const SUNSET_TEXT = {
-  en: {
-    title: "☀ SUNSET RESET · 60 SECONDS",
-    tagline: "Cinematic pause · one minute to soften your day.",
-    subline: "When the timer reaches zero, notice one tiny thing that feels 2% lighter than before.",
-    phase1Label: "PHASE 1 • ARRIVAL",
-    phase1Instr: "Let your eyes soften on the horizon. You don’t have to solve anything yet, just arrive here with your breath.",
-    phase1Breath: "Simply breathe at your own rhythm.",
-    phase2Label: "PHASE 2 • BREATH 4–4–6",
-    phase2Instr: "Inhale through the nose for 4, hold gently for 4, then exhale through the mouth for 6. Let each exhale carry one worry out of your chest.",
-    phase2Breath: "Inhale 4 · hold 4 · exhale 6 · repeat.",
-    phase3Label: "PHASE 3 • LET IT SOFTEN",
-    phase3Instr: "Imagine the light absorbing what you can’t control today. With each exhale, whisper inside: “I let it soften.”",
-    phase3Breath: "Whisper inside: “Let it soften.”",
-    doneLabel: "DONE • RESET COMPLETE",
-    doneInstr: "Your reset is complete. Notice one tiny difference in your body before you return to your day.",
-    doneBreath: "Stay still for one more soft breath."
-  },
-  fr: {
-    title: "☀ SUNSET RESET · 60 SECONDES",
-    tagline: "Pause cinématographique · une minute pour adoucir ta journée.",
-    subline: "Quand le minuteur arrive à zéro, remarque une petite chose qui te semble 2 % plus légère qu’avant.",
-    phase1Label: "PHASE 1 • ARRIVÉE",
-    phase1Instr: "Laisse ton regard se poser doucement sur l’horizon. Tu n’as rien à résoudre pour l’instant, juste arriver ici avec ta respiration.",
-    phase1Breath: "Respire simplement à ton propre rythme.",
-    phase2Label: "PHASE 2 • RESPIRATION 4–4–6",
-    phase2Instr: "Inspire par le nez pendant 4, retiens délicatement pendant 4, puis expire par la bouche pendant 6. À chaque expiration, laisse sortir une inquiétude de ta poitrine.",
-    phase2Breath: "Inspire 4 · retiens 4 · expire 6 · répète.",
-    phase3Label: "PHASE 3 • LAISSE RAMOLLIR",
-    phase3Instr: "Imagine la lumière absorber ce que tu ne peux pas contrôler aujourd’hui. À chaque expiration, murmure intérieurement : « Je laisse ramollir. »",
-    phase3Breath: "Murmure intérieurement : « Je laisse ramollir. »",
-    doneLabel: "FIN • RESET TERMINÉ",
-    doneInstr: "Ton reset est terminé. Remarque une toute petite différence dans ton corps avant de revenir à ta journée.",
-    doneBreath: "Reste immobile pour un dernier souffle doux."
-  }
-};
-
-function getSunsetText(lang){
-  return SUNSET_TEXT[lang] || SUNSET_TEXT.en;
-}
-
-let sunsetText = SUNSET_TEXT.en;
-
-
-    const UI_LANGS = ["en", "fr"];
-    const SUPPORTED_LANGS = ["en","fr","es","ar"];
-
-    const browserLangCode = (navigator.language || navigator.userLanguage || "en")
-      .slice(0, 2)
-      .toLowerCase();
-
-    const autoLang = SUPPORTED_LANGS.includes(browserLangCode) ? browserLangCode : "en";
-    let uiLang = UI_LANGS.includes(browserLangCode) ? browserLangCode : "en";
-    let currentUI = UI_STRINGS[uiLang] || UI_STRINGS.en;
-
-    function applyUILanguage(lang){
-      if (!UI_LANGS.includes(lang)) lang = "en";
-      uiLang = lang;
-      currentUI = UI_STRINGS[lang] || UI_STRINGS.en;
-
-      if (stepTitleEl) stepTitleEl.textContent = currentUI.stepTitle;
-      if (stepHelpEl) stepHelpEl.textContent = currentUI.stepHelp;
-      if (dilemmaModeBtn) dilemmaModeBtn.textContent = "🧭 " + currentUI.shareDilemma;
-      if (choiceHintEl) choiceHintEl.textContent = currentUI.choiceHint;
-      if (inputEl) inputEl.placeholder = currentUI.placeholder;
-      if (btn) btn.textContent = currentUI.analyze;
-      if (clearBtn) clearBtn.textContent = currentUI.clear;
-      if (langAutoOption) langAutoOption.textContent = currentUI.langAuto;
-      if (footerEl) footerEl.textContent = currentUI.footer;
-      if (asideTitleEl) asideTitleEl.textContent = currentUI.asideTitle;
-      if (ritualChip) ritualChip.textContent = currentUI.asideChip;
-      if (productLine) productLine.textContent = currentUI.productEmpty;
-      if (sunsetResetBtn) sunsetResetBtn.textContent = currentUI.sunsetBottomBtn;
-      if (sunsetGalleryTitleEl) sunsetGalleryTitleEl.textContent = currentUI.galleryTitle;
-      if (shufflePhotoBtn) shufflePhotoBtn.textContent = currentUI.galleryBtn;
-      if (wellTipEl) wellTipEl.textContent = currentUI.wellTip;
-
-      if (langSelect && !langSelect.value && SUPPORTED_LANGS.includes(lang)) {
-        langSelect.value = lang;
-      }
-      
-    }
-
-    /* ---------- Theming & helpers ---------- */
-
-    const themeEmojis = {
-      stress: "😰",
-      fear: "😨",
-      guilt: "🫂",
-      uncertainty: "🤔",
-      anger: "🔥",
-      sadness: "😢",
-      inspiration: "✨",
-      neutral: "🍃"
-    };
-
-    const LOADING_MESSAGES = {
-      en: [
-        "⏳ I’m listening… take one soft breath.",
-        "🌬️ Breathe slowly… I’m tuning into your energy.",
-        "✨ Hold for a moment… the horizon is clearing.",
-        "💫 One inhale, one exhale… the guidance is forming.",
-        "🕊️ Soft breath… clarity is approaching."
-      ],
-      fr: [
-        "⏳ Je t’écoute… prends une douce respiration.",
-        "🌬️ Respire lentement… je me connecte à ton énergie.",
-        "✨ Attends un instant… l’horizon se clarifie.",
-        "💫 Inspire, expire… la guidance se forme.",
-        "🕊️ Respire doucement… la clarté arrive."
-      ],
-      es: [
-        "⏳ Te escucho… respira suavemente.",
-        "🌬️ Respira despacio… estoy leyendo tu energía.",
-        "✨ Espera un momento… el horizonte se aclara.",
-        "💫 Inhala y exhala… la guía está llegando.",
-        "🕊️ Suave aliento… la claridad se acerca."
-      ],
-      ar: [
-        "⏳ أنا أصغي… خذ نفسًا هادئًا.",
-        "🌬️ تنفّس ببطء… أقرأ طاقتك.",
-        "✨ لحظة واحدة… الأفق يهدأ.",
-        "💫 شهيق، زفير… الإرشاد يتشكل.",
-        "🕊️ تنفّس بلطف… الوضوح قادم."
-      ],
-      default: [
-        "⏳ I’m listening… breathe softly.",
-        "🌬️ One slow breath… I’m here.",
-        "✨ Clarity is forming, stay still."
-      ]
-    };
-
-    const SUNSET_IMAGES = [
-      "sunset-1.jpeg",
-      "sunset-2.jpeg",
-      "sunset-3.jpeg",
-      "Sunset-4.jpeg",
-      "Sunset-5.jpeg",
-      "Sunset-6.jpeg",
-      "Sunset-7.jpeg"
-    ];
-
-    const SUNSET_VIDEOS = [
-      "Sunset-1V.mp4",
-      "Sunset-2V.mp4",
-      "Sunset-3V.mp4",
-      "Sunset-4V.mp4"
-    ];
-
-    function randomLoadingMessage(langSelected) {
-      const list =
-        LOADING_MESSAGES[langSelected] ||
-        LOADING_MESSAGES.default;
-      return list[Math.floor(Math.random() * list.length)];
-    }
-
-    function setTheme(theme) {
-      const t = theme || "neutral";
-      halo.className = "halo";
-      halo.classList.add(`theme-${t}`);
-      themeIconEl.textContent = themeEmojis[t] || themeEmojis.neutral;
-    }
-
-    function escapeHTML(str = "") {
-      return str
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#39;");
-    }
-
-    function splitByIcons(rawText = "") {
-      const markers = ["🌫", "🪞", "🕯", "🗣", "🪷"];
-      const keyMap = {
-        "🌫": "energy",
-        "🪞": "clarity",
-        "🕯": "ritual",
-        "🗣": "guidance",
-        "🪷": "product"
-      };
-
-      const text = rawText || "";
-      const found = [];
-
-      markers.forEach(m => {
-        const idx = text.indexOf(m);
-        if (idx !== -1) found.push({ m, i: idx });
-      });
-
-      found.sort((a,b) => a.i - b.i);
-
-      const sections = {
-        energy: "",
-        clarity: "",
-        ritual: "",
-        guidance: "",
-        product: ""
-      };
-
-      if (!found.length) {
-        return sections;
-      }
-
-      for (let k = 0; k < found.length; k++) {
-        const { m, i } = found[k];
-        const key = keyMap[m];
-        const start = i;
-        const end = (k + 1 < found.length) ? found[k + 1].i : text.length;
-        sections[key] = text.slice(start, end).trim();
-      }
-
-      return sections;
-    }
-
-    function renderMessage(text) {
-      const card = document.createElement('div');
-      card.className = 'bubble';
-      const safe = escapeHTML(text || '');
-      card.innerHTML = safe
-        .split(/\n{2,}/)
-        .map(line => `<div class="section">${line}</div>`)
-        .join('');
-
-      resultEl.innerHTML = '';
-      resultEl.appendChild(card);
-    }
-
-    function renderPAW(rawText, originalPrompt, extra) {
-      const secs = splitByIcons(rawText);
-      const hasIcons = Object.values(secs).some(v => v && v.length > 0);
-
-      if (!hasIcons) {
-        renderMessage(rawText);
-        return;
-      }
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'paw-grid';
-
-      const pCard = document.createElement('div');
-      pCard.className = 'paw-card';
-      pCard.innerHTML = `
-        <div class="paw-label">P — Prompt</div>
-        <div class="paw-text paw-prompt">${escapeHTML(originalPrompt || '').trim() || "No prompt."}</div>
-      `;
-      wrapper.appendChild(pCard);
-
-      const awarenessTextParts = [];
-      if (secs.energy) awarenessTextParts.push(secs.energy);
-      if (secs.clarity) awarenessTextParts.push(secs.clarity);
-      const awarenessText = awarenessTextParts.join("\n\n").trim();
-
-      const aCard = document.createElement('div');
-      aCard.className = 'paw-card';
-      aCard.innerHTML = `
-        <div class="paw-label">A — Awareness</div>
-        <div class="paw-text">${escapeHTML(awarenessText || rawText)}</div>
-      `;
-      wrapper.appendChild(aCard);
-
-      let wisdomBlock = "";
-      if (secs.ritual) {
-        wisdomBlock += `<div class="paw-tag">🕯 Ritual</div><div class="paw-text">${escapeHTML(secs.ritual)}</div>`;
-      }
-      if (secs.guidance) {
-        wisdomBlock += `<div class="paw-tag">🗣 Guidance</div><div class="paw-text">${escapeHTML(secs.guidance)}</div>`;
-      }
-      if (extra && extra.product) {
-        wisdomBlock += `<div class="paw-tag">🪷 Product option</div><div class="paw-text">${escapeHTML(extra.product)}</div>`;
-      } else if (secs.product) {
-        wisdomBlock += `<div class="paw-tag">🪷 Product option</div><div class="paw-text">${escapeHTML(secs.product)}</div>`;
-      }
-
-      const wCard = document.createElement('div');
-      wCard.className = 'paw-card paw-card-wisdom';
-      wCard.innerHTML = `
-        <div class="paw-label">W — Wisdom</div>
-        ${wisdomBlock || `<div class="paw-text">${escapeHTML(rawText)}</div>`}
-      `;
-      wrapper.appendChild(wCard);
-
-      resultEl.innerHTML = '';
-      resultEl.appendChild(wrapper);
-    }
-
-    /* ---------- Sunset Reset Deluxe: videos + ambient + 60s flow ---------- */
-
-    function pickRandomSunsetVideo(current) {
-      const list = current ? SUNSET_VIDEOS.filter(v => v !== current) : SUNSET_VIDEOS.slice();
-      if (!list.length) return current || SUNSET_VIDEOS[0];
-      const idx = Math.floor(Math.random() * list.length);
-      return list[idx];
-    }
-
-    function loadRandomSunsetVideo() {
-      if (!sunsetResetVideoEl || !sunsetVideoSourceEl) return;
-      const current = sunsetVideoSourceEl.getAttribute("src") || "";
-      const next = pickRandomSunsetVideo(current);
-      sunsetVideoSourceEl.setAttribute("src", next);
-      sunsetResetVideoEl.load();
-      sunsetResetVideoEl.play().catch(() => {});
-    }
-
-    function resetAmbient() {
-      if (!sunsetAmbientEl) return;
-      sunsetAmbientEl.pause();
-      sunsetAmbientEl.currentTime = 0;
-      ambientPlaying = false;
-      if (ambientBtn) ambientBtn.textContent = "🔈";
-    }
-
-    if (ambientBtn && sunsetAmbientEl) {
-      ambientBtn.addEventListener("click", () => {
-        if (!ambientPlaying) {
-          sunsetAmbientEl.play().then(() => {
-            ambientPlaying = true;
-            ambientBtn.textContent = "🔊";
-          }).catch(() => {});
-        } else {
-          sunsetAmbientEl.pause();
-          ambientPlaying = false;
-          ambientBtn.textContent = "🔈";
-        }
-      });
-    }
-
-    function updateSunsetPhaseUI() {
-      if (!sunsetPhaseEl || !sunsetInstructionEl || !sunsetBreathTextEl) return;
-
-      const total = 60;
-      const remaining = sunsetRemaining;
-      const elapsed = total - remaining;
-
-      if (remaining <= 0) {
-        sunsetPhaseEl.textContent = "DONE • RESET COMPLETE";
-        sunsetInstructionEl.textContent =
-          "Your reset is complete. Notice one tiny difference in your body before you return to your day.";
-        sunsetBreathTextEl.textContent =
-          "Stay still for one more soft breath.";
-        return;
-      }
-
-      if (elapsed <= 10) {
-        sunsetPhaseEl.textContent = "PHASE 1 • ARRIVAL";
-        sunsetInstructionEl.textContent =
-          "Let your eyes soften on the horizon. You don’t have to solve anything yet, just arrive here with your breath.";
-        sunsetBreathTextEl.textContent =
-          "Simply breathe at your own rhythm.";
-      } else if (elapsed <= 35) {
-        sunsetPhaseEl.textContent = "PHASE 2 • BREATH 4–4–6";
-        sunsetInstructionEl.textContent =
-          "Inhale through the nose for 4, hold gently for 4, then exhale through the mouth for 6. Let each exhale carry one worry out of your chest.";
-        sunsetBreathTextEl.textContent =
-          "Inhale 4 · hold 4 · exhale 6 · repeat.";
-      } else {
-        sunsetPhaseEl.textContent = "PHASE 3 • LET IT SOFTEN";
-        sunsetInstructionEl.textContent =
-          "Imagine the light absorbing what you can’t control today. With each exhale, whisper inside: “I let it soften.”";
-        sunsetBreathTextEl.textContent =
-          "Whisper inside: “Let it soften.”";
+    function applyLanguageUI(lang){
+      if(lang === "fr"){
+        stepTitle.textContent = "Bilan Émotionnel";
+        stepDesc.textContent = "Décris ce que tu ressens ou ce qu'il s'est passé. Le Soulset Companion te renverra un miroir émotionnel et quelques micro-pratiques thérapeutiques.";
+        subtitle.textContent = "Bien-être émotionnel • Guidance thérapeutique douce";
+        qs("#analyzeBtn").textContent = "Explorer avec moi";
+        qs("#clearBtn").textContent = "Effacer";
+        input.placeholder = "Ex : Je me sens vidé(e), anxieux(se), et j’ai du mal à me recentrer...";
       }
     }
+    applyLanguageUI(userLang);
 
-    function startSunsetReset() {
-      if (!sunsetOverlay) return;
-
-      // prepare overlay
-      sunsetOverlay.classList.add('is-visible');
-      sunsetOverlay.setAttribute('aria-hidden', 'false');
-
-      // reset timer
-      sunsetRemaining = 60;
-      if (sunsetTimerEl) {
-        sunsetTimerEl.textContent = String(sunsetRemaining);
-      }
-
-      // random video + reset ambient
-      loadRandomSunsetVideo();
-      resetAmbient();
-      updateSunsetPhaseUI();
-
-      // clear previous interval
-      if (sunsetInterval) {
-        clearInterval(sunsetInterval);
-        sunsetInterval = null;
-      }
-
-      sunsetInterval = setInterval(() => {
-        sunsetRemaining -= 1;
-        if (sunsetRemaining < 0) {
-          sunsetRemaining = 0;
-        }
-        if (sunsetTimerEl) {
-          sunsetTimerEl.textContent = String(sunsetRemaining);
-        }
-        updateSunsetPhaseUI();
-
-        if (sunsetRemaining <= 0 && sunsetInterval) {
-          clearInterval(sunsetInterval);
-          sunsetInterval = null;
-        }
-      }, 1000);
+    /* ——————————————————————————————————————————
+       Helper to render messages
+    ——————————————————————————————————————————— */
+    function renderMessage(text){
+      const div = document.createElement("div");
+      div.className = "bubble";
+      div.innerHTML = text;
+      result.innerHTML = "";
+      result.appendChild(div);
     }
 
-    function closeSunsetReset() {
-      if (sunsetInterval) {
-        clearInterval(sunsetInterval);
-        sunsetInterval = null;
-      }
-      resetAmbient();
-      if (sunsetOverlay) {
-        sunsetOverlay.classList.remove('is-visible');
-        sunsetOverlay.setAttribute('aria-hidden', 'true');
-      }
-    }
+    /* ——————————————————————————————————————————
+       Button actions
+    ——————————————————————————————————————————— */
+    qs("#analyzeBtn").onclick = async () => {
+      const text = input.value.trim();
+      if(!text){ input.focus(); return; }
 
-    function pickRandomSunsetPhoto(currentSrc) {
-      if (!SUNSET_IMAGES.length) return currentSrc || "";
-      const others = currentSrc
-        ? SUNSET_IMAGES.filter(src => src !== currentSrc)
-        : SUNSET_IMAGES.slice();
-      if (!others.length) return currentSrc || SUNSET_IMAGES[0];
-      const idx = Math.floor(Math.random() * others.length);
-      return others[idx];
-    }
-
-    function shuffleSunsetPhoto() {
-      if (!sunsetPhotoEl) return;
-      const current = sunsetPhotoEl.getAttribute("src") || "";
-      const next = pickRandomSunsetPhoto(current);
-      sunsetPhotoEl.setAttribute("src", next);
-    }
-
-    /* ---------- Analyze / API call ---------- */
-
-    async function analyze() {
-      const text = (inputEl.value || '').trim();
-      if (!text) { inputEl.focus(); return; }
-
-      btn.disabled = true;
-      clearBtn.disabled = true;
-      langSelect.disabled = true;
-
-      const selectedLang = langSelect.value || autoLang || "default";
-
-      statusEl.textContent = currentUI.statusReading;
-      renderMessage(randomLoadingMessage(selectedLang));
-      setTheme('neutral');
+      statusEl.textContent = (userLang==="fr") ? "Analyse en cours…" : "Reading…";
+      renderMessage("⏳ " + ((userLang==="fr") ? "Je t’écoute…" : "I’m listening…"));
 
       try {
-        const res = await fetch('/api/analyze', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text, lang: selectedLang })
+        const res = await fetch("/api/analyze", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body:JSON.stringify({ text, lang: userLang })
         });
-        const data = await res.json().catch(() => ({}));
+        const data = await res.json();
 
-        const output = data?.text || data?.markdown || data?.result || '';
-        const theme = data?.theme || 'neutral';
-        const lang = data?.lang || 'auto';
-
-        if (res.ok && data?.ok && output) {
-          renderPAW(output, text, { product: data.product });
-          setTheme(theme);
-          statusEl.textContent = `Theme: ${theme} • Language: ${lang}`;
-
-          if (ritualChip && data.ritual) {
-            ritualChip.textContent = data.ritual;
-          }
-          if (productLine && data.product) {
-            productLine.textContent = (currentUI.productPrefix || "Product option: ") + data.product;
-          }
-
-          if (sunsetResetBottom) {
-            sunsetResetBottom.classList.remove('hidden');
-          }
+        if(data.ok){
+          renderMessage(data.text);
+          sunsetBlock.style.display = "block";
+          statusEl.textContent = "";
         } else {
-          renderMessage('✨ I could not generate guidance. Try again with a simple, clear sentence.');
-          setTheme('neutral');
-          statusEl.textContent = currentUI.statusAdjust;
-          console.error('Analyze error', data);
+          renderMessage("⚠️ Error generating guidance.");
         }
-      } catch (e) {
-        renderMessage('⚠️ Network error — please try again in a moment.');
-        setTheme('neutral');
-        statusEl.textContent = currentUI.statusOffline;
-        console.error(e);
-      } finally {
-        btn.disabled = false;
-        clearBtn.disabled = false;
-        langSelect.disabled = false;
+      } catch(err){
+        renderMessage("⚠️ Connection error.");
       }
-    }
+    };
 
-    /* ---------- Events ---------- */
+    qs("#clearBtn").onclick = () => {
+      input.value = "";
+      result.innerHTML = "";
+      statusEl.textContent = "";
+      sunsetBlock.style.display = "none";
+    };
 
-    btn.addEventListener('click', analyze);
-    inputEl.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') analyze();
-    });
-    clearBtn.addEventListener('click', () => {
-      inputEl.value = '';
-      resultEl.innerHTML = '';
-      statusEl.textContent = '';
-      setTheme('neutral');
-      if (ritualChip) ritualChip.textContent = currentUI.asideChip;
-      if (productLine) productLine.textContent = currentUI.productEmpty;
-      if (sunsetResetBottom) sunsetResetBottom.classList.add('hidden');
-      inputEl.focus();
-    });
-
-    if (dilemmaModeBtn) {
-      dilemmaModeBtn.addEventListener('click', () => {
-        inputEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        inputEl.focus();
-      });
-    }
-
-    if (sunsetResetBtn) {
-      sunsetResetBtn.addEventListener('click', startSunsetReset);
-    }
-    if (sunsetCloseBtn) {
-      sunsetCloseBtn.addEventListener('click', closeSunsetReset);
-    }
-    if (sunsetOverlay) {
-      sunsetOverlay.addEventListener('click', (e) => {
-        if (e.target === sunsetOverlay) {
-          closeSunsetReset();
-        }
-      });
-    }
-
-    if (shufflePhotoBtn) {
-      shufflePhotoBtn.addEventListener('click', shuffleSunsetPhoto);
-    }
-
-    window.addEventListener("load", () => {
-      applyUILanguage(uiLang);          // auto EN/FR based on device
-      shuffleSunsetPhoto();             // random sidebar sunset image
-    });
-
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("/service-worker.js")
-          .catch((err) => {
-            console.error("SW registration failed:", err);
-          });
-      });
-    }
+    /* ——————————————————————————————————————————
+       Sunset Reset Button (full screen video soon)
+    ——————————————————————————————————————————— */
+    qs("#sunsetBtn").onclick = () => {
+      window.scrollTo({ top: 0, behavior:"smooth" });
+    };
   </script>
+  <!-- ——————————————————————————————————————————————
+    FULLSCREEN SUNSET RESET EXPERIENCE
+—————————————————————————————————————————————— -->
+<style>
+  .sunset-fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: black;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes fadeOut {
+    from { opacity: 1; } to { opacity: 0; }
+  }
+
+  .sunset-fullscreen video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(1.05) saturate(1.22);
+  }
+
+  .sunset-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0.15));
+  }
+
+  .sunset-close {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+  }
+
+  .sunset-timer {
+    position: absolute;
+    bottom: 60px;
+    text-align: center;
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.65);
+  }
+</style>
+
+<div class="sunset-fullscreen" id="sunsetFS">
+  <video id="sunsetFSVideo" autoplay muted playsinline>
+    <source src="Sunset-1V.mp4" type="video/mp4">
+  </video>
+  <div class="sunset-overlay"></div>
+  <div class="sunset-timer" id="sunsetTimer">60</div>
+  <div class="sunset-close" id="sunsetClose">×</div>
+</div>
+
+<script>
+  const sunsetFS = document.getElementById("sunsetFS");
+  const sunsetFSVideo = document.getElementById("sunsetFSVideo");
+  const sunsetTimer = document.getElementById("sunsetTimer");
+  const sunsetClose = document.getElementById("sunsetClose");
+
+  let sunsetInterval;
+
+  function startSunsetReset(){
+    sunsetFS.style.display = "flex";
+    sunsetFS.style.animation = "fadeIn 0.4s ease";
+
+    sunsetFSVideo.currentTime = 0;
+    sunsetFSVideo.play();
+
+    let time = 60;
+    sunsetTimer.textContent = time;
+
+    sunsetInterval = setInterval(() => {
+      time--;
+      sunsetTimer.textContent = time;
+      if(time <= 0){
+        clearInterval(sunsetInterval);
+        closeSunsetReset();
+      }
+    }, 1000);
+  }
+
+  function closeSunsetReset(){
+    sunsetFS.style.animation = "fadeOut 0.4s ease";
+    setTimeout(() => {
+      sunsetFS.style.display = "none";
+      sunsetFSVideo.pause();
+    }, 400);
+
+    clearInterval(sunsetInterval);
+  }
+
+  document.getElementById("sunsetBtn").onclick = startSunsetReset;
+  sunsetClose.onclick = closeSunsetReset;
+</script>
+
 </body>
 </html>
