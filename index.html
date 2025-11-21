@@ -70,13 +70,40 @@
       letter-spacing:.04em;
     }
     header .subtitle{
-      opacity:0.9;
-      font-size:15px;
-      margin-top:10px;
-      max-width:520px;
-      margin-left:auto;
-      margin-right:auto;
-    }
+  opacity:0;
+  transform: translateY(8px);
+  font-size:18px;
+  margin-top:14px;
+  max-width:640px;
+  margin-left:auto;
+  margin-right:auto;
+  line-height:1.6;
+  font-weight:600;
+  color:#fdfdfd;
+  text-shadow:
+    0 0 12px rgba(255,255,255,0.25),
+    0 0 20px rgba(90,163,166,0.25);
+  animation: subtitleFadeIn 1.4s ease forwards;
+}
+
+/* Fade-in + slight slide-up */
+@keyframes subtitleFadeIn{
+  0%   { opacity:0; transform: translateY(8px); filter: blur(2px); }
+  100% { opacity:1; transform: translateY(0); filter: blur(0); }
+}
+
+/* subtle breathing glow after appearing */
+header .subtitle.breathe{
+  animation:
+    subtitleFadeIn 1.4s ease forwards,
+    subtitleGlow 6s ease-in-out infinite 1.4s;
+}
+
+@keyframes subtitleGlow{
+  0%,100% { text-shadow: 0 0 10px rgba(255,255,255,0.18), 0 0 18px rgba(90,163,166,0.18); }
+  50%     { text-shadow: 0 0 14px rgba(255,255,255,0.30), 0 0 26px rgba(90,163,166,0.30); }
+}
+
 
     .container{
       max-width:860px;
@@ -268,6 +295,10 @@
         padding:0 18px;
       }
     }
+    header .subtitle{
+  animation-delay: .4s;
+}
+
   </style>
 </head>
 
@@ -347,53 +378,63 @@
     });
 
     function applyLanguageUI(){
-      const subtitle   = document.getElementById("subtitle");
-      const checkTitle = document.getElementById("check-title");
-      const checkDesc  = document.getElementById("check-desc");
-      const analyzeBtn = document.getElementById("analyzeBtn");
-      const clearBtn   = document.getElementById("clearBtn");
-      const inputText  = document.getElementById("inputText");
-      const sunsetBtn  = document.getElementById("sunsetBtn");
-      const autoOpt    = langSelect.querySelector('option[value="auto"]');
+  const subtitle   = document.getElementById("subtitle");
+  const checkTitle = document.getElementById("check-title");
+  const checkDesc  = document.getElementById("check-desc");
+  const analyzeBtn = document.getElementById("analyzeBtn");
+  const clearBtn   = document.getElementById("clearBtn");
+  const inputText  = document.getElementById("inputText");
+  const sunsetBtn  = document.getElementById("sunsetBtn");
+  const autoOpt    = langSelect.querySelector('option[value="auto"]');
 
-      if(baseLang === "fr"){
-        subtitle.textContent = "Avant de parler à un thérapeute, parlez à votre guide intérieur. Il vous écoute vraiment.";
-        checkTitle.textContent = "Bilan émotionnel";
-        checkDesc.textContent = "Décrivez ce que vous ressentez. Vous recevrez un miroir émotionnel et des micro-pratiques thérapeutiques.";
-        analyzeBtn.textContent = "Explorer avec moi";
-        clearBtn.textContent = "Effacer";
-        inputText.placeholder = "Ex : Je me sens submergé(e)…";
-        sunsetBtn.textContent = "🌅 Pause Sunset (60 s)";
-        if(autoOpt) autoOpt.textContent = "🌐 Langue du système";
-      } else if(baseLang === "es"){
-        subtitle.textContent = "Antes de hablar con un terapeuta, habla con tu guía interior. Él realmente te escucha.";
-        checkTitle.textContent = "Revisión emocional";
-        checkDesc.textContent = "Describe lo que sientes. Recibirás un espejo emocional y microprácticas terapéuticas.";
-        analyzeBtn.textContent = "Explorar conmigo";
-        clearBtn.textContent = "Borrar";
-        inputText.placeholder = "Ej: Me siento abrumado(a)…";
-        sunsetBtn.textContent = "🌅 Pausa Sunset (60 s)";
-        if(autoOpt) autoOpt.textContent = "🌐 Idioma del sistema";
-      } else if(baseLang === "ar"){
-        subtitle.textContent = "قبل أن تتحدث مع معالج، تحدّث إلى دليلك الداخلي. إنه ينصت إليك حقًا.";
-        checkTitle.textContent = "تقييم عاطفي";
-        checkDesc.textContent = "صف ما تشعر به. ستحصل على انعكاس عاطفي وممارسات علاجية صغيرة.";
-        analyzeBtn.textContent = "استكشِف معي";
-        clearBtn.textContent = "مسح";
-        inputText.placeholder = "مثال: أشعر بأنني مُرهق…";
-        sunsetBtn.textContent = "🌅 استراحة الغروب (60 ثانية)";
-        if(autoOpt) autoOpt.textContent = "🌐 لغة النظام";
-      } else {
-        subtitle.textContent = "Before talking to a therapist, speak to your inner guide. It truly listens to you.";
-        checkTitle.textContent = "Emotional Check-In";
-        checkDesc.textContent = "Describe what you're feeling. You'll receive emotional reflection and therapeutic micro-practices.";
-        analyzeBtn.textContent = "Reflect with me";
-        clearBtn.textContent = "Clear";
-        inputText.placeholder = "Ex: I feel overwhelmed…";
-        sunsetBtn.textContent = "🌅 Sunset Reset (60s)";
-        if(autoOpt) autoOpt.textContent = "🌐 System default";
-      }
-    }
+  if(baseLang === "fr"){
+    subtitle.textContent = "Avant de parler à un thérapeute, parlez à votre guide intérieur. Il vous écoute vraiment.";
+    checkTitle.textContent = "Bilan émotionnel";
+    checkDesc.textContent = "Décrivez ce que vous ressentez. Vous recevrez un miroir émotionnel et des micro-pratiques thérapeutiques.";
+    analyzeBtn.textContent = "Explorer avec moi";
+    clearBtn.textContent = "Effacer";
+    inputText.placeholder = "Ex : Je me sens submergé(e)…";
+    sunsetBtn.textContent = "🌅 Pause Sunset (60 s)";
+    if(autoOpt) autoOpt.textContent = "🌐 Langue du système";
+  }
+  else if(baseLang === "es"){
+    subtitle.textContent = "Antes de hablar con un terapeuta, habla con tu guía interior. Él realmente te escucha.";
+    checkTitle.textContent = "Revisión emocional";
+    checkDesc.textContent = "Describe lo que sientes. Recibirás un espejo emocional y microprácticas terapéuticas.";
+    analyzeBtn.textContent = "Explorar conmigo";
+    clearBtn.textContent = "Borrar";
+    inputText.placeholder = "Ej: Me siento abrumado(a)…";
+    sunsetBtn.textContent = "🌅 Pausa Sunset (60 s)";
+    if(autoOpt) autoOpt.textContent = "🌐 Idioma del sistema";
+  }
+  else if(baseLang === "ar"){
+    subtitle.textContent = "قبل أن تلجأ إلى معالج، تحدّث إلى دليلك الداخلي—فهو الوحيد الذي ينصت إليك حقًا.";
+    checkTitle.textContent = "تقييم عاطفي";
+    checkDesc.textContent = "صف ما تشعر به. ستحصل على انعكاس عاطفي وممارسات علاجية صغيرة.";
+    analyzeBtn.textContent = "استكشِف معي";
+    clearBtn.textContent = "مسح";
+    inputText.placeholder = "مثال: أشعر بأنني مُرهق…";
+    sunsetBtn.textContent = "🌅 استراحة الغروب (60 ثانية)";
+    if(autoOpt) autoOpt.textContent = "🌐 لغة النظام";
+  }
+  else {
+    subtitle.textContent = "Before seeking a therapist, speak to your inner guide — it’s the one that truly listens.";
+    checkTitle.textContent = "Emotional Check-In";
+    checkDesc.textContent = "Describe what you're feeling. You'll receive emotional reflection and therapeutic micro-practices.";
+    analyzeBtn.textContent = "Reflect with me";
+    clearBtn.textContent = "Clear";
+    inputText.placeholder = "Ex: I feel overwhelmed…";
+    sunsetBtn.textContent = "🌅 Sunset Reset (60s)";
+    if(autoOpt) autoOpt.textContent = "🌐 System default";
+  }
+
+  /* ⭐⭐⭐ AJOUTE EXACTEMENT CES 4 LIGNES ICI ⭐⭐⭐ */
+  const st = document.getElementById("subtitle");
+  st.classList.remove("breathe");   // reset animation
+  void st.offsetWidth;              // force reflow (restarts animation)
+  st.classList.add("breathe");      // play animation
+}
+
     applyLanguageUI();
 
     // ---------- Quotes by language ----------
