@@ -70,39 +70,39 @@
       letter-spacing:.04em;
     }
     header .subtitle{
-  opacity:0;
-  transform: translateY(8px);
-  font-size:18px;
-  margin-top:14px;
-  max-width:640px;
-  margin-left:auto;
-  margin-right:auto;
-  line-height:1.6;
-  font-weight:600;
-  color:#fdfdfd;
-  text-shadow:
-    0 0 12px rgba(255,255,255,0.25),
-    0 0 20px rgba(90,163,166,0.25);
-  animation: subtitleFadeIn 1.4s ease forwards;
-}
+      opacity:0;
+      transform: translateY(8px);
+      font-size:18px;
+      margin-top:14px;
+      max-width:640px;
+      margin-left:auto;
+      margin-right:auto;
+      line-height:1.6;
+      font-weight:600;
+      color:#fdfdfd;
+      text-shadow:
+        0 0 12px rgba(255,255,255,0.25),
+        0 0 20px rgba(90,163,166,0.25);
+      animation: subtitleFadeIn 1.4s ease forwards;
+    }
 
-/* Fade-in + slight slide-up */
-@keyframes subtitleFadeIn{
-  0%   { opacity:0; transform: translateY(8px); filter: blur(2px); }
-  100% { opacity:1; transform: translateY(0); filter: blur(0); }
-}
+    /* Fade-in + slight slide-up */
+    @keyframes subtitleFadeIn{
+      0%   { opacity:0; transform: translateY(8px); filter: blur(2px); }
+      100% { opacity:1; transform: translateY(0); filter: blur(0); }
+    }
 
-/* subtle breathing glow after appearing */
-header .subtitle.breathe{
-  animation:
-    subtitleFadeIn 1.4s ease forwards,
-    subtitleGlow 6s ease-in-out infinite 1.4s;
-}
+    /* subtle breathing glow after appearing */
+    header .subtitle.breathe{
+      animation:
+        subtitleFadeIn 1.4s ease forwards,
+        subtitleGlow 6s ease-in-out infinite 1.4s;
+    }
 
-@keyframes subtitleGlow{
-  0%,100% { text-shadow: 0 0 10px rgba(255,255,255,0.18), 0 0 18px rgba(90,163,166,0.18); }
-  50%     { text-shadow: 0 0 14px rgba(255,255,255,0.30), 0 0 26px rgba(90,163,166,0.30); }
-}
+    @keyframes subtitleGlow{
+      0%,100% { text-shadow: 0 0 10px rgba(255,255,255,0.18), 0 0 18px rgba(90,163,166,0.18); }
+      50%     { text-shadow: 0 0 14px rgba(255,255,255,0.30), 0 0 26px rgba(90,163,166,0.30); }
+    }
 
 
     .container{
@@ -180,6 +180,13 @@ header .subtitle.breathe{
       cursor:not-allowed;
     }
 
+    /* 🎤 micro en mode écoute */
+    #voiceBtn.listening{
+      border-color:#f7c873;
+      box-shadow:0 0 0 2px rgba(247,200,115,0.15) inset;
+      color:#ffe6ad;
+    }
+
     .lang-select{
       min-width:140px;
       border-radius:999px;
@@ -211,6 +218,15 @@ header .subtitle.breathe{
       border:1px solid rgba(163,186,255,0.28);
       color:#eef2ff;
       font-size:15px;
+    }
+
+    /* 🔊 bouton écouter la réponse */
+    #speakBtn{
+      margin-top:12px;
+      width:auto;
+      flex:0;
+      padding:10px 14px;
+      font-size:14px;
     }
 
     .sunset-block{
@@ -296,83 +312,83 @@ header .subtitle.breathe{
       }
     }
     header .subtitle{
-  animation-delay: .4s;
-}
-/* --- Soulset internal banner (after analysis) --- */
-.soulset-banner{
-  margin-top:18px;
-  background:linear-gradient(135deg, rgba(90,163,166,0.18), rgba(180,140,255,0.14));
-  border:1px solid rgba(190,205,255,0.35);
-  border-radius:16px;
-  padding:14px 14px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  box-shadow:0 10px 26px rgba(0,0,0,0.45);
-}
-.soulset-banner .badge{
-  font-size:20px;
-  width:40px;height:40px;border-radius:12px;
-  display:grid;place-items:center;
-  background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.12);
-}
-.soulset-banner .text{
-  flex:1;
-  font-size:14px;
-  line-height:1.5;
-  color:#eef2ff;
-  font-weight:600;
-}
-.soulset-banner .cta{
-  white-space:nowrap;
-  background:#ffffff;
-  color:#11152b;
-  font-weight:800;
-  border:0;
-  padding:8px 12px;
-  border-radius:999px;
-  cursor:pointer;
-  font-size:12px;
-  box-shadow:0 6px 14px rgba(0,0,0,0.35);
-}
+      animation-delay: .4s;
+    }
 
-/* --- Affiliate mini card (end of analysis) --- */
-.affiliate-card{
-  margin-top:12px;
-  background:rgba(4,10,30,0.96);
-  border:1px solid rgba(163,186,255,0.28);
-  border-radius:14px;
-  padding:12px 12px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.affiliate-card .ico{
-  width:36px;height:36px;border-radius:10px;
-  display:grid;place-items:center;
-  background:rgba(255,255,255,0.08);
-  font-size:18px;
-}
-.affiliate-card .copy{
-  flex:1;
-  font-size:13px;
-  color:#e7ebff;
-  line-height:1.45;
-}
-.affiliate-card a{
-  color:#9fe7ea;
-  font-weight:800;
-  text-decoration:none;
-  font-size:12px;
-}
-.affiliate-disclaimer{
-  margin-top:6px;
-  font-size:11px;
-  color:#9aa6d9;
-  opacity:0.9;
-}
+    /* --- Soulset internal banner (after analysis) --- */
+    .soulset-banner{
+      margin-top:18px;
+      background:linear-gradient(135deg, rgba(90,163,166,0.18), rgba(180,140,255,0.14));
+      border:1px solid rgba(190,205,255,0.35);
+      border-radius:16px;
+      padding:14px 14px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      box-shadow:0 10px 26px rgba(0,0,0,0.45);
+    }
+    .soulset-banner .badge{
+      font-size:20px;
+      width:40px;height:40px;border-radius:12px;
+      display:grid;place-items:center;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.12);
+    }
+    .soulset-banner .text{
+      flex:1;
+      font-size:14px;
+      line-height:1.5;
+      color:#eef2ff;
+      font-weight:600;
+    }
+    .soulset-banner .cta{
+      white-space:nowrap;
+      background:#ffffff;
+      color:#11152b;
+      font-weight:800;
+      border:0;
+      padding:8px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      font-size:12px;
+      box-shadow:0 6px 14px rgba(0,0,0,0.35);
+    }
 
+    /* --- Affiliate mini card (end of analysis) --- */
+    .affiliate-card{
+      margin-top:12px;
+      background:rgba(4,10,30,0.96);
+      border:1px solid rgba(163,186,255,0.28);
+      border-radius:14px;
+      padding:12px 12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .affiliate-card .ico{
+      width:36px;height:36px;border-radius:10px;
+      display:grid;place-items:center;
+      background:rgba(255,255,255,0.08);
+      font-size:18px;
+    }
+    .affiliate-card .copy{
+      flex:1;
+      font-size:13px;
+      color:#e7ebff;
+      line-height:1.45;
+    }
+    .affiliate-card a{
+      color:#9fe7ea;
+      font-weight:800;
+      text-decoration:none;
+      font-size:12px;
+    }
+    .affiliate-disclaimer{
+      margin-top:6px;
+      font-size:11px;
+      color:#9aa6d9;
+      opacity:0.9;
+    }
   </style>
 </head>
 
@@ -406,8 +422,15 @@ header .subtitle.breathe{
         <textarea id="inputText" placeholder="Ex: I feel overwhelmed…"></textarea>
 
         <div class="actions">
-          <button class="btn" id="analyzeBtn">Reflect with me</button>
-          <button class="btn secondary" id="clearBtn">Clear</button>
+          <!-- 🎤 NEW: Voice button -->
+          <button class="btn secondary" id="voiceBtn" type="button">🎤 Dictate</button>
+
+          <button class="btn" id="analyzeBtn" type="button">Reflect with me</button>
+          <button class="btn secondary" id="clearBtn" type="button">Clear</button>
+
+          <!-- 🔊 NEW: Speak button (hidden until response) -->
+          <button class="btn secondary" id="speakBtn" type="button" style="display:none;">🔊 Listen</button>
+
           <select id="analysisLangSelect" class="lang-select">
             <option value="auto">🌐 System default</option>
             <option value="en">English</option>
@@ -420,9 +443,8 @@ header .subtitle.breathe{
         <div id="status"></div>
         <div id="result"></div>
 
-<!-- Soulset internal banner (shows after analysis) -->
-<div id="soulsetBanner" style="display:none;"></div>
-
+        <!-- Soulset internal banner (shows after analysis) -->
+        <div id="soulsetBanner" style="display:none;"></div>
       </section>
 
       <!-- SUNSET RESET BUTTON -->
@@ -456,63 +478,72 @@ header .subtitle.breathe{
     });
 
     function applyLanguageUI(){
-  const subtitle   = document.getElementById("subtitle");
-  const checkTitle = document.getElementById("check-title");
-  const checkDesc  = document.getElementById("check-desc");
-  const analyzeBtn = document.getElementById("analyzeBtn");
-  const clearBtn   = document.getElementById("clearBtn");
-  const inputText  = document.getElementById("inputText");
-  const sunsetBtn  = document.getElementById("sunsetBtn");
-  const autoOpt    = langSelect.querySelector('option[value="auto"]');
+      const subtitle   = document.getElementById("subtitle");
+      const checkTitle = document.getElementById("check-title");
+      const checkDesc  = document.getElementById("check-desc");
+      const analyzeBtn = document.getElementById("analyzeBtn");
+      const clearBtn   = document.getElementById("clearBtn");
+      const inputText  = document.getElementById("inputText");
+      const sunsetBtn  = document.getElementById("sunsetBtn");
+      const autoOpt    = langSelect.querySelector('option[value="auto"]');
+      const voiceBtn   = document.getElementById("voiceBtn");
+      const speakBtn   = document.getElementById("speakBtn");
 
-  if(baseLang === "fr"){
-    subtitle.textContent = "Avant de parler à un thérapeute, parlez à votre guide intérieur. Il vous écoute vraiment.";
-    checkTitle.textContent = "Bilan émotionnel";
-    checkDesc.textContent = "Décrivez ce que vous ressentez. Vous recevrez un miroir émotionnel et des micro-pratiques thérapeutiques.";
-    analyzeBtn.textContent = "Explorer avec moi";
-    clearBtn.textContent = "Effacer";
-    inputText.placeholder = "Ex : Je me sens submergé(e)…";
-    sunsetBtn.textContent = "🌅 Pause Sunset (60 s)";
-    if(autoOpt) autoOpt.textContent = "🌐 Langue du système";
-  }
-  else if(baseLang === "es"){
-    subtitle.textContent = "Antes de hablar con un terapeuta, habla con tu guía interior. Él realmente te escucha.";
-    checkTitle.textContent = "Revisión emocional";
-    checkDesc.textContent = "Describe lo que sientes. Recibirás un espejo emocional y microprácticas terapéuticas.";
-    analyzeBtn.textContent = "Explorar conmigo";
-    clearBtn.textContent = "Borrar";
-    inputText.placeholder = "Ej: Me siento abrumado(a)…";
-    sunsetBtn.textContent = "🌅 Pausa Sunset (60 s)";
-    if(autoOpt) autoOpt.textContent = "🌐 Idioma del sistema";
-  }
-  else if(baseLang === "ar"){
-    subtitle.textContent = "قبل أن تلجأ إلى معالج، تحدّث إلى دليلك الداخلي—فهو الوحيد الذي ينصت إليك حقًا.";
-    checkTitle.textContent = "تقييم عاطفي";
-    checkDesc.textContent = "صف ما تشعر به. ستحصل على انعكاس عاطفي وممارسات علاجية صغيرة.";
-    analyzeBtn.textContent = "استكشِف معي";
-    clearBtn.textContent = "مسح";
-    inputText.placeholder = "مثال: أشعر بأنني مُرهق…";
-    sunsetBtn.textContent = "🌅 استراحة الغروب (60 ثانية)";
-    if(autoOpt) autoOpt.textContent = "🌐 لغة النظام";
-  }
-  else {
-    subtitle.textContent = "Before seeking a therapist, speak to your inner guide — it’s the one that truly listens.";
-    checkTitle.textContent = "Emotional Check-In";
-    checkDesc.textContent = "Describe what you're feeling. You'll receive emotional reflection and therapeutic micro-practices.";
-    analyzeBtn.textContent = "Reflect with me";
-    clearBtn.textContent = "Clear";
-    inputText.placeholder = "Ex: I feel overwhelmed…";
-    sunsetBtn.textContent = "🌅 Sunset Reset (60s)";
-    if(autoOpt) autoOpt.textContent = "🌐 System default";
-  }
+      if(baseLang === "fr"){
+        subtitle.textContent = "Avant de parler à un thérapeute, parlez à votre guide intérieur. Il vous écoute vraiment.";
+        checkTitle.textContent = "Bilan émotionnel";
+        checkDesc.textContent = "Décrivez ce que vous ressentez. Vous recevrez un miroir émotionnel et des micro-pratiques thérapeutiques.";
+        analyzeBtn.textContent = "Explorer avec moi";
+        clearBtn.textContent = "Effacer";
+        inputText.placeholder = "Ex : Je me sens submergé(e)…";
+        sunsetBtn.textContent = "🌅 Pause Sunset (60 s)";
+        if(autoOpt) autoOpt.textContent = "🌐 Langue du système";
+        if(voiceBtn) voiceBtn.textContent = "🎤 Dicter";
+        if(speakBtn) speakBtn.textContent = "🔊 Écouter";
+      }
+      else if(baseLang === "es"){
+        subtitle.textContent = "Antes de hablar con un terapeuta, habla con tu guía interior. Él realmente te escucha.";
+        checkTitle.textContent = "Revisión emocional";
+        checkDesc.textContent = "Describe lo que sientes. Recibirás un espejo emocional y microprácticas terapéuticas.";
+        analyzeBtn.textContent = "Explorar conmigo";
+        clearBtn.textContent = "Borrar";
+        inputText.placeholder = "Ej: Me siento abrumado(a)…";
+        sunsetBtn.textContent = "🌅 Pausa Sunset (60 s)";
+        if(autoOpt) autoOpt.textContent = "🌐 Idioma del sistema";
+        if(voiceBtn) voiceBtn.textContent = "🎤 Dictar";
+        if(speakBtn) speakBtn.textContent = "🔊 Escuchar";
+      }
+      else if(baseLang === "ar"){
+        subtitle.textContent = "قبل أن تلجأ إلى معالج، تحدّث إلى دليلك الداخلي—فهو الوحيد الذي ينصت إليك حقًا.";
+        checkTitle.textContent = "تقييم عاطفي";
+        checkDesc.textContent = "صف ما تشعر به. ستحصل على انعكاس عاطفي وممارسات علاجية صغيرة.";
+        analyzeBtn.textContent = "استكشِف معي";
+        clearBtn.textContent = "مسح";
+        inputText.placeholder = "مثال: أشعر بأنني مُرهق…";
+        sunsetBtn.textContent = "🌅 استراحة الغروب (60 ثانية)";
+        if(autoOpt) autoOpt.textContent = "🌐 لغة النظام";
+        if(voiceBtn) voiceBtn.textContent = "🎤 إملاء";
+        if(speakBtn) speakBtn.textContent = "🔊 استماع";
+      }
+      else {
+        subtitle.textContent = "Before seeking a therapist, speak to your inner guide — it’s the one that truly listens.";
+        checkTitle.textContent = "Emotional Check-In";
+        checkDesc.textContent = "Describe what you're feeling. You'll receive emotional reflection and therapeutic micro-practices.";
+        analyzeBtn.textContent = "Reflect with me";
+        clearBtn.textContent = "Clear";
+        inputText.placeholder = "Ex: I feel overwhelmed…";
+        sunsetBtn.textContent = "🌅 Sunset Reset (60s)";
+        if(autoOpt) autoOpt.textContent = "🌐 System default";
+        if(voiceBtn) voiceBtn.textContent = "🎤 Dictate";
+        if(speakBtn) speakBtn.textContent = "🔊 Listen";
+      }
 
-  /* ⭐⭐⭐ AJOUTE EXACTEMENT CES 4 LIGNES ICI ⭐⭐⭐ */
-  const st = document.getElementById("subtitle");
-  st.classList.remove("breathe");   // reset animation
-  void st.offsetWidth;              // force reflow (restarts animation)
-  st.classList.add("breathe");      // play animation
-}
-
+      // restart subtitle breathe animation
+      const st = document.getElementById("subtitle");
+      st.classList.remove("breathe");
+      void st.offsetWidth;
+      st.classList.add("breathe");
+    }
     applyLanguageUI();
 
     // ---------- Quotes by language ----------
@@ -615,6 +646,7 @@ header .subtitle.breathe{
     const analyzeBtn = document.getElementById("analyzeBtn");
     const clearBtn   = document.getElementById("clearBtn");
     const inputEl    = document.getElementById("inputText");
+    const speakBtn   = document.getElementById("speakBtn");
 
     function renderMessage(text){
       const div = document.createElement("div");
@@ -623,97 +655,148 @@ header .subtitle.breathe{
       resultEl.innerHTML = "";
       resultEl.appendChild(div);
     }
+
     // ---------- A) Soulset internal banner texts ----------
-const BANNER_TEXTS = {
-  fr: {
-    text: "✨ Recevez un mini-rituel SoulsetJourney chaque matin pour ancrer votre paix intérieure.",
-    cta: "Recevoir mon rituel"
-  },
-  en: {
-    text: "✨ Get a SoulsetJourney mini-ritual every morning to anchor your inner peace.",
-    cta: "Get my ritual"
-  },
-  es: {
-    text: "✨ Recibe un mini ritual SoulsetJourney cada mañana para anclar tu paz interior.",
-    cta: "Recibir mi ritual"
-  },
-  ar: {
-    text: "✨ احصل على طقس SoulsetJourney صغير كل صباح لتعزيز سلامك الداخلي.",
-    cta: "احصل على طقسي"
-  }
-};
+    const BANNER_TEXTS = {
+      fr: { text: "✨ Recevez un mini-rituel SoulsetJourney chaque matin pour ancrer votre paix intérieure.", cta: "Recevoir mon rituel" },
+      en: { text: "✨ Get a SoulsetJourney mini-ritual every morning to anchor your inner peace.", cta: "Get my ritual" },
+      es: { text: "✨ Recibe un mini ritual SoulsetJourney cada mañana para anclar tu paz interior.", cta: "Recibir mi ritual" },
+      ar: { text: "✨ احصل على طقس SoulsetJourney صغير كل صباح لتعزيز سلامك الداخلي.", cta: "احصل على طقسي" }
+    };
 
-// 🔗 Mets ici TON LIEN SoulsetJourney (site / newsletter / store)
-const SOULSET_LINK = "https://soulsetjourney.com"; // <-- change ça
+    const SOULSET_LINK = "https://soulsetjourney.com"; // <-- change ça
 
-function showSoulsetBanner(langKey){
-  const banner = document.getElementById("soulsetBanner");
-  if(!banner) return;
+    function showSoulsetBanner(langKey){
+      const banner = document.getElementById("soulsetBanner");
+      if(!banner) return;
 
-  const L = BANNER_TEXTS[langKey] || BANNER_TEXTS.en;
+      const L = BANNER_TEXTS[langKey] || BANNER_TEXTS.en;
 
-  banner.innerHTML = `
-    <div class="soulset-banner">
-      <div class="badge">☀️</div>
-      <div class="text">${L.text}</div>
-      <button class="cta" onclick="window.open('${SOULSET_LINK}','_blank')">${L.cta}</button>
-    </div>
-  `;
-  banner.style.display = "block";
-}
+      banner.innerHTML = `
+        <div class="soulset-banner">
+          <div class="badge">☀️</div>
+          <div class="text">${L.text}</div>
+          <button class="cta" onclick="window.open('${SOULSET_LINK}','_blank')">${L.cta}</button>
+        </div>
+      `;
+      banner.style.display = "block";
+    }
 
-// ---------- C) Affiliate products (soft suggestion) ----------
-const AFFILIATE_BY_THEME = {
-  stress: [
-    { name:{fr:"Diffuseur apaisant",en:"Calming diffuser",es:"Difusor calmante",ar:"موزّع روائح مهدئ"}, icon:"🫧", url:"https://amzn.to/xxxxx1" },
-    { name:{fr:"Bougie relaxante",en:"Relax candle",es:"Vela relajante",ar:"شمعة استرخاء"}, icon:"🕯️", url:"https://amzn.to/xxxxx2" }
-  ],
-  fear: [
-    { name:{fr:"Lampe douce",en:"Warm night lamp",es:"Lámpara cálida",ar:"مصباح دافئ"}, icon:"💡", url:"https://amzn.to/xxxxx3" }
-  ],
-  sadness: [
-    { name:{fr:"Bracelet apaisant",en:"Calm bracelet",es:"Pulsera calmante",ar:"سوار مهدئ"}, icon:"📿", url:"https://amzn.to/xxxxx4" }
-  ],
-  anger: [
-    { name:{fr:"Encens bois doux",en:"Soft sandalwood incense",es:"Incienso suave",ar:"بخور خشب ناعم"}, icon:"🌿", url:"https://amzn.to/xxxxx5" }
-  ],
-  uncertainty: [
-    { name:{fr:"Journal guidé",en:"Guided journal",es:"Diario guiado",ar:"دفتر موجه"}, icon:"📓", url:"https://amzn.to/xxxxx6" }
-  ],
-  inspiration: [
-    { name:{fr:"Carnet créatif",en:"Creative notebook",es:"Cuaderno creativo",ar:"دفتر إبداعي"}, icon:"✨", url:"https://amzn.to/xxxxx7" }
-  ],
-  neutral: [
-    { name:{fr:"Brume relaxante",en:"Relax mist",es:"Bruma relajante",ar:"رذاذ استرخاء"}, icon:"🌙", url:"https://amzn.to/xxxxx8" }
-  ]
-};
+    // ---------- C) Affiliate products (soft suggestion) ----------
+    const AFFILIATE_BY_THEME = {
+      stress: [
+        { name:{fr:"Diffuseur apaisant",en:"Calming diffuser",es:"Difusor calmante",ar:"موزّع روائح مهدئ"}, icon:"🫧", url:"https://amzn.to/xxxxx1" },
+        { name:{fr:"Bougie relaxante",en:"Relax candle",es:"Vela relajante",ar:"شمعة استرخاء"}, icon:"🕯️", url:"https://amzn.to/xxxxx2" }
+      ],
+      fear: [
+        { name:{fr:"Lampe douce",en:"Warm night lamp",es:"Lámpara cálida",ar:"مصباح دافئ"}, icon:"💡", url:"https://amzn.to/xxxxx3" }
+      ],
+      sadness: [
+        { name:{fr:"Bracelet apaisant",en:"Calm bracelet",es:"Pulsera calmante",ar:"سوار مهدئ"}, icon:"📿", url:"https://amzn.to/xxxxx4" }
+      ],
+      anger: [
+        { name:{fr:"Encens bois doux",en:"Soft sandalwood incense",es:"Incienso suave",ar:"بخور خشب ناعم"}, icon:"🌿", url:"https://amzn.to/xxxxx5" }
+      ],
+      uncertainty: [
+        { name:{fr:"Journal guidé",en:"Guided journal",es:"Diario guiado",ar:"دفتر موجه"}, icon:"📓", url:"https://amzn.to/xxxxx6" }
+      ],
+      inspiration: [
+        { name:{fr:"Carnet créatif",en:"Creative notebook",es:"Cuaderno creativo",ar:"دفتر إبداعي"}, icon:"✨", url:"https://amzn.to/xxxxx7" }
+      ],
+      neutral: [
+        { name:{fr:"Brume relaxante",en:"Relax mist",es:"Bruma relajante",ar:"رذاذ استرخاء"}, icon:"🌙", url:"https://amzn.to/xxxxx8" }
+      ]
+    };
 
-// ⚠️ Remplace les url "amzn.to/xxxxx" par TES liens affiliés
-function pickAffiliate(theme, langKey){
-  const key = AFFILIATE_BY_THEME[theme] ? theme : "neutral";
-  const arr = AFFILIATE_BY_THEME[key];
-  const item = arr[Math.floor(Math.random()*arr.length)];
-  const label = item.name[langKey] || item.name.en;
-  return { ...item, label };
-}
+    function pickAffiliate(theme, langKey){
+      const key = AFFILIATE_BY_THEME[theme] ? theme : "neutral";
+      const arr = AFFILIATE_BY_THEME[key];
+      const item = arr[Math.floor(Math.random()*arr.length)];
+      const label = item.name[langKey] || item.name.en;
+      return { ...item, label };
+    }
 
-function renderAffiliate(theme, langKey){
-  const { icon, label, url } = pickAffiliate(theme, langKey);
-  return `
-    <div class="affiliate-card">
-      <div class="ico">${icon}</div>
-      <div class="copy">
-        ${label} — <a href="${url}" target="_blank" rel="noopener">Voir</a>
-      </div>
-    </div>
-    <div class="affiliate-disclaimer">
-      ${langKey==="fr" ? "Lien affilié : sans coût supplémentaire pour vous." :
-        langKey==="es" ? "Enlace afiliado: sin coste extra para ti." :
-        langKey==="ar" ? "رابط تابع: دون أي تكلفة إضافية عليك." :
-        "Affiliate link: no extra cost to you."}
-    </div>
-  `;
-}
+    function renderAffiliate(theme, langKey){
+      const { icon, label, url } = pickAffiliate(theme, langKey);
+      return `
+        <div class="affiliate-card">
+          <div class="ico">${icon}</div>
+          <div class="copy">
+            ${label} — <a href="${url}" target="_blank" rel="noopener">Voir</a>
+          </div>
+        </div>
+        <div class="affiliate-disclaimer">
+          ${langKey==="fr" ? "Lien affilié : sans coût supplémentaire pour vous." :
+            langKey==="es" ? "Enlace afiliado: sin coste extra para ti." :
+            langKey==="ar" ? "رابط تابع: دون أي تكلفة إضافية عليك." :
+            "Affiliate link: no extra cost to you."}
+        </div>
+      `;
+    }
+
+    /* =========================================================
+       🎤 VOICE-TO-TEXT (SpeechRecognition)
+    ========================================================= */
+    const voiceBtn = document.getElementById("voiceBtn");
+    let recognition = null;
+    let isListening = false;
+
+    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.interimResults = false;
+      recognition.continuous = false;
+
+      recognition.onstart = () => {
+        isListening = true;
+        voiceBtn.classList.add("listening");
+      };
+      recognition.onend = () => {
+        isListening = false;
+        voiceBtn.classList.remove("listening");
+      };
+      recognition.onresult = (e) => {
+        const text = e.results[0][0].transcript;
+        inputEl.value = text;
+      };
+      recognition.onerror = (e) => console.log("Voice error:", e);
+
+      voiceBtn.onclick = () => {
+        const effectiveLang = analysisLang || baseLang;
+        recognition.lang =
+          effectiveLang === "ar" ? "ar-MA" :
+          effectiveLang === "es" ? "es-ES" :
+          effectiveLang === "fr" ? "fr-FR" : "en-US";
+
+        if (!isListening) recognition.start();
+        else recognition.stop();
+      };
+    } else {
+      voiceBtn.disabled = true;
+      voiceBtn.textContent = "🎤 Not supported";
+    }
+
+    /* =========================================================
+       🔊 TEXT-TO-SPEECH
+    ========================================================= */
+    function speak(text){
+      if (!("speechSynthesis" in window)) return;
+      speechSynthesis.cancel();
+
+      const utter = new SpeechSynthesisUtterance(text.replace(/<[^>]*>/g, "")); // strip HTML
+      const effectiveLang = analysisLang || baseLang;
+
+      utter.lang =
+        effectiveLang === "ar" ? "ar-SA" :
+        effectiveLang === "es" ? "es-ES" :
+        effectiveLang === "fr" ? "fr-FR" : "en-US";
+
+      utter.rate = 1;
+      utter.pitch = 1;
+      speechSynthesis.speak(utter);
+    }
+
+    let lastAIText = "";
 
     // ---------- AI Analysis ----------
     analyzeBtn.onclick = async () => {
@@ -725,6 +808,8 @@ function renderAffiliate(theme, langKey){
 
       analyzeBtn.disabled = true;
       clearBtn.disabled   = true;
+      voiceBtn.disabled   = true;
+      speakBtn.style.display = "none";
 
       statusEl.textContent =
         (effectiveLang === "fr") ? "Analyse en cours…" :
@@ -748,23 +833,23 @@ function renderAffiliate(theme, langKey){
         const data = await res.json();
 
         if(data.ok){
-  // data.theme vient de ton analyze.js (stress/fear/etc.)
-  const theme = data.theme || "neutral";
+          const theme = data.theme || "neutral";
 
-  // message IA
-  renderMessage(data.text);
+          renderMessage(data.text);
+          lastAIText = data.text || "";
 
-  // bloc affiliation discret sous l'analyse
-  const affiliateHTML = renderAffiliate(theme, effectiveLang);
-  resultEl.insertAdjacentHTML("beforeend", affiliateHTML);
+          // 🔊 show listen button
+          speakBtn.style.display = "inline-block";
+          speakBtn.onclick = () => speak(lastAIText);
 
-  // bannière SoulsetJourney interne
-  showSoulsetBanner(effectiveLang);
+          const affiliateHTML = renderAffiliate(theme, effectiveLang);
+          resultEl.insertAdjacentHTML("beforeend", affiliateHTML);
 
-  sunsetBlock.style.display = "block";
-  statusEl.textContent = "";
-}
- else {
+          showSoulsetBanner(effectiveLang);
+
+          sunsetBlock.style.display = "block";
+          statusEl.textContent = "";
+        } else {
           renderMessage("⚠️ Something went wrong.");
           statusEl.textContent = "";
         }
@@ -775,6 +860,7 @@ function renderAffiliate(theme, langKey){
       } finally{
         analyzeBtn.disabled = false;
         clearBtn.disabled   = false;
+        voiceBtn.disabled   = false;
       }
     };
 
@@ -784,7 +870,8 @@ function renderAffiliate(theme, langKey){
       statusEl.textContent = "";
       sunsetBlock.style.display = "none";
       document.getElementById("soulsetBanner").style.display="none";
-
+      speakBtn.style.display = "none";
+      speechSynthesis.cancel();
     };
 
     // ---------- Random sounds & videos ----------
@@ -818,11 +905,9 @@ function renderAffiliate(theme, langKey){
     let countdown;
 
     function startSunsetReset(){
-      // vidéo aléatoire
       const randomVideo = pickRandom(VIDEO_SOURCES);
       video.src = randomVideo;
 
-      // son aléatoire
       const randomSound = pickRandom(SOUND_SOURCES);
       audioEl.src = randomSound;
 
@@ -830,7 +915,6 @@ function renderAffiliate(theme, langKey){
       video.currentTime = 0;
       video.play().catch(()=>{});
 
-      // quote dans la langue actuelle effective
       const quote = getRandomQuote(currentLang);
       quoteEl.textContent = quote;
       quoteEl.style.direction = (currentLang === "ar") ? "rtl" : "ltr";
@@ -866,30 +950,32 @@ function renderAffiliate(theme, langKey){
     if(sunsetClose){
       sunsetClose.onclick = closeSunset;
     }
-  </script>
-</body>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", async () => {
-    const reg = await navigator.serviceWorker.register("/service-worker.js");
 
-    // 🔥 Force la vérif d'update à CHAQUE LOAD
-    reg.update();
+    /* =========================================================
+       ✅ AUTO-UPDATE SERVICE WORKER (same logic you had)
+    ========================================================= */
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", async () => {
+        try {
+          const reg = await navigator.serviceWorker.register("/service-worker.js");
+          reg.update();
+          if (reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
 
-    // Si un nouveau SW attend, on le force
-    if (reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
-
-    reg.addEventListener("updatefound", () => {
-      const newSW = reg.installing;
-      newSW.addEventListener("statechange", () => {
-        if (newSW.state === "installed" && navigator.serviceWorker.controller) {
-          newSW.postMessage("SKIP_WAITING");
-          window.location.reload();
+          reg.addEventListener("updatefound", () => {
+            const newSW = reg.installing;
+            newSW.addEventListener("statechange", () => {
+              if (newSW.state === "installed" && navigator.serviceWorker.controller) {
+                newSW.postMessage("SKIP_WAITING");
+                window.location.reload();
+              }
+            });
+          });
+        } catch(e) {
+          console.log("SW error:", e);
         }
       });
-    });
-  });
-}
-</script>
+    }
 
+  </script>
+</body>
 </html>
