@@ -298,6 +298,80 @@ header .subtitle.breathe{
     header .subtitle{
   animation-delay: .4s;
 }
+/* --- Soulset internal banner (after analysis) --- */
+.soulset-banner{
+  margin-top:18px;
+  background:linear-gradient(135deg, rgba(90,163,166,0.18), rgba(180,140,255,0.14));
+  border:1px solid rgba(190,205,255,0.35);
+  border-radius:16px;
+  padding:14px 14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  box-shadow:0 10px 26px rgba(0,0,0,0.45);
+}
+.soulset-banner .badge{
+  font-size:20px;
+  width:40px;height:40px;border-radius:12px;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.12);
+}
+.soulset-banner .text{
+  flex:1;
+  font-size:14px;
+  line-height:1.5;
+  color:#eef2ff;
+  font-weight:600;
+}
+.soulset-banner .cta{
+  white-space:nowrap;
+  background:#ffffff;
+  color:#11152b;
+  font-weight:800;
+  border:0;
+  padding:8px 12px;
+  border-radius:999px;
+  cursor:pointer;
+  font-size:12px;
+  box-shadow:0 6px 14px rgba(0,0,0,0.35);
+}
+
+/* --- Affiliate mini card (end of analysis) --- */
+.affiliate-card{
+  margin-top:12px;
+  background:rgba(4,10,30,0.96);
+  border:1px solid rgba(163,186,255,0.28);
+  border-radius:14px;
+  padding:12px 12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.affiliate-card .ico{
+  width:36px;height:36px;border-radius:10px;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,0.08);
+  font-size:18px;
+}
+.affiliate-card .copy{
+  flex:1;
+  font-size:13px;
+  color:#e7ebff;
+  line-height:1.45;
+}
+.affiliate-card a{
+  color:#9fe7ea;
+  font-weight:800;
+  text-decoration:none;
+  font-size:12px;
+}
+.affiliate-disclaimer{
+  margin-top:6px;
+  font-size:11px;
+  color:#9aa6d9;
+  opacity:0.9;
+}
 
   </style>
 </head>
@@ -345,6 +419,10 @@ header .subtitle.breathe{
 
         <div id="status"></div>
         <div id="result"></div>
+
+<!-- Soulset internal banner (shows after analysis) -->
+<div id="soulsetBanner" style="display:none;"></div>
+
       </section>
 
       <!-- SUNSET RESET BUTTON -->
@@ -545,6 +623,97 @@ header .subtitle.breathe{
       resultEl.innerHTML = "";
       resultEl.appendChild(div);
     }
+    // ---------- A) Soulset internal banner texts ----------
+const BANNER_TEXTS = {
+  fr: {
+    text: "✨ Recevez un mini-rituel SoulsetJourney chaque matin pour ancrer votre paix intérieure.",
+    cta: "Recevoir mon rituel"
+  },
+  en: {
+    text: "✨ Get a SoulsetJourney mini-ritual every morning to anchor your inner peace.",
+    cta: "Get my ritual"
+  },
+  es: {
+    text: "✨ Recibe un mini ritual SoulsetJourney cada mañana para anclar tu paz interior.",
+    cta: "Recibir mi ritual"
+  },
+  ar: {
+    text: "✨ احصل على طقس SoulsetJourney صغير كل صباح لتعزيز سلامك الداخلي.",
+    cta: "احصل على طقسي"
+  }
+};
+
+// 🔗 Mets ici TON LIEN SoulsetJourney (site / newsletter / store)
+const SOULSET_LINK = "https://soulsetjourney.com"; // <-- change ça
+
+function showSoulsetBanner(langKey){
+  const banner = document.getElementById("soulsetBanner");
+  if(!banner) return;
+
+  const L = BANNER_TEXTS[langKey] || BANNER_TEXTS.en;
+
+  banner.innerHTML = `
+    <div class="soulset-banner">
+      <div class="badge">☀️</div>
+      <div class="text">${L.text}</div>
+      <button class="cta" onclick="window.open('${SOULSET_LINK}','_blank')">${L.cta}</button>
+    </div>
+  `;
+  banner.style.display = "block";
+}
+
+// ---------- C) Affiliate products (soft suggestion) ----------
+const AFFILIATE_BY_THEME = {
+  stress: [
+    { name:{fr:"Diffuseur apaisant",en:"Calming diffuser",es:"Difusor calmante",ar:"موزّع روائح مهدئ"}, icon:"🫧", url:"https://amzn.to/xxxxx1" },
+    { name:{fr:"Bougie relaxante",en:"Relax candle",es:"Vela relajante",ar:"شمعة استرخاء"}, icon:"🕯️", url:"https://amzn.to/xxxxx2" }
+  ],
+  fear: [
+    { name:{fr:"Lampe douce",en:"Warm night lamp",es:"Lámpara cálida",ar:"مصباح دافئ"}, icon:"💡", url:"https://amzn.to/xxxxx3" }
+  ],
+  sadness: [
+    { name:{fr:"Bracelet apaisant",en:"Calm bracelet",es:"Pulsera calmante",ar:"سوار مهدئ"}, icon:"📿", url:"https://amzn.to/xxxxx4" }
+  ],
+  anger: [
+    { name:{fr:"Encens bois doux",en:"Soft sandalwood incense",es:"Incienso suave",ar:"بخور خشب ناعم"}, icon:"🌿", url:"https://amzn.to/xxxxx5" }
+  ],
+  uncertainty: [
+    { name:{fr:"Journal guidé",en:"Guided journal",es:"Diario guiado",ar:"دفتر موجه"}, icon:"📓", url:"https://amzn.to/xxxxx6" }
+  ],
+  inspiration: [
+    { name:{fr:"Carnet créatif",en:"Creative notebook",es:"Cuaderno creativo",ar:"دفتر إبداعي"}, icon:"✨", url:"https://amzn.to/xxxxx7" }
+  ],
+  neutral: [
+    { name:{fr:"Brume relaxante",en:"Relax mist",es:"Bruma relajante",ar:"رذاذ استرخاء"}, icon:"🌙", url:"https://amzn.to/xxxxx8" }
+  ]
+};
+
+// ⚠️ Remplace les url "amzn.to/xxxxx" par TES liens affiliés
+function pickAffiliate(theme, langKey){
+  const key = AFFILIATE_BY_THEME[theme] ? theme : "neutral";
+  const arr = AFFILIATE_BY_THEME[key];
+  const item = arr[Math.floor(Math.random()*arr.length)];
+  const label = item.name[langKey] || item.name.en;
+  return { ...item, label };
+}
+
+function renderAffiliate(theme, langKey){
+  const { icon, label, url } = pickAffiliate(theme, langKey);
+  return `
+    <div class="affiliate-card">
+      <div class="ico">${icon}</div>
+      <div class="copy">
+        ${label} — <a href="${url}" target="_blank" rel="noopener">Voir</a>
+      </div>
+    </div>
+    <div class="affiliate-disclaimer">
+      ${langKey==="fr" ? "Lien affilié : sans coût supplémentaire pour vous." :
+        langKey==="es" ? "Enlace afiliado: sin coste extra para ti." :
+        langKey==="ar" ? "رابط تابع: دون أي تكلفة إضافية عليك." :
+        "Affiliate link: no extra cost to you."}
+    </div>
+  `;
+}
 
     // ---------- AI Analysis ----------
     analyzeBtn.onclick = async () => {
@@ -579,10 +748,23 @@ header .subtitle.breathe{
         const data = await res.json();
 
         if(data.ok){
-          renderMessage(data.text);
-          sunsetBlock.style.display = "block";
-          statusEl.textContent = "";
-        } else {
+  // data.theme vient de ton analyze.js (stress/fear/etc.)
+  const theme = data.theme || "neutral";
+
+  // message IA
+  renderMessage(data.text);
+
+  // bloc affiliation discret sous l'analyse
+  const affiliateHTML = renderAffiliate(theme, effectiveLang);
+  resultEl.insertAdjacentHTML("beforeend", affiliateHTML);
+
+  // bannière SoulsetJourney interne
+  showSoulsetBanner(effectiveLang);
+
+  sunsetBlock.style.display = "block";
+  statusEl.textContent = "";
+}
+ else {
           renderMessage("⚠️ Something went wrong.");
           statusEl.textContent = "";
         }
@@ -601,6 +783,8 @@ header .subtitle.breathe{
       resultEl.innerHTML = "";
       statusEl.textContent = "";
       sunsetBlock.style.display = "none";
+      document.getElementById("soulsetBanner").style.display="none";
+
     };
 
     // ---------- Random sounds & videos ----------
