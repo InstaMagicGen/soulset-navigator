@@ -868,4 +868,22 @@ function renderAffiliate(theme, langKey){
     }
   </script>
 </body>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js").then((reg) => {
+    if (reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
+
+    reg.addEventListener("updatefound", () => {
+      const newSW = reg.installing;
+      newSW.addEventListener("statechange", () => {
+        if (newSW.state === "installed" && navigator.serviceWorker.controller) {
+          newSW.postMessage("SKIP_WAITING");
+          window.location.reload();
+        }
+      });
+    });
+  });
+}
+</script>
+
 </html>
