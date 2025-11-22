@@ -870,7 +870,13 @@ function renderAffiliate(theme, langKey){
 </body>
 <script>
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/service-worker.js").then((reg) => {
+  window.addEventListener("load", async () => {
+    const reg = await navigator.serviceWorker.register("/service-worker.js");
+
+    // 🔥 Force la vérif d'update à CHAQUE LOAD
+    reg.update();
+
+    // Si un nouveau SW attend, on le force
     if (reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
 
     reg.addEventListener("updatefound", () => {

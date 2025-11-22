@@ -1,55 +1,46 @@
-/* service-worker.js — AUTO-UPDATE VERSION */
+/* service-worker.js — FINAL SAFE AUTO */
 
-const VERSION = Date.now(); // 🔥 Génère une version unique à chaque déploiement
+const STATIC_CACHE = "soulset-static";
+const RUNTIME_CACHE = "soulset-runtime";
 
-const STATIC_CACHE = `soulset-static-${VERSION}`;
-const RUNTIME_CACHE = `soulset-runtime-${VERSION}`;
-
-/** Découvre tous les fichiers via fetch dynamique */
 self.addEventListener("install", (event) => {
-  self.skipWaiting(); // active immédiatement
+  self.skipWaiting();
 });
 
-/** Supprime automatiquement tous les anciens caches */
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys.map((key) => {
-          // delete tout sauf les caches versionnés de maintenant
-          if (!key.includes(VERSION)) {
-            return caches.delete(key);
-          }
-        })
-      )
+    caches.keys().then(keys =>
+      Promise.all(keys.map(k => caches.delete(k))) // 🔥 delete TOUT
     )
   );
   self.clients.claim();
 });
 
-/** FETCH intelligent : toujours la dernière version */
 self.addEventListener("fetch", (event) => {
   const req = event.request;
 
-  // HTML = always network-first (pour éviter les anciennes versions)
-  if (req.mode === "navigate") {
+  if (req.method !== "GET") return;
+
+  const isHTML =
+    req.mode === "navigate" ||
+    (req.headers.get("accept") || "").includes("text/html");
+
+  if (isHTML) {
     event.respondWith(networkFirst(req));
     return;
   }
 
-  // Assets (css/js/images…) = cache-first
   event.respondWith(cacheFirst(req));
 });
 
-/* STRATÉGIES */
 async function networkFirst(req) {
   const cache = await caches.open(RUNTIME_CACHE);
   try {
-    const fresh = await fetch(req, { cache: "no-store" }); // 🔥 prend toujours la dernière version
+    const fresh = await fetch(req, { cache: "no-store" });
     cache.put(req, fresh.clone());
     return fresh;
-  } catch (e) {
-    return cache.match(req) || caches.match("/index.html");
+  } catch {
+    return cache.match(req);
   }
 }
 
@@ -63,7 +54,6 @@ async function cacheFirst(req) {
   return fresh;
 }
 
-/* MESSAGE: permet update immédiat si besoin */
 self.addEventListener("message", (event) => {
   if (event.data === "SKIP_WAITING") self.skipWaiting();
 });
