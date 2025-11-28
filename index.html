@@ -86,13 +86,11 @@
       animation: subtitleFadeIn 1.4s ease forwards;
     }
 
-    /* Fade-in + slight slide-up */
     @keyframes subtitleFadeIn{
       0%   { opacity:0; transform: translateY(8px); filter: blur(2px); }
       100% { opacity:1; transform: translateY(0); filter: blur(0); }
     }
 
-    /* subtle breathing glow after appearing */
     header .subtitle.breathe{
       animation:
         subtitleFadeIn 1.4s ease forwards,
@@ -103,7 +101,6 @@
       0%,100% { text-shadow: 0 0 10px rgba(255,255,255,0.18), 0 0 18px rgba(90,163,166,0.18); }
       50%     { text-shadow: 0 0 14px rgba(255,255,255,0.30), 0 0 26px rgba(90,163,166,0.30); }
     }
-
 
     .container{
       max-width:860px;
@@ -422,14 +419,18 @@
         <textarea id="inputText" placeholder="Ex: I feel overwhelmed…"></textarea>
 
         <div class="actions">
-          <!-- 🎤 NEW: Voice button -->
+          <!-- 🎤 Dictée -->
           <button class="btn secondary" id="voiceBtn" type="button">🎤 Dictate</button>
 
+          <!-- Analyse texte classique -->
           <button class="btn" id="analyzeBtn" type="button">Reflect with me</button>
           <button class="btn secondary" id="clearBtn" type="button">Clear</button>
 
-          <!-- 🔊 NEW: Speak button (hidden until response) -->
+          <!-- 🔊 Lecture de la réponse -->
           <button class="btn secondary" id="speakBtn" type="button" style="display:none;">🔊 Listen</button>
+
+          <!-- 🎧 Mode conversation réaliste -->
+          <button class="btn" type="button" id="convBtn">🎧 Real-talk mode</button>
 
           <select id="analysisLangSelect" class="lang-select">
             <option value="auto">🌐 System default</option>
@@ -488,6 +489,7 @@
       const autoOpt    = langSelect.querySelector('option[value="auto"]');
       const voiceBtn   = document.getElementById("voiceBtn");
       const speakBtn   = document.getElementById("speakBtn");
+      const convBtn    = document.getElementById("convBtn");
 
       if(baseLang === "fr"){
         subtitle.textContent = "Avant de parler à un thérapeute, parlez à votre guide intérieur. Il vous écoute vraiment.";
@@ -500,6 +502,7 @@
         if(autoOpt) autoOpt.textContent = "🌐 Langue du système";
         if(voiceBtn) voiceBtn.textContent = "🎤 Dicter";
         if(speakBtn) speakBtn.textContent = "🔊 Écouter";
+        if(convBtn)  convBtn.textContent  = "🎧 Mode conversation";
       }
       else if(baseLang === "es"){
         subtitle.textContent = "Antes de hablar con un terapeuta, habla con tu guía interior. Él realmente te escucha.";
@@ -512,6 +515,7 @@
         if(autoOpt) autoOpt.textContent = "🌐 Idioma del sistema";
         if(voiceBtn) voiceBtn.textContent = "🎤 Dictar";
         if(speakBtn) speakBtn.textContent = "🔊 Escuchar";
+        if(convBtn)  convBtn.textContent  = "🎧 Modo conversación";
       }
       else if(baseLang === "ar"){
         subtitle.textContent = "قبل أن تلجأ إلى معالج، تحدّث إلى دليلك الداخلي—فهو الوحيد الذي ينصت إليك حقًا.";
@@ -524,6 +528,7 @@
         if(autoOpt) autoOpt.textContent = "🌐 لغة النظام";
         if(voiceBtn) voiceBtn.textContent = "🎤 إملاء";
         if(speakBtn) speakBtn.textContent = "🔊 استماع";
+        if(convBtn)  convBtn.textContent  = "🎧 وضع المحادثة";
       }
       else {
         subtitle.textContent = "Before seeking a therapist, speak to your inner guide — it’s the one that truly listens.";
@@ -536,9 +541,9 @@
         if(autoOpt) autoOpt.textContent = "🌐 System default";
         if(voiceBtn) voiceBtn.textContent = "🎤 Dictate";
         if(speakBtn) speakBtn.textContent = "🔊 Listen";
+        if(convBtn)  convBtn.textContent  = "🎧 Real-talk mode";
       }
 
-      // restart subtitle breathe animation
       const st = document.getElementById("subtitle");
       st.classList.remove("breathe");
       void st.offsetWidth;
@@ -647,6 +652,7 @@
     const clearBtn   = document.getElementById("clearBtn");
     const inputEl    = document.getElementById("inputText");
     const speakBtn   = document.getElementById("speakBtn");
+    const voiceBtn   = document.getElementById("voiceBtn");
 
     function renderMessage(text){
       const div = document.createElement("div");
@@ -664,7 +670,7 @@
       ar: { text: "✨ احصل على طقس SoulsetJourney صغير كل صباح لتعزيز سلامك الداخلي.", cta: "احصل على طقسي" }
     };
 
-    const SOULSET_LINK = "https://soulsetjourney.com"; // <-- change ça
+    const SOULSET_LINK = "https://soulsetjourney.com"; // <-- change si besoin
 
     function showSoulsetBanner(langKey){
       const banner = document.getElementById("soulsetBanner");
@@ -737,13 +743,12 @@
     /* =========================================================
        🎤 VOICE-TO-TEXT (SpeechRecognition)
     ========================================================= */
-    const voiceBtn = document.getElementById("voiceBtn");
     let recognition = null;
     let isListening = false;
 
-    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognition = new SpeechRecognition();
+    const NativeSR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (NativeSR) {
+      recognition = new NativeSR();
       recognition.interimResults = false;
       recognition.continuous = false;
 
@@ -757,7 +762,10 @@
       };
       recognition.onresult = (e) => {
         const text = e.results[0][0].transcript;
-        inputEl.value = text;
+        // Ajoute au texte existant
+        inputEl.value = inputEl.value
+          ? inputEl.value.trim() + " " + text
+          : text;
       };
       recognition.onerror = (e) => console.log("Voice error:", e);
 
@@ -783,9 +791,10 @@
       if (!("speechSynthesis" in window)) return;
       speechSynthesis.cancel();
 
-      const utter = new SpeechSynthesisUtterance(text.replace(/<[^>]*>/g, "")); // strip HTML
       const effectiveLang = analysisLang || baseLang;
+      const clean = text.replace(/<[^>]*>/g, "").replace(/\s+$/,"");
 
+      const utter = new SpeechSynthesisUtterance(clean);
       utter.lang =
         effectiveLang === "ar" ? "ar-SA" :
         effectiveLang === "es" ? "es-ES" :
@@ -952,7 +961,218 @@
     }
 
     /* =========================================================
-       ✅ AUTO-UPDATE SERVICE WORKER (same logic you had)
+       🎧 MODE CONVERSATION "REAL TALK"
+    ========================================================= */
+    const convBtn = document.getElementById("convBtn");
+
+    let convActive   = false;
+    let convListening = false;
+
+    const ConvSR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const convRecognition = ConvSR ? new ConvSR() : null;
+
+    function speakConversational(text, langKey, onEnd) {
+      if (!("speechSynthesis" in window)) {
+        onEnd && onEnd();
+        return;
+      }
+      speechSynthesis.cancel();
+
+      const clean = text.replace(/<[^>]*>/g, "").replace(/\n{2,}/g, "\n\n");
+
+      const utter = new SpeechSynthesisUtterance(clean);
+      utter.lang =
+        langKey === "ar"
+          ? "ar-SA"
+          : langKey === "es"
+          ? "es-ES"
+          : langKey === "fr"
+          ? "fr-FR"
+          : "en-US";
+
+      utter.rate = 1.03;
+      utter.pitch = 0.98;
+
+      utter.onend = () => {
+        console.log("🔊 [Real-talk] end");
+        onEnd && onEnd();
+      };
+
+      speechSynthesis.speak(utter);
+    }
+
+    function startConvListening() {
+      if (!convRecognition) return;
+      if (!convActive) return;
+
+      const effectiveLang = analysisLang || baseLang;
+      convRecognition.lang =
+        effectiveLang === "ar"
+          ? "ar-MA"
+          : effectiveLang === "es"
+          ? "es-ES"
+          : effectiveLang === "fr"
+          ? "fr-FR"
+          : "en-US";
+
+      try {
+        convRecognition.start();
+      } catch (e) {
+        console.log("startConvListening error:", e);
+      }
+    }
+
+    if (convRecognition) {
+      convRecognition.continuous = false;
+      convRecognition.interimResults = false;
+
+      convRecognition.onstart = () => {
+        convListening = true;
+        console.log("🎤 [Real-talk] listening…");
+        convBtn.textContent = currentLang.startsWith("fr")
+          ? "🎧 Je t’écoute…"
+          : currentLang.startsWith("es")
+          ? "🎧 Te escucho…"
+          : currentLang.startsWith("ar")
+          ? "🎧 أستمع إليك..."
+          : "🎧 I’m listening…";
+      };
+
+      convRecognition.onend = () => {
+        convListening = false;
+        if (!convActive) return;
+        console.log("🛑 [Real-talk] stop listening.");
+      };
+
+      convRecognition.onerror = (e) => {
+        console.log("Real-talk voice error:", e);
+        if (convActive) {
+          setTimeout(() => startConvListening(), 800);
+        }
+      };
+
+      convRecognition.onresult = async (event) => {
+        const userText = event.results[0][0].transcript;
+        console.log("👤 User (real-talk):", userText);
+
+        inputEl.value = userText;
+
+        const effectiveLang = analysisLang || baseLang;
+        currentLang = effectiveLang;
+
+        statusEl.textContent =
+          effectiveLang === "fr"
+            ? "Je reformule ce que tu vis…"
+            : effectiveLang === "es"
+            ? "Estoy procesando lo que sientes…"
+            : effectiveLang === "ar"
+            ? "أحاول استيعاب ما تشعر به..."
+            : "Let me process what you’re saying…";
+
+        try {
+          const res = await fetch("/api/analyze", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: userText, lang: effectiveLang })
+          });
+          const data = await res.json();
+
+          if (!data.ok) {
+            renderMessage("⚠️ Something went wrong.");
+            statusEl.textContent = "";
+            if (convActive) startConvListening();
+            return;
+          }
+
+          const raw = (data.text || "").replace(/<[^>]*>/g, "").trim();
+          const intro =
+            effectiveLang === "fr"
+              ? "OK, je vais te répondre franchement."
+              : effectiveLang === "es"
+              ? "Vale, te voy a responder con sinceridad."
+              : effectiveLang === "ar"
+              ? "حسنًا، سأجيبك بصدق الآن."
+              : "Alright, let me answer you honestly.";
+
+          const outro =
+            effectiveLang === "fr"
+              ? "Tu peux me répondre à voix haute, je suis là."
+              : effectiveLang === "es"
+              ? "Puedes responderme en voz alta, aquí estoy contigo."
+              : effectiveLang === "ar"
+              ? "يمكنك الرد بصوت عالٍ، أنا معك."
+              : "You can just talk back to me out loud, I’m here.";
+
+          const finalText = `${intro}\n\n${raw}\n\n${outro}`;
+
+          renderMessage(finalText);
+          lastAIText = finalText;
+          speakBtn.style.display = "inline-block";
+          speakBtn.onclick = () => speak(lastAIText);
+
+          statusEl.textContent = "";
+
+          speakConversational(finalText, effectiveLang, () => {
+            if (convActive) {
+              startConvListening();
+            }
+          });
+        } catch (err) {
+          console.error(err);
+          renderMessage("⚠️ Network error, please try again.");
+          statusEl.textContent = "";
+          if (convActive) startConvListening();
+        }
+      };
+    }
+
+    if (convBtn && convRecognition) {
+      convBtn.addEventListener("click", () => {
+        if (!convActive) {
+          convActive = true;
+          convBtn.textContent =
+            baseLang === "fr"
+              ? "⏹ Stop real-talk"
+              : baseLang === "es"
+              ? "⏹ Parar conversación"
+              : baseLang === "ar"
+              ? "⏹ إيقاف المحادثة"
+              : "⏹ Stop real-talk";
+
+          speakConversational(
+            baseLang === "fr"
+              ? "On va parler comme dans une vraie discussion. Quand je finis, tu peux simplement me répondre à voix haute."
+              : baseLang === "es"
+              ? "Vamos a hablar como en una conversación real. Cuando termine de hablar, solo respóndeme en voz alta."
+              : baseLang === "ar"
+              ? "سنتحدّث الآن وكأنها محادثة حقيقية. عندما أنهي كلامي، فقط أجبني بصوت عالٍ."
+              : "We’ll talk like in a real conversation now. When I finish, just talk back to me out loud.",
+            baseLang,
+            () => startConvListening()
+          );
+        } else {
+          convActive = false;
+          convListening = false;
+          try { convRecognition.stop(); } catch (e) {}
+          speechSynthesis.cancel();
+          convBtn.textContent =
+            baseLang === "fr"
+              ? "🎧 Mode conversation"
+              : baseLang === "es"
+              ? "🎧 Modo conversación"
+              : baseLang === "ar"
+              ? "🎧 وضع المحادثة"
+              : "🎧 Real-talk mode";
+          statusEl.textContent = "";
+        }
+      });
+    } else if (convBtn && !convRecognition) {
+      convBtn.disabled = true;
+      convBtn.textContent = "🎧 Voice not supported";
+    }
+
+    /* =========================================================
+       ✅ AUTO-UPDATE SERVICE WORKER
     ========================================================= */
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", async () => {

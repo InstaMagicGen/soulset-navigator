@@ -4,13 +4,14 @@ const STATIC_CACHE = "soulset-static";
 const RUNTIME_CACHE = "soulset-runtime";
 
 self.addEventListener("install", (event) => {
+  // on ne précache pas agressivement → moins de risques de vieux HTML
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.map(k => caches.delete(k))) // 🔥 delete TOUT
+      Promise.all(keys.map(k => caches.delete(k))) // 🔥 on supprime tout l'ancien
     )
   );
   self.clients.claim();
@@ -36,11 +37,11 @@ self.addEventListener("fetch", (event) => {
 async function networkFirst(req) {
   const cache = await caches.open(RUNTIME_CACHE);
   try {
-    const fresh = await fetch(req, { cache: "no-store" });
+    const fresh = await fetch(req, { cache: "no-store" }); // 🔥 toujours la dernière version
     cache.put(req, fresh.clone());
     return fresh;
   } catch {
-    return cache.match(req);
+    return cache.match(req) || caches.match("/index.html");
   }
 }
 
