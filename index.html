@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Soulset Navigator • Therapeutic Support</title>
+  <title>Soulset Navigator • Soulset Reset</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
       -webkit-font-smoothing:antialiased;
     }
 
-    /* BACKGROUND SLIDESHOW – FULLSCREEN + KEN BURNS EFFECT */
+    /* BACKGROUND SLIDESHOW */
     .background-slideshow {
       position: fixed;
       inset: 0;
@@ -47,34 +47,35 @@
       100%{transform:scale(1);}
     }
 
-    /* Dark gradient overlay to keep text readable */
     .bg-overlay{
       position:fixed;
       inset:0;
-      background:radial-gradient(circle at top, rgba(120,150,255,0.35), transparent 55%),
-                 linear-gradient(to bottom, rgba(0,0,0,0.78), rgba(0,0,0,0.9));
+      background:
+        radial-gradient(circle at top, rgba(120,150,255,0.22), transparent 60%),
+        linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.86));
       z-index:-1;
     }
 
     .page{
       min-height:100vh;
     }
+
     header{
       text-align:center;
-      padding:30px 20px 8px;
+      padding:32px 20px 14px;
     }
     header h1{
       font-family:"Playfair Display", serif;
-      font-size:clamp(28px,4.8vw,38px);
+      font-size:clamp(28px,4.8vw,40px);
       margin:0;
-      letter-spacing:.04em;
+      letter-spacing:.05em;
     }
     header .subtitle{
       opacity:0;
       transform: translateY(8px);
-      font-size:18px;
+      font-size:17px;
       margin-top:14px;
-      max-width:640px;
+      max-width:600px;
       margin-left:auto;
       margin-right:auto;
       line-height:1.6;
@@ -85,50 +86,79 @@
         0 0 20px rgba(90,163,166,0.25);
       animation: subtitleFadeIn 1.4s ease forwards;
     }
-
     @keyframes subtitleFadeIn{
       0%   { opacity:0; transform: translateY(8px); filter: blur(2px); }
       100% { opacity:1; transform: translateY(0); filter: blur(0); }
     }
-
     header .subtitle.breathe{
       animation:
         subtitleFadeIn 1.4s ease forwards,
         subtitleGlow 6s ease-in-out infinite 1.4s;
     }
-
     @keyframes subtitleGlow{
       0%,100% { text-shadow: 0 0 10px rgba(255,255,255,0.18), 0 0 18px rgba(90,163,166,0.18); }
       50%     { text-shadow: 0 0 14px rgba(255,255,255,0.30), 0 0 26px rgba(90,163,166,0.30); }
     }
 
     .container{
-      max-width:860px;
+      max-width:840px;
       margin:0 auto;
-      padding:18px 20px 80px;
+      padding:16px 20px 80px;
     }
 
     .card{
-      background:rgba(6,12,28,0.92);
+      background:rgba(6,12,28,0.8);
       border-radius:22px;
-      padding:22px 20px;
-      box-shadow:0 16px 40px rgba(0,0,0,0.45);
-      margin-bottom:26px;
-      border:1px solid rgba(255,255,255,0.04);
+      padding:22px 20px 26px;
+      box-shadow:0 16px 40px rgba(0,0,0,0.55);
+      border:1px solid rgba(255,255,255,0.08);
       backdrop-filter:blur(18px);
+      text-align:center;
     }
 
-    .card h2{
-      margin:0 0 10px;
-      font-size:20px;
-      font-family:"Playfair Display", serif;
-      letter-spacing:.03em;
+    .main-reset-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:16px 26px;
+      border-radius:999px;
+      border:0;
+      font-size:17px;
+      font-weight:800;
+      cursor:pointer;
+      background:linear-gradient(135deg,#f7b267,#f78c6b,#f25f5c);
+      color:#1b1020;
+      box-shadow:0 14px 30px rgba(0,0,0,0.55);
+      margin-top:6px;
+      margin-bottom:8px;
+    }
+    .main-reset-btn span{
+      font-size:22px;
     }
 
     .card p{
-      margin-top:0;
+      margin:4px 0 0;
       font-size:14px;
-      color:#ccd4ff;
+      color:#d6ddff;
+    }
+
+    /* PANEL SOULSET RESET (après clic) */
+    #resetPanel{
+      margin-top:20px;
+      display:none;
+      text-align:left;
+    }
+
+    .panel-title{
+      font-family:"Playfair Display", serif;
+      font-size:18px;
+      margin-bottom:6px;
+    }
+    .panel-sub{
+      font-size:13px;
+      color:#cbd3ff;
+      margin-bottom:16px;
     }
 
     textarea{
@@ -137,7 +167,7 @@
       border-radius:14px;
       border:1.5px solid rgba(190,205,255,0.45);
       padding:14px;
-      font-size:16px;
+      font-size:15px;
       background:rgba(5,10,30,0.9);
       resize:vertical;
       outline:none;
@@ -149,64 +179,54 @@
 
     .actions{
       display:flex;
-      gap:12px;
-      margin-top:14px;
+      gap:10px;
+      margin-top:12px;
       flex-wrap:wrap;
-      align-items:center;
     }
 
     .btn{
-      flex:1;
       border:0;
-      padding:13px 16px;
+      padding:11px 16px;
       border-radius:14px;
-      font-size:15px;
+      font-size:14px;
       font-weight:700;
       cursor:pointer;
       background:#5aa3a6;
       color:white;
       box-shadow:0 10px 24px rgba(0,0,0,0.45);
+      flex:1;
     }
     .btn.secondary{
       background:transparent;
       border:1px solid rgba(190,205,255,0.45);
       color:#d7e0ff;
+      box-shadow:none;
     }
     .btn:disabled{
       opacity:0.6;
       cursor:not-allowed;
     }
 
-    /* 🎤 micro en mode écoute */
-    #voiceBtn.listening{
-      border-color:#f7c873;
-      box-shadow:0 0 0 2px rgba(247,200,115,0.15) inset;
-      color:#ffe6ad;
+    .live-block{
+      margin-top:18px;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,0.12);
     }
-
-    .lang-select{
-      min-width:140px;
-      border-radius:999px;
-      border:1px solid rgba(190,205,255,0.7);
-      background:rgba(4,10,30,0.9);
-      color:#dfe6ff;
-      font-size:12px;
-      padding:8px 12px;
-    }
-    .lang-select:focus{
-      outline:none;
-      border-color:#5aa3a6;
+    .live-desc{
+      font-size:13px;
+      color:#d6ddff;
+      margin-bottom:10px;
     }
 
     #status{
-      margin-top:10px;
+      margin-top:12px;
       font-size:13px;
       color:#d0d8ff;
     }
 
     #result .bubble{
       margin-top:18px;
-      background:rgba(4,10,30,0.96);
+      background:rgba(4,10,30,0.9);
       padding:16px 18px;
       border-radius:16px;
       box-shadow:0 10px 30px rgba(0,0,0,0.6);
@@ -217,34 +237,17 @@
       font-size:15px;
     }
 
-    /* 🔊 bouton écouter la réponse */
-    #speakBtn{
-      margin-top:12px;
-      width:auto;
-      flex:0;
-      padding:10px 14px;
-      font-size:14px;
+    @media (max-width:600px){
+      .card{
+        padding:18px 16px 22px;
+      }
+      .main-reset-btn{
+        width:100%;
+      }
     }
 
-    .sunset-block{
-      display:none;
-      text-align:center;
-      margin-top:10px;
-    }
-    .sunset-btn{
-      background:rgba(9,20,55,0.9);
-      padding:12px 22px;
-      border-radius:18px;
-      font-weight:700;
-      box-shadow:0 10px 26px rgba(0,0,0,0.6);
-      backdrop-filter:blur(14px);
-      color:#f3f6ff;
-      border:1px solid rgba(190,205,255,0.4);
-      font-size:15px;
-    }
-
-    /* IMMERSIVE SUNSET RESET */
-    .sunset-fullscreen{
+    /* FULLSCREEN SOULSET RESET LIVE (video + voix) */
+    .soulset-fullscreen{
       position:fixed;
       inset:0;
       background:black;
@@ -254,143 +257,62 @@
       flex-direction:column;
       z-index:9999;
     }
-    .sunset-fullscreen video{
+    .soulset-fullscreen video{
       position:absolute;
       inset:0;
       width:100%;
       height:100%;
       object-fit:cover;
     }
-    .sunset-close{
+    .ss-overlay{
       position:absolute;
-      top:26px;
-      right:24px;
+      inset:0;
+      background:linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0.3));
+    }
+    .ss-inner{
+      position:relative;
+      z-index:2;
+      text-align:center;
+      padding:0 22px;
+      max-width:600px;
+    }
+    .ss-title{
+      font-family:"Playfair Display", serif;
+      font-size:20px;
+      margin-bottom:10px;
+    }
+    .ss-text{
+      font-size:15px;
+      color:#f8fbff;
+      line-height:1.7;
+    }
+    .ss-timer{
+      position:absolute;
+      bottom:50px;
+      left:50%;
+      transform:translateX(-50%);
+      color:#ffffff;
       font-size:28px;
+      font-weight:700;
+      text-shadow:0 2px 10px rgba(0,0,0,0.7);
+    }
+    .ss-close{
+      position:absolute;
+      top:24px;
+      right:20px;
+      font-size:26px;
       color:white;
-      padding:6px 14px;
+      padding:6px 12px;
       background:#ffffff33;
       border-radius:12px;
       cursor:pointer;
       backdrop-filter:blur(10px);
     }
-    .sunset-timer{
-      position:absolute;
-      bottom:60px;
-      color:white;
-      font-size:40px;
-      font-weight:700;
-      text-shadow:0 2px 10px rgba(0,0,0,0.6);
-    }
-
-    .sunset-quote{
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:0 22px;
-      text-align:center;
-      color:#ffffff;
-      font-size:18px;
-      font-weight:500;
-      text-shadow:0 2px 14px rgba(0,0,0,0.85);
-    }
-
-    @media (max-width:600px){
-      .card{
-        padding:18px 16px;
-      }
-      .sunset-timer{
-        bottom:40px;
-      }
-      .sunset-quote{
-        font-size:16px;
-        padding:0 18px;
-      }
-    }
-    header .subtitle{
-      animation-delay: .4s;
-    }
-
-    /* --- Soulset internal banner (after analysis) --- */
-    .soulset-banner{
-      margin-top:18px;
-      background:linear-gradient(135deg, rgba(90,163,166,0.18), rgba(180,140,255,0.14));
-      border:1px solid rgba(190,205,255,0.35);
-      border-radius:16px;
-      padding:14px 14px;
-      display:flex;
-      align-items:center;
-      gap:12px;
-      box-shadow:0 10px 26px rgba(0,0,0,0.45);
-    }
-    .soulset-banner .badge{
-      font-size:20px;
-      width:40px;height:40px;border-radius:12px;
-      display:grid;place-items:center;
-      background:rgba(255,255,255,0.08);
-      border:1px solid rgba(255,255,255,0.12);
-    }
-    .soulset-banner .text{
-      flex:1;
-      font-size:14px;
-      line-height:1.5;
-      color:#eef2ff;
-      font-weight:600;
-    }
-    .soulset-banner .cta{
-      white-space:nowrap;
-      background:#ffffff;
-      color:#11152b;
-      font-weight:800;
-      border:0;
-      padding:8px 12px;
-      border-radius:999px;
-      cursor:pointer;
-      font-size:12px;
-      box-shadow:0 6px 14px rgba(0,0,0,0.35);
-    }
-
-    /* --- Affiliate mini card (end of analysis) --- */
-    .affiliate-card{
-      margin-top:12px;
-      background:rgba(4,10,30,0.96);
-      border:1px solid rgba(163,186,255,0.28);
-      border-radius:14px;
-      padding:12px 12px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .affiliate-card .ico{
-      width:36px;height:36px;border-radius:10px;
-      display:grid;place-items:center;
-      background:rgba(255,255,255,0.08);
-      font-size:18px;
-    }
-    .affiliate-card .copy{
-      flex:1;
-      font-size:13px;
-      color:#e7ebff;
-      line-height:1.45;
-    }
-    .affiliate-card a{
-      color:#9fe7ea;
-      font-weight:800;
-      text-decoration:none;
-      font-size:12px;
-    }
-    .affiliate-disclaimer{
-      margin-top:6px;
-      font-size:11px;
-      color:#9aa6d9;
-      opacity:0.9;
-    }
   </style>
 </head>
 
 <body>
-  <!-- FULLSCREEN BACKGROUND IMAGES -->
+  <!-- BACKGROUND -->
   <div class="background-slideshow">
     <img src="sunset-1.jpeg" class="slide active" alt="Sunset 1">
     <img src="sunset-2.jpeg" class="slide" alt="Sunset 2">
@@ -409,231 +331,148 @@
     </header>
 
     <div class="container">
-      <!-- EMOTIONAL CHECK-IN -->
       <section class="card">
-        <h2 id="check-title">Emotional Check-In</h2>
-        <p id="check-desc">
-          Describe what you're feeling. You will receive emotional reflection and therapeutic micro-practices.
-        </p>
+        <!-- 🌅 BOUTON PRINCIPAL UNIQUE -->
+        <button class="main-reset-btn" id="mainResetBtn">
+          <span>🌅</span>
+          <div id="mainResetLabel">Soulset Reset — I want to talk</div>
+        </button>
+        <p id="mainResetSub">One safe space to drop what you feel or speak in real-time.</p>
 
-        <textarea id="inputText" placeholder="Ex: I feel overwhelmed…"></textarea>
+        <!-- PANEL AFFICHÉ APRÈS CLIC -->
+        <div id="resetPanel">
+          <div class="panel-title" id="panelTitle">How do you feel right now ?</div>
+          <div class="panel-sub" id="panelSub">
+            You can either write what you feel or go directly into a live therapeutic dialogue.
+          </div>
 
-        <div class="actions">
-          <!-- 🎤 Dictée -->
-          <button class="btn secondary" id="voiceBtn" type="button">🎤 Dictate</button>
+          <!-- ÉCRITURE -->
+          <textarea id="inputText" placeholder="Ex: I feel overwhelmed…"></textarea>
 
-          <!-- Analyse texte classique -->
-          <button class="btn" id="analyzeBtn" type="button">Reflect with me</button>
-          <button class="btn secondary" id="clearBtn" type="button">Clear</button>
+          <div class="actions">
+            <button class="btn" id="sendBtn">Send</button>
+            <button class="btn secondary" id="clearBtn">Clear</button>
+          </div>
 
-          <!-- 🔊 Lecture de la réponse -->
-          <button class="btn secondary" id="speakBtn" type="button" style="display:none;">🔊 Listen</button>
+          <!-- DISCUSSION LIVE -->
+          <div class="live-block">
+            <div class="live-desc" id="liveDesc">
+              Or, if you prefer not to read, you can switch to a calm voice dialogue in front of the sunset.
+            </div>
+            <button class="btn" id="liveBtn">🎧 Start live dialogue</button>
+          </div>
 
-          <!-- 🎧 Mode conversation réaliste -->
-          <button class="btn" type="button" id="convBtn">🎧 Real-talk mode</button>
-
-          <select id="analysisLangSelect" class="lang-select">
-            <option value="auto">🌐 System default</option>
-            <option value="en">English</option>
-            <option value="fr">Français</option>
-            <option value="es">Español</option>
-            <option value="ar">العربية</option>
-          </select>
+          <div id="status"></div>
+          <div id="result"></div>
         </div>
-
-        <div id="status"></div>
-        <div id="result"></div>
-
-        <!-- Soulset internal banner (shows after analysis) -->
-        <div id="soulsetBanner" style="display:none;"></div>
       </section>
-
-      <!-- SUNSET RESET BUTTON -->
-      <div class="sunset-block" id="sunsetBlock">
-        <button class="sunset-btn" id="sunsetBtn">🌅 Sunset Reset (60s)</button>
-      </div>
     </div>
   </div>
 
-  <!-- IMMERSIVE SUNSET FULLSCREEN -->
-  <div class="sunset-fullscreen" id="sunsetFS">
-    <video id="sunsetVideo" autoplay muted playsinline></video>
-    <div class="sunset-quote" id="sunsetQuote"></div>
-    <div class="sunset-timer" id="sunsetTimer">60</div>
-    <div class="sunset-close" id="sunsetClose">×</div>
+  <!-- FULLSCREEN SOULSET RESET LIVE -->
+  <div class="soulset-fullscreen" id="ssFS">
+    <video id="ssVideo" autoplay muted playsinline></video>
+    <div class="ss-overlay"></div>
+    <div class="ss-close" id="ssClose">×</div>
+    <div class="ss-inner">
+      <div class="ss-title" id="ssTitle">Soulset Reset</div>
+      <div class="ss-text" id="ssText">
+        We’re going to talk like in a real session. Let me speak first, then you’ll just answer out loud.
+      </div>
+    </div>
+    <div class="ss-timer" id="ssTimer">05:00</div>
   </div>
 
-  <!-- AUDIO -->
+  <!-- AUDIO AMBIANT SUNSET -->
   <audio id="sunsetAudio" preload="auto"></audio>
 
   <script>
-    // ---------- Langues de base ----------
+    /* ----------------------------
+       LANG + UI DE BASE
+    ----------------------------- */
     const baseLang = (navigator.language || navigator.userLanguage || "en").substring(0,2).toLowerCase();
-    let currentLang = baseLang;      // langue utilisée pour analyse + quotes
-    let analysisLang = "";           // override manuel si choisi dans le select
+    let currentLang = baseLang;
 
-    const langSelect = document.getElementById("analysisLangSelect");
-    langSelect.addEventListener("change", () => {
-      const v = langSelect.value;
-      analysisLang = (v === "auto") ? "" : v;
-    });
+    const subtitleEl = document.getElementById("subtitle");
+    const mainResetLabel = document.getElementById("mainResetLabel");
+    const mainResetSub   = document.getElementById("mainResetSub");
+    const panelTitle     = document.getElementById("panelTitle");
+    const panelSub       = document.getElementById("panelSub");
+    const inputText      = document.getElementById("inputText");
+    const sendBtn        = document.getElementById("sendBtn");
+    const clearBtn       = document.getElementById("clearBtn");
+    const liveDesc       = document.getElementById("liveDesc");
+    const liveBtn        = document.getElementById("liveBtn");
+    const sunsetAudio    = document.getElementById("sunsetAudio");
 
     function applyLanguageUI(){
-      const subtitle   = document.getElementById("subtitle");
-      const checkTitle = document.getElementById("check-title");
-      const checkDesc  = document.getElementById("check-desc");
-      const analyzeBtn = document.getElementById("analyzeBtn");
-      const clearBtn   = document.getElementById("clearBtn");
-      const inputText  = document.getElementById("inputText");
-      const sunsetBtn  = document.getElementById("sunsetBtn");
-      const autoOpt    = langSelect.querySelector('option[value="auto"]');
-      const voiceBtn   = document.getElementById("voiceBtn");
-      const speakBtn   = document.getElementById("speakBtn");
-      const convBtn    = document.getElementById("convBtn");
-
       if(baseLang === "fr"){
-        subtitle.textContent = "Avant de parler à un thérapeute, parlez à votre guide intérieur. Il vous écoute vraiment.";
-        checkTitle.textContent = "Bilan émotionnel";
-        checkDesc.textContent = "Décrivez ce que vous ressentez. Vous recevrez un miroir émotionnel et des micro-pratiques thérapeutiques.";
-        analyzeBtn.textContent = "Explorer avec moi";
+        subtitleEl.textContent = "Avant de chercher un thérapeute, viens parler à ton guide intérieur. Ici, personne ne te juge.";
+        mainResetLabel.textContent = "Soulset Reset — Je veux parler";
+        mainResetSub.textContent = "Un seul espace doux pour déposer ce que tu ressens ou parler en direct.";
+        panelTitle.textContent = "Comment tu te sens maintenant ?";
+        panelSub.textContent = "Tu peux poser ton ressenti par écrit, ou passer directement en dialogue vocal.";
+        inputText.placeholder = "Ex : Je me sens dépassé(e)…";
+        sendBtn.textContent = "Envoyer";
         clearBtn.textContent = "Effacer";
-        inputText.placeholder = "Ex : Je me sens submergé(e)…";
-        sunsetBtn.textContent = "🌅 Pause Sunset (60 s)";
-        if(autoOpt) autoOpt.textContent = "🌐 Langue du système";
-        if(voiceBtn) voiceBtn.textContent = "🎤 Dicter";
-        if(speakBtn) speakBtn.textContent = "🔊 Écouter";
-        if(convBtn)  convBtn.textContent  = "🎧 Mode conversation";
-      }
-      else if(baseLang === "es"){
-        subtitle.textContent = "Antes de hablar con un terapeuta, habla con tu guía interior. Él realmente te escucha.";
-        checkTitle.textContent = "Revisión emocional";
-        checkDesc.textContent = "Describe lo que sientes. Recibirás un espejo emocional y microprácticas terapéuticas.";
-        analyzeBtn.textContent = "Explorar conmigo";
-        clearBtn.textContent = "Borrar";
+        liveDesc.textContent = "Si tu préfères ne pas lire, tu peux passer en dialogue vocal calme devant le coucher de soleil.";
+        liveBtn.textContent = "🎧 Passer en discussion live";
+        document.getElementById("ssTitle").textContent = "Soulset Reset";
+        document.getElementById("ssText").textContent =
+          "On va parler comme dans une vraie séance. Laisse-moi d’abord te parler doucement, puis tu répondras simplement à voix haute.";
+      } else if(baseLang === "es"){
+        subtitleEl.textContent = "Antes de buscar un terapeuta, puedes hablar con tu guía interior. Aquí nadie te juzga.";
+        mainResetLabel.textContent = "Soulset Reset — Quiero hablar";
+        mainResetSub.textContent = "Un espacio suave para escribir lo que sientes o hablar en directo.";
+        panelTitle.textContent = "¿Cómo te sientes ahora mismo?";
+        panelSub.textContent = "Puedes dejar tu sentir por escrito o pasar directo al diálogo de voz.";
         inputText.placeholder = "Ej: Me siento abrumado(a)…";
-        sunsetBtn.textContent = "🌅 Pausa Sunset (60 s)";
-        if(autoOpt) autoOpt.textContent = "🌐 Idioma del sistema";
-        if(voiceBtn) voiceBtn.textContent = "🎤 Dictar";
-        if(speakBtn) speakBtn.textContent = "🔊 Escuchar";
-        if(convBtn)  convBtn.textContent  = "🎧 Modo conversación";
-      }
-      else if(baseLang === "ar"){
-        subtitle.textContent = "قبل أن تلجأ إلى معالج، تحدّث إلى دليلك الداخلي—فهو الوحيد الذي ينصت إليك حقًا.";
-        checkTitle.textContent = "تقييم عاطفي";
-        checkDesc.textContent = "صف ما تشعر به. ستحصل على انعكاس عاطفي وممارسات علاجية صغيرة.";
-        analyzeBtn.textContent = "استكشِف معي";
-        clearBtn.textContent = "مسح";
+        sendBtn.textContent = "Enviar";
+        clearBtn.textContent = "Borrar";
+        liveDesc.textContent = "Si prefieres no leer, puedes pasar a un diálogo de voz tranquilo frente al atardecer.";
+        liveBtn.textContent = "🎧 Pasar a diálogo en vivo";
+        document.getElementById("ssTitle").textContent = "Soulset Reset";
+        document.getElementById("ssText").textContent =
+          "Vamos a hablar como en una sesión real. Primero te hablo con calma, luego tú respondes en voz alta.";
+      } else if(baseLang === "ar"){
+        subtitleEl.textContent = "قبل أن تبحث عن معالج، يمكنك أن تتحدّث إلى دليلك الداخلي. هنا لا أحد يحكم عليك.";
+        mainResetLabel.textContent = "Soulset Reset — أريد أن أتحدّث";
+        mainResetSub.textContent = "مساحة واحدة ناعمة لتكتب ما تشعر به أو لتتحدّث بصوتك.";
+        panelTitle.textContent = "كيف تشعر الآن؟";
+        panelSub.textContent = "يمكنك أن تكتب ما تشعر به، أو أن تنتقل مباشرة إلى حوار صوتي هادئ.";
         inputText.placeholder = "مثال: أشعر بأنني مُرهق…";
-        sunsetBtn.textContent = "🌅 استراحة الغروب (60 ثانية)";
-        if(autoOpt) autoOpt.textContent = "🌐 لغة النظام";
-        if(voiceBtn) voiceBtn.textContent = "🎤 إملاء";
-        if(speakBtn) speakBtn.textContent = "🔊 استماع";
-        if(convBtn)  convBtn.textContent  = "🎧 وضع المحادثة";
-      }
-      else {
-        subtitle.textContent = "Before seeking a therapist, speak to your inner guide — it’s the one that truly listens.";
-        checkTitle.textContent = "Emotional Check-In";
-        checkDesc.textContent = "Describe what you're feeling. You'll receive emotional reflection and therapeutic micro-practices.";
-        analyzeBtn.textContent = "Reflect with me";
-        clearBtn.textContent = "Clear";
+        sendBtn.textContent = "إرسال";
+        clearBtn.textContent = "مسح";
+        liveDesc.textContent = "إن فضّلت ألا تقرأ، يمكنك الانتقال إلى حوار صوتي هادئ أمام الغروب.";
+        liveBtn.textContent = "🎧 بدء حوار مباشر";
+        document.getElementById("ssTitle").textContent = "Soulset Reset";
+        document.getElementById("ssText").textContent =
+          "سنتحدّث كما في جلسة حقيقية. سأبدأ أنا بصوت هادئ، ثم تردّ أنت بصوت عالٍ.";
+      } else {
+        subtitleEl.textContent = "Before looking for a therapist, come and speak to your inner guide. Here, nothing you feel is ‘too much’.";
+        mainResetLabel.textContent = "Soulset Reset — I want to talk";
+        mainResetSub.textContent = "One soft space to drop what you feel or talk in real time.";
+        panelTitle.textContent = "How do you feel right now?";
+        panelSub.textContent = "You can put your feelings into words, or go straight into a live voice dialogue.";
         inputText.placeholder = "Ex: I feel overwhelmed…";
-        sunsetBtn.textContent = "🌅 Sunset Reset (60s)";
-        if(autoOpt) autoOpt.textContent = "🌐 System default";
-        if(voiceBtn) voiceBtn.textContent = "🎤 Dictate";
-        if(speakBtn) speakBtn.textContent = "🔊 Listen";
-        if(convBtn)  convBtn.textContent  = "🎧 Real-talk mode";
+        sendBtn.textContent = "Send";
+        clearBtn.textContent = "Clear";
+        liveDesc.textContent = "If you prefer not to read, you can switch to a calm voice dialogue in front of the sunset.";
+        liveBtn.textContent = "🎧 Start live dialogue";
+        document.getElementById("ssTitle").textContent = "Soulset Reset";
+        document.getElementById("ssText").textContent =
+          "We’ll talk like in a real session. I’ll speak first, then you just answer out loud.";
       }
 
-      const st = document.getElementById("subtitle");
-      st.classList.remove("breathe");
-      void st.offsetWidth;
-      st.classList.add("breathe");
+      subtitleEl.classList.remove("breathe");
+      void subtitleEl.offsetWidth;
+      subtitleEl.classList.add("breathe");
     }
     applyLanguageUI();
 
-    // ---------- Quotes by language ----------
-    const QUOTES = {
-      en: [
-        "You don’t have to fix everything in this minute.",
-        "Your feelings are valid, even when no one else sees them.",
-        "Rest is not a reward. It’s a right.",
-        "You are allowed to be a work in progress and still be worthy.",
-        "Softening is not weakness. It is how light gets in.",
-        "You have survived 100% of your hardest days.",
-        "Your pace is sacred. You do not have to rush healing.",
-        "Some chapters close so your nervous system can finally breathe.",
-        "Even when the mind is loud, the body whispers the truth.",
-        "You can start again at any breath.",
-        "You are not behind. You are right on time for your own story.",
-        "Tenderness with yourself is already a form of therapy.",
-        "Every exhale is a small letting go.",
-        "You are allowed to take up emotional space.",
-        "Your sensitivity is not a flaw, it’s a compass.",
-        "You are learning to stay with yourself, and that is huge."
-      ],
-      fr: [
-        "Vous n’avez pas besoin de tout régler dans cette minute.",
-        "Vos émotions sont légitimes, même si personne ne les voit.",
-        "Le repos n’est pas une récompense. C’est un droit.",
-        "Vous avez le droit d’être en chantier et déjà digne d’amour.",
-        "S’adoucir n’est pas une faiblesse. C’est ainsi que la lumière entre.",
-        "Vous avez survécu à 100 % de vos jours les plus difficiles.",
-        "Votre cadence est sacrée. Vous n’avez pas à précipiter votre guérison.",
-        "Certains chapitres se ferment pour que votre système nerveux respire enfin.",
-        "Même quand le mental crie, le corps murmure la vérité.",
-        "Vous pouvez recommencer à chaque respiration.",
-        "Vous n’êtes pas en retard. Vous êtes à l’heure de votre propre histoire.",
-        "La douceur envers vous-même est déjà une forme de thérapie.",
-        "Chaque expiration est un petit lâcher-prise.",
-        "Vous avez le droit de prendre de la place, aussi dans vos émotions.",
-        "Votre sensibilité n’est pas un défaut, c’est une boussole.",
-        "Vous apprenez à rester avec vous-même, et c’est immense."
-      ],
-      es: [
-        "No tienes que arreglarlo todo en este minuto.",
-        "Tus emociones son válidas, aunque nadie más las vea.",
-        "El descanso no es una recompensa. Es un derecho.",
-        "Tienes derecho a estar en construcción y seguir siendo digno de amor.",
-        "Suavizarte no es debilidad. Es la forma en que entra la luz.",
-        "Has sobrevivido al 100 % de tus días más difíciles.",
-        "Tu ritmo es sagrado. No tienes que apresurar tu sanación.",
-        "Algunos capítulos se cierran para que tu sistema nervioso pueda respirar.",
-        "Aunque la mente grite, el cuerpo susurra la verdad.",
-        "Puedes empezar de nuevo en cualquier respiración.",
-        "No vas tarde. Vas al tiempo de tu propia historia.",
-        "La ternura contigo mismo ya es una forma de terapia.",
-        "Cada exhalación es un pequeño soltar.",
-        "Tienes derecho a ocupar espacio emocional.",
-        "Tu sensibilidad no es un defecto, es una brújula.",
-        "Estás aprendiendo a quedarte contigo mismo, y eso es enorme."
-      ],
-      ar: [
-        "لستَ مضطرًا لحلّ كل شيء في هذه الدقيقة.",
-        "مشاعرك حقيقية حتى لو لم يَرَها أحد.",
-        "الراحة ليست مكافأة، إنها حق.",
-        "يحقّ لك أن تكون في حالة بناء وما زلتَ أهلًا للحب.",
-        "اللين ليس ضعفًا، هكذا يدخل النور إلى قلبك.",
-        "لقد نجوتَ من 100٪ من أصعب أيامك.",
-        "إيقاعك مقدّس، لا حاجة لأن تُسرِع شفاءك.",
-        "أحيانًا تُغلَق الفصول كي يتمكّن جهازك العصبي من التنفّس.",
-        "حتى عندما يصرخ العقل، يهمس الجسد بالحقيقة.",
-        "يمكنك أن تبدأ من جديد مع كل شهيق وزفير.",
-        "أنت لست متأخرًا، أنت في وقتك الخاص.",
-        "الرفق بنفسك هو بالفعل شكل من أشكال العلاج.",
-        "كل زفير هو إفراج صغير.",
-        "يحقّ لك أن تأخذ مكانًا أيضًا في مشاعرك.",
-        "حساسيّتك ليست عيبًا، إنها بوصلة.",
-        "أنت تتعلّم أن تبقى مع نفسك، وهذا إنجاز كبير."
-      ]
-    };
-
-    function getRandomQuote(langKey){
-      const key = QUOTES[langKey] ? langKey : "en";
-      const arr = QUOTES[key];
-      return arr[Math.floor(Math.random() * arr.length)];
-    }
-
-    // ---------- Background slideshow ----------
+    /* ----------------------------
+       BACKGROUND SLIDESHOW
+    ----------------------------- */
     const slidesBG = document.querySelectorAll(".background-slideshow .slide");
     let bgIndex = 0;
     if(slidesBG.length > 0){
@@ -644,15 +483,18 @@
       }, 9000);
     }
 
-    // ---------- Helper render ----------
-    const resultEl   = document.getElementById("result");
-    const statusEl   = document.getElementById("status");
-    const sunsetBlock= document.getElementById("sunsetBlock");
-    const analyzeBtn = document.getElementById("analyzeBtn");
-    const clearBtn   = document.getElementById("clearBtn");
-    const inputEl    = document.getElementById("inputText");
-    const speakBtn   = document.getElementById("speakBtn");
-    const voiceBtn   = document.getElementById("voiceBtn");
+    /* ----------------------------
+       SOULSET RESET PANEL
+    ----------------------------- */
+    const mainResetBtn = document.getElementById("mainResetBtn");
+    const resetPanel   = document.getElementById("resetPanel");
+    const statusEl     = document.getElementById("status");
+    const resultEl     = document.getElementById("result");
+
+    mainResetBtn.onclick = () => {
+      resetPanel.style.display = "block";
+      resetPanel.scrollIntoView({ behavior:"smooth", block:"start" });
+    };
 
     function renderMessage(text){
       const div = document.createElement("div");
@@ -662,175 +504,31 @@
       resultEl.appendChild(div);
     }
 
-    // ---------- A) Soulset internal banner texts ----------
-    const BANNER_TEXTS = {
-      fr: { text: "✨ Recevez un mini-rituel SoulsetJourney chaque matin pour ancrer votre paix intérieure.", cta: "Recevoir mon rituel" },
-      en: { text: "✨ Get a SoulsetJourney mini-ritual every morning to anchor your inner peace.", cta: "Get my ritual" },
-      es: { text: "✨ Recibe un mini ritual SoulsetJourney cada mañana para anclar tu paz interior.", cta: "Recibir mi ritual" },
-      ar: { text: "✨ احصل على طقس SoulsetJourney صغير كل صباح لتعزيز سلامك الداخلي.", cta: "احصل على طقسي" }
-    };
-
-    const SOULSET_LINK = "https://soulsetjourney.com"; // <-- change si besoin
-
-    function showSoulsetBanner(langKey){
-      const banner = document.getElementById("soulsetBanner");
-      if(!banner) return;
-
-      const L = BANNER_TEXTS[langKey] || BANNER_TEXTS.en;
-
-      banner.innerHTML = `
-        <div class="soulset-banner">
-          <div class="badge">☀️</div>
-          <div class="text">${L.text}</div>
-          <button class="cta" onclick="window.open('${SOULSET_LINK}','_blank')">${L.cta}</button>
-        </div>
-      `;
-      banner.style.display = "block";
-    }
-
-    // ---------- C) Affiliate products (soft suggestion) ----------
-    const AFFILIATE_BY_THEME = {
-      stress: [
-        { name:{fr:"Diffuseur apaisant",en:"Calming diffuser",es:"Difusor calmante",ar:"موزّع روائح مهدئ"}, icon:"🫧", url:"https://amzn.to/xxxxx1" },
-        { name:{fr:"Bougie relaxante",en:"Relax candle",es:"Vela relajante",ar:"شمعة استرخاء"}, icon:"🕯️", url:"https://amzn.to/xxxxx2" }
-      ],
-      fear: [
-        { name:{fr:"Lampe douce",en:"Warm night lamp",es:"Lámpara cálida",ar:"مصباح دافئ"}, icon:"💡", url:"https://amzn.to/xxxxx3" }
-      ],
-      sadness: [
-        { name:{fr:"Bracelet apaisant",en:"Calm bracelet",es:"Pulsera calmante",ar:"سوار مهدئ"}, icon:"📿", url:"https://amzn.to/xxxxx4" }
-      ],
-      anger: [
-        { name:{fr:"Encens bois doux",en:"Soft sandalwood incense",es:"Incienso suave",ar:"بخور خشب ناعم"}, icon:"🌿", url:"https://amzn.to/xxxxx5" }
-      ],
-      uncertainty: [
-        { name:{fr:"Journal guidé",en:"Guided journal",es:"Diario guiado",ar:"دفتر موجه"}, icon:"📓", url:"https://amzn.to/xxxxx6" }
-      ],
-      inspiration: [
-        { name:{fr:"Carnet créatif",en:"Creative notebook",es:"Cuaderno creativo",ar:"دفتر إبداعي"}, icon:"✨", url:"https://amzn.to/xxxxx7" }
-      ],
-      neutral: [
-        { name:{fr:"Brume relaxante",en:"Relax mist",es:"Bruma relajante",ar:"رذاذ استرخاء"}, icon:"🌙", url:"https://amzn.to/xxxxx8" }
-      ]
-    };
-
-    function pickAffiliate(theme, langKey){
-      const key = AFFILIATE_BY_THEME[theme] ? theme : "neutral";
-      const arr = AFFILIATE_BY_THEME[key];
-      const item = arr[Math.floor(Math.random()*arr.length)];
-      const label = item.name[langKey] || item.name.en;
-      return { ...item, label };
-    }
-
-    function renderAffiliate(theme, langKey){
-      const { icon, label, url } = pickAffiliate(theme, langKey);
-      return `
-        <div class="affiliate-card">
-          <div class="ico">${icon}</div>
-          <div class="copy">
-            ${label} — <a href="${url}" target="_blank" rel="noopener">Voir</a>
-          </div>
-        </div>
-        <div class="affiliate-disclaimer">
-          ${langKey==="fr" ? "Lien affilié : sans coût supplémentaire pour vous." :
-            langKey==="es" ? "Enlace afiliado: sin coste extra para ti." :
-            langKey==="ar" ? "رابط تابع: دون أي تكلفة إضافية عليك." :
-            "Affiliate link: no extra cost to you."}
-        </div>
-      `;
-    }
-
-    /* =========================================================
-       🎤 VOICE-TO-TEXT (SpeechRecognition)
-    ========================================================= */
-    let recognition = null;
-    let isListening = false;
-
-    const NativeSR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (NativeSR) {
-      recognition = new NativeSR();
-      recognition.interimResults = false;
-      recognition.continuous = false;
-
-      recognition.onstart = () => {
-        isListening = true;
-        voiceBtn.classList.add("listening");
-      };
-      recognition.onend = () => {
-        isListening = false;
-        voiceBtn.classList.remove("listening");
-      };
-      recognition.onresult = (e) => {
-        const text = e.results[0][0].transcript;
-        // Ajoute au texte existant
-        inputEl.value = inputEl.value
-          ? inputEl.value.trim() + " " + text
-          : text;
-      };
-      recognition.onerror = (e) => console.log("Voice error:", e);
-
-      voiceBtn.onclick = () => {
-        const effectiveLang = analysisLang || baseLang;
-        recognition.lang =
-          effectiveLang === "ar" ? "ar-MA" :
-          effectiveLang === "es" ? "es-ES" :
-          effectiveLang === "fr" ? "fr-FR" : "en-US";
-
-        if (!isListening) recognition.start();
-        else recognition.stop();
-      };
-    } else {
-      voiceBtn.disabled = true;
-      voiceBtn.textContent = "🎤 Not supported";
-    }
-
-    /* =========================================================
-       🔊 TEXT-TO-SPEECH
-    ========================================================= */
-    function speak(text){
-      if (!("speechSynthesis" in window)) return;
-      speechSynthesis.cancel();
-
-      const effectiveLang = analysisLang || baseLang;
-      const clean = text.replace(/<[^>]*>/g, "").replace(/\s+$/,"");
-
-      const utter = new SpeechSynthesisUtterance(clean);
-      utter.lang =
-        effectiveLang === "ar" ? "ar-SA" :
-        effectiveLang === "es" ? "es-ES" :
-        effectiveLang === "fr" ? "fr-FR" : "en-US";
-
-      utter.rate = 1;
-      utter.pitch = 1;
-      speechSynthesis.speak(utter);
-    }
-
-    let lastAIText = "";
-
-    // ---------- AI Analysis ----------
-    analyzeBtn.onclick = async () => {
-      const text = inputEl.value.trim();
+    /* ----------------------------
+       ANALYSE ÉCRITE
+    ----------------------------- */
+    sendBtn.onclick = async () => {
+      const text = inputText.value.trim();
       if(!text) return;
 
-      const effectiveLang = analysisLang || baseLang;
+      const effectiveLang = baseLang;
       currentLang = effectiveLang;
 
-      analyzeBtn.disabled = true;
-      clearBtn.disabled   = true;
-      voiceBtn.disabled   = true;
-      speakBtn.style.display = "none";
+      sendBtn.disabled = true;
+      clearBtn.disabled = true;
+      liveBtn.disabled = true;
 
       statusEl.textContent =
-        (effectiveLang === "fr") ? "Analyse en cours…" :
-        (effectiveLang === "es") ? "Analizando…" :
-        (effectiveLang === "ar") ? "جاري التحليل..." :
-        "Analyzing…";
+        (effectiveLang === "fr") ? "Je t’écoute et je reformule pour toi…" :
+        (effectiveLang === "es") ? "Te escucho y te devuelvo lo que siento en tus mots…" :
+        (effectiveLang === "ar") ? "أستمع إليك وأحاول أن أعكس ما تشعر به..." :
+        "I’m listening and reflecting back to you…";
 
-      renderMessage("⏳ " +
-        ((effectiveLang === "fr") ? "Je t’écoute…" :
-         (effectiveLang === "es") ? "Te escucho…" :
-         (effectiveLang === "ar") ? "أنا أستمع إليك..." :
-         "I’m listening…")
+      renderMessage(
+        (effectiveLang === "fr") ? "⏳ Je prends un moment pour te répondre avec soin…" :
+        (effectiveLang === "es") ? "⏳ Me tomo un momento para responderte con cuidado…" :
+        (effectiveLang === "ar") ? "⏳ سأستغرق لحظات لأجيبك بلطف..." :
+        "⏳ I’m taking a moment to answer you with care…"
       );
 
       try{
@@ -842,21 +540,7 @@
         const data = await res.json();
 
         if(data.ok){
-          const theme = data.theme || "neutral";
-
           renderMessage(data.text);
-          lastAIText = data.text || "";
-
-          // 🔊 show listen button
-          speakBtn.style.display = "inline-block";
-          speakBtn.onclick = () => speak(lastAIText);
-
-          const affiliateHTML = renderAffiliate(theme, effectiveLang);
-          resultEl.insertAdjacentHTML("beforeend", affiliateHTML);
-
-          showSoulsetBanner(effectiveLang);
-
-          sunsetBlock.style.display = "block";
           statusEl.textContent = "";
         } else {
           renderMessage("⚠️ Something went wrong.");
@@ -867,23 +551,26 @@
         renderMessage("⚠️ Network error, please try again.");
         statusEl.textContent = "";
       } finally{
-        analyzeBtn.disabled = false;
-        clearBtn.disabled   = false;
-        voiceBtn.disabled   = false;
+        sendBtn.disabled = false;
+        clearBtn.disabled = false;
+        liveBtn.disabled = false;
       }
     };
 
     clearBtn.onclick = () => {
-      inputEl.value = "";
+      inputText.value = "";
       resultEl.innerHTML = "";
       statusEl.textContent = "";
-      sunsetBlock.style.display = "none";
-      document.getElementById("soulsetBanner").style.display="none";
-      speakBtn.style.display = "none";
-      speechSynthesis.cancel();
     };
 
-    // ---------- Random sounds & videos ----------
+    /* ----------------------------
+       LIVE DIALOGUE + VIDEO
+    ----------------------------- */
+    const ssFS    = document.getElementById("ssFS");
+    const ssVideo = document.getElementById("ssVideo");
+    const ssTimer = document.getElementById("ssTimer");
+    const ssClose = document.getElementById("ssClose");
+
     const VIDEO_SOURCES = [
       "Sunset-1V.mp4",
       "Sunset-2V.mp4",
@@ -891,311 +578,215 @@
       "Sunset-4V.mp4",
       "Sunset-ambient.mp4"
     ];
-
     const SOUND_SOURCES = [
       "sunset-soft.mp3",
       "sunset-ocean.mp3",
       "sunset-deep.mp3",
       "Sunset-ambient.mp4"
     ];
-
     function pickRandom(arr){
-      return arr[Math.floor(Math.random() * arr.length)];
+      return arr[Math.floor(Math.random()*arr.length)];
     }
 
-    // ---------- Sunset Reset immersive ----------
-    const FS         = document.getElementById("sunsetFS");
-    const video      = document.getElementById("sunsetVideo");
-    const timer      = document.getElementById("sunsetTimer");
-    const sunsetBtn  = document.getElementById("sunsetBtn");
-    const sunsetClose= document.getElementById("sunsetClose");
-    const quoteEl    = document.getElementById("sunsetQuote");
-    const audioEl    = document.getElementById("sunsetAudio");
-    let countdown;
+    let convActive = false;
+    let countdown  = null;
 
-    function startSunsetReset(){
-      const randomVideo = pickRandom(VIDEO_SOURCES);
-      video.src = randomVideo;
-
-      const randomSound = pickRandom(SOUND_SOURCES);
-      audioEl.src = randomSound;
-
-      FS.style.display = "flex";
-      video.currentTime = 0;
-      video.play().catch(()=>{});
-
-      const quote = getRandomQuote(currentLang);
-      quoteEl.textContent = quote;
-      quoteEl.style.direction = (currentLang === "ar") ? "rtl" : "ltr";
-
-      audioEl.currentTime = 0;
-      audioEl.volume = 1;
-      audioEl.play().catch(()=>{});
-
-      let time = 60;
-      timer.textContent = time;
-
-      clearInterval(countdown);
-      countdown = setInterval(() => {
-        time--;
-        timer.textContent = time;
-        if(time <= 0){
-          closeSunset();
-        }
-      }, 1000);
-    }
-
-    function closeSunset(){
-      FS.style.display = "none";
-      video.pause();
-      audioEl.pause();
-      audioEl.currentTime = 0;
-      clearInterval(countdown);
-    }
-
-    if(sunsetBtn){
-      sunsetBtn.onclick = startSunsetReset;
-    }
-    if(sunsetClose){
-      sunsetClose.onclick = closeSunset;
-    }
-
-    /* =========================================================
-       🎧 MODE CONVERSATION "REAL TALK"
-    ========================================================= */
-    const convBtn = document.getElementById("convBtn");
-
-    let convActive   = false;
-    let convListening = false;
-
-    const ConvSR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const convRecognition = ConvSR ? new ConvSR() : null;
-
-    function speakConversational(text, langKey, onEnd) {
+    // TTS calme pour la voix
+    function speakConversational(text, langKey, onEnd){
       if (!("speechSynthesis" in window)) {
         onEnd && onEnd();
         return;
       }
       speechSynthesis.cancel();
-
-      const clean = text.replace(/<[^>]*>/g, "").replace(/\n{2,}/g, "\n\n");
-
+      const clean = text.replace(/<[^>]*>/g,"").replace(/\s+$/,"");
       const utter = new SpeechSynthesisUtterance(clean);
       utter.lang =
-        langKey === "ar"
-          ? "ar-SA"
-          : langKey === "es"
-          ? "es-ES"
-          : langKey === "fr"
-          ? "fr-FR"
-          : "en-US";
-
-      utter.rate = 1.03;
-      utter.pitch = 0.98;
-
-      utter.onend = () => {
-        console.log("🔊 [Real-talk] end");
-        onEnd && onEnd();
-      };
-
+        langKey === "ar" ? "ar-SA" :
+        langKey === "es" ? "es-ES" :
+        langKey === "fr" ? "fr-FR" : "en-US";
+      utter.rate  = 0.94;
+      utter.pitch = 0.96;
+      utter.volume= 1;
+      utter.onend = () => onEnd && onEnd();
       speechSynthesis.speak(utter);
     }
 
-    function startConvListening() {
-      if (!convRecognition) return;
-      if (!convActive) return;
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const convRecognition = SR ? new SR() : null;
 
-      const effectiveLang = analysisLang || baseLang;
-      convRecognition.lang =
-        effectiveLang === "ar"
-          ? "ar-MA"
-          : effectiveLang === "es"
-          ? "es-ES"
-          : effectiveLang === "fr"
-          ? "fr-FR"
-          : "en-US";
-
-      try {
-        convRecognition.start();
-      } catch (e) {
-        console.log("startConvListening error:", e);
-      }
+    function updateTimerDisplay(sec){
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      ssTimer.textContent = String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
     }
 
-    if (convRecognition) {
-      convRecognition.continuous = false;
+    function stopLiveSession(){
+      convActive = false;
+      if (convRecognition){
+        try { convRecognition.stop(); } catch(e){}
+      }
+      speechSynthesis.cancel();
+      sunsetAudio.pause();
+      sunsetAudio.currentTime = 0;
+      ssVideo.pause();
+      ssVideo.currentTime = 0;
+      clearInterval(countdown);
+      ssFS.style.display = "none";
+      statusEl.textContent = "";
+    }
+
+    function startListeningTurn(){
+      if (!convRecognition || !convActive) return;
+
+      const effectiveLang = baseLang;
+      convRecognition.lang =
+        effectiveLang === "ar" ? "ar-MA" :
+        effectiveLang === "es" ? "es-ES" :
+        effectiveLang === "fr" ? "fr-FR" : "en-US";
+
+      try { convRecognition.start(); } catch(e){ console.log(e); }
+    }
+
+    if (convRecognition){
       convRecognition.interimResults = false;
+      convRecognition.continuous = false;
 
       convRecognition.onstart = () => {
-        convListening = true;
-        console.log("🎤 [Real-talk] listening…");
-        convBtn.textContent = currentLang.startsWith("fr")
-          ? "🎧 Je t’écoute…"
-          : currentLang.startsWith("es")
-          ? "🎧 Te escucho…"
-          : currentLang.startsWith("ar")
-          ? "🎧 أستمع إليك..."
-          : "🎧 I’m listening…";
+        liveBtn.textContent =
+          baseLang === "fr" ? "🎧 Discussion live en cours…" :
+          baseLang === "es" ? "🎧 Diálogo en curso…" :
+          baseLang === "ar" ? "🎧 حوار مباشر جارٍ…" :
+          "🎧 Live dialogue running…";
       };
 
       convRecognition.onend = () => {
-        convListening = false;
         if (!convActive) return;
-        console.log("🛑 [Real-talk] stop listening.");
-      };
-
-      convRecognition.onerror = (e) => {
-        console.log("Real-talk voice error:", e);
-        if (convActive) {
-          setTimeout(() => startConvListening(), 800);
-        }
+        // on relancera après la réponse vocale de l’IA
       };
 
       convRecognition.onresult = async (event) => {
-        const userText = event.results[0][0].transcript;
-        console.log("👤 User (real-talk):", userText);
+        const userSpeech = event.results[0][0].transcript;
+        console.log("User said:", userSpeech);
 
-        inputEl.value = userText;
-
-        const effectiveLang = analysisLang || baseLang;
+        const effectiveLang = baseLang;
         currentLang = effectiveLang;
 
         statusEl.textContent =
-          effectiveLang === "fr"
-            ? "Je reformule ce que tu vis…"
-            : effectiveLang === "es"
-            ? "Estoy procesando lo que sientes…"
-            : effectiveLang === "ar"
-            ? "أحاول استيعاب ما تشعر به..."
-            : "Let me process what you’re saying…";
+          (effectiveLang === "fr") ? "Je reformule pour toi…" :
+          (effectiveLang === "es") ? "Estoy procesando lo que dices…" :
+          (effectiveLang === "ar") ? "أحاول أن أعكس ما تشعر به..." :
+          "Let me reflect back to you…";
 
-        try {
+        try{
           const res = await fetch("/api/analyze", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: userText, lang: effectiveLang })
+            method:"POST",
+            headers:{ "Content-Type":"application/json" },
+            body:JSON.stringify({ text:userSpeech, lang: effectiveLang })
           });
           const data = await res.json();
 
-          if (!data.ok) {
-            renderMessage("⚠️ Something went wrong.");
+          if(data.ok){
+            const reply = data.text || "";
+            renderMessage(reply); // affiché aussi dans l’interface normale
             statusEl.textContent = "";
-            if (convActive) startConvListening();
-            return;
+
+            speakConversational(reply, effectiveLang, () => {
+              if (convActive) startListeningTurn();
+            });
+          } else {
+            statusEl.textContent = "";
           }
-
-          const raw = (data.text || "").replace(/<[^>]*>/g, "").trim();
-          const intro =
-            effectiveLang === "fr"
-              ? "OK, je vais te répondre franchement."
-              : effectiveLang === "es"
-              ? "Vale, te voy a responder con sinceridad."
-              : effectiveLang === "ar"
-              ? "حسنًا، سأجيبك بصدق الآن."
-              : "Alright, let me answer you honestly.";
-
-          const outro =
-            effectiveLang === "fr"
-              ? "Tu peux me répondre à voix haute, je suis là."
-              : effectiveLang === "es"
-              ? "Puedes responderme en voz alta, aquí estoy contigo."
-              : effectiveLang === "ar"
-              ? "يمكنك الرد بصوت عالٍ، أنا معك."
-              : "You can just talk back to me out loud, I’m here.";
-
-          const finalText = `${intro}\n\n${raw}\n\n${outro}`;
-
-          renderMessage(finalText);
-          lastAIText = finalText;
-          speakBtn.style.display = "inline-block";
-          speakBtn.onclick = () => speak(lastAIText);
-
-          statusEl.textContent = "";
-
-          speakConversational(finalText, effectiveLang, () => {
-            if (convActive) {
-              startConvListening();
-            }
-          });
-        } catch (err) {
+        } catch(err){
           console.error(err);
-          renderMessage("⚠️ Network error, please try again.");
           statusEl.textContent = "";
-          if (convActive) startConvListening();
+          if (convActive) startListeningTurn();
+        }
+      };
+
+      convRecognition.onerror = (e) => {
+        console.log("Voice error:", e);
+        if (convActive){
+          setTimeout(()=>startListeningTurn(), 800);
         }
       };
     }
 
-    if (convBtn && convRecognition) {
-      convBtn.addEventListener("click", () => {
-        if (!convActive) {
-          convActive = true;
-          convBtn.textContent =
-            baseLang === "fr"
-              ? "⏹ Stop real-talk"
-              : baseLang === "es"
-              ? "⏹ Parar conversación"
-              : baseLang === "ar"
-              ? "⏹ إيقاف المحادثة"
-              : "⏹ Stop real-talk";
+    liveBtn.onclick = () => {
+      if (!convRecognition){
+        liveBtn.disabled = true;
+        liveBtn.textContent =
+          baseLang === "fr" ? "🎧 Dialogue vocal non supporté" :
+          baseLang === "es" ? "🎧 Voz no disponible" :
+          baseLang === "ar" ? "🎧 الميكروفون غير مدعوم" :
+          "🎧 Voice not supported";
+        return;
+      }
 
-          speakConversational(
-            baseLang === "fr"
-              ? "On va parler comme dans une vraie discussion. Quand je finis, tu peux simplement me répondre à voix haute."
-              : baseLang === "es"
-              ? "Vamos a hablar como en una conversación real. Cuando termine de hablar, solo respóndeme en voz alta."
-              : baseLang === "ar"
-              ? "سنتحدّث الآن وكأنها محادثة حقيقية. عندما أنهي كلامي، فقط أجبني بصوت عالٍ."
-              : "We’ll talk like in a real conversation now. When I finish, just talk back to me out loud.",
-            baseLang,
-            () => startConvListening()
-          );
-        } else {
-          convActive = false;
-          convListening = false;
-          try { convRecognition.stop(); } catch (e) {}
-          speechSynthesis.cancel();
-          convBtn.textContent =
-            baseLang === "fr"
-              ? "🎧 Mode conversation"
-              : baseLang === "es"
-              ? "🎧 Modo conversación"
-              : baseLang === "ar"
-              ? "🎧 وضع المحادثة"
-              : "🎧 Real-talk mode";
-          statusEl.textContent = "";
+      convActive = true;
+      ssFS.style.display = "flex";
+
+      const randomVideo = pickRandom(VIDEO_SOURCES);
+      ssVideo.src = randomVideo;
+      ssVideo.currentTime = 0;
+      ssVideo.play().catch(()=>{});
+
+      const randomSound = pickRandom(SOUND_SOURCES);
+      sunsetAudio.src = randomSound;
+      sunsetAudio.currentTime = 0;
+      sunsetAudio.volume = 0.5;
+      sunsetAudio.play().catch(()=>{});
+
+      let remaining = 5 * 60; // 5 minutes
+      updateTimerDisplay(remaining);
+      clearInterval(countdown);
+      countdown = setInterval(() => {
+        remaining--;
+        updateTimerDisplay(remaining);
+        if (remaining <= 0){
+          stopLiveSession();
         }
+      }, 1000);
+
+      const intro =
+        baseLang === "fr" ?
+          "On va garder ça simple. Je vais te parler doucement, et tu pourras simplement répondre à voix haute, sans te censurer." :
+        baseLang === "es" ?
+          "Vamos a mantener esto simple. Te voy a hablar con calma, y tú solo responde en voz alta, sin censurarte." :
+        baseLang === "ar" ?
+          "سنُبقي الأمر بسيطًا. سأتحدّث إليك بهدوء، ويمكنك فقط أن تردّ بصوت عالٍ دون رقابة على نفسك." :
+          "We’ll keep this simple. I’ll talk to you softly, and you can just answer out loud, without filtering yourself.";
+
+      speakConversational(intro, baseLang, () => {
+        startListeningTurn();
       });
-    } else if (convBtn && !convRecognition) {
-      convBtn.disabled = true;
-      convBtn.textContent = "🎧 Voice not supported";
-    }
+    };
 
-    /* =========================================================
-       ✅ AUTO-UPDATE SERVICE WORKER
-    ========================================================= */
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", async () => {
-        try {
-          const reg = await navigator.serviceWorker.register("/service-worker.js");
-          reg.update();
-          if (reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
+    ssClose.onclick = stopLiveSession;
 
-          reg.addEventListener("updatefound", () => {
-            const newSW = reg.installing;
-            newSW.addEventListener("statechange", () => {
-              if (newSW.state === "installed" && navigator.serviceWorker.controller) {
-                newSW.postMessage("SKIP_WAITING");
-                window.location.reload();
-              }
-            });
+  </script>
+
+  <!-- Service worker: garder pour forcer la dernière version -->
+  <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", async () => {
+      try {
+        const reg = await navigator.serviceWorker.register("/service-worker.js");
+        reg.update();
+        if (reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
+        reg.addEventListener("updatefound", () => {
+          const newSW = reg.installing;
+          newSW.addEventListener("statechange", () => {
+            if (newSW.state === "installed" && navigator.serviceWorker.controller) {
+              newSW.postMessage("SKIP_WAITING");
+              window.location.reload();
+            }
           });
-        } catch(e) {
-          console.log("SW error:", e);
-        }
-      });
-    }
-
+        });
+      } catch(e) {
+        console.log("SW error:", e);
+      }
+    });
+  }
   </script>
 </body>
 </html>
