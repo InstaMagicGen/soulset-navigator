@@ -50,9 +50,10 @@
     .bg-overlay{
       position:fixed;
       inset:0;
+      /* ⬇️ overlay un peu plus léger pour mieux voir les photos */
       background:
-        radial-gradient(circle at top, rgba(120,150,255,0.22), transparent 60%),
-        linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.86));
+        radial-gradient(circle at top, rgba(120,150,255,0.18), transparent 62%),
+        linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.78));
       z-index:-1;
     }
 
@@ -107,13 +108,38 @@
     }
 
     .card{
-      background:rgba(6,12,28,0.8);
+      /* ⬇️ un peu plus transparent que 0.8 */
+      background:rgba(6,12,28,0.72);
       border-radius:22px;
       padding:22px 20px 26px;
       box-shadow:0 16px 40px rgba(0,0,0,0.55);
       border:1px solid rgba(255,255,255,0.08);
       backdrop-filter:blur(18px);
       text-align:center;
+    }
+
+    /* Choix de langue */
+    .lang-row{
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap:8px;
+      margin-bottom:10px;
+      font-size:12px;
+      color:#cbd3ff;
+    }
+    .lang-select{
+      min-width:110px;
+      border-radius:999px;
+      border:1px solid rgba(190,205,255,0.7);
+      background:rgba(4,10,30,0.9);
+      color:#e8edff;
+      padding:5px 10px;
+      font-size:12px;
+    }
+    .lang-select:focus{
+      outline:none;
+      border-color:#5aa3a6;
     }
 
     .main-reset-btn{
@@ -127,8 +153,9 @@
       font-size:17px;
       font-weight:800;
       cursor:pointer;
-      background:linear-gradient(135deg,#f7b267,#f78c6b,#f25f5c);
-      color:#1b1020;
+      /* ⬇️ nouveau dégradé plus Soulset (turquoise → violet) */
+      background:linear-gradient(135deg,#5aa3a6,#8e9dfc);
+      color:#0b1020;
       box-shadow:0 14px 30px rgba(0,0,0,0.55);
       margin-top:6px;
       margin-bottom:8px;
@@ -143,10 +170,9 @@
       color:#d6ddff;
     }
 
-    /* PANEL SOULSET RESET (après clic) */
+    /* PANEL SOULSET RESET */
     #resetPanel{
       margin-top:20px;
-      display:none;
       text-align:left;
     }
 
@@ -246,7 +272,7 @@
       }
     }
 
-    /* FULLSCREEN SOULSET RESET LIVE (video + voix) */
+    /* FULLSCREEN SOULSET RESET LIVE */
     .soulset-fullscreen{
       position:fixed;
       inset:0;
@@ -332,18 +358,29 @@
 
     <div class="container">
       <section class="card">
+        <!-- 🌐 Sélecteur de langue -->
+        <div class="lang-row">
+          <span id="langLabel">Language</span>
+          <select id="langSelect" class="lang-select">
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+            <option value="es">Español</option>
+            <option value="ar">العربية</option>
+          </select>
+        </div>
+
         <!-- 🌅 BOUTON PRINCIPAL UNIQUE -->
         <button class="main-reset-btn" id="mainResetBtn">
           <span>🌅</span>
           <div id="mainResetLabel">Soulset Reset — I want to talk</div>
         </button>
-        <p id="mainResetSub">One safe space to drop what you feel or speak in real-time.</p>
+        <p id="mainResetSub">One soft space to drop what you feel or talk in real time.</p>
 
-        <!-- PANEL AFFICHÉ APRÈS CLIC -->
+        <!-- PANEL -->
         <div id="resetPanel">
           <div class="panel-title" id="panelTitle">How do you feel right now ?</div>
           <div class="panel-sub" id="panelSub">
-            You can either write what you feel or go directly into a live therapeutic dialogue.
+            You can put your feelings into words, or go straight into a live voice dialogue.
           </div>
 
           <!-- ÉCRITURE -->
@@ -357,7 +394,7 @@
           <!-- DISCUSSION LIVE -->
           <div class="live-block">
             <div class="live-desc" id="liveDesc">
-              Or, if you prefer not to read, you can switch to a calm voice dialogue in front of the sunset.
+              If you prefer not to read, you can switch to a calm voice dialogue in front of the sunset.
             </div>
             <button class="btn" id="liveBtn">🎧 Start live dialogue</button>
           </div>
@@ -391,23 +428,41 @@
        LANG + UI DE BASE
     ----------------------------- */
     const baseLang = (navigator.language || navigator.userLanguage || "en").substring(0,2).toLowerCase();
-    let currentLang = baseLang;
+    let uiLang = baseLang;   // langue choisie pour UI + analyse + voix
+    let currentLang = uiLang;
 
-    const subtitleEl = document.getElementById("subtitle");
-    const mainResetLabel = document.getElementById("mainResetLabel");
-    const mainResetSub   = document.getElementById("mainResetSub");
-    const panelTitle     = document.getElementById("panelTitle");
-    const panelSub       = document.getElementById("panelSub");
-    const inputText      = document.getElementById("inputText");
-    const sendBtn        = document.getElementById("sendBtn");
-    const clearBtn       = document.getElementById("clearBtn");
-    const liveDesc       = document.getElementById("liveDesc");
-    const liveBtn        = document.getElementById("liveBtn");
-    const sunsetAudio    = document.getElementById("sunsetAudio");
+    const subtitleEl    = document.getElementById("subtitle");
+    const mainResetLabel= document.getElementById("mainResetLabel");
+    const mainResetSub  = document.getElementById("mainResetSub");
+    const panelTitle    = document.getElementById("panelTitle");
+    const panelSub      = document.getElementById("panelSub");
+    const inputText     = document.getElementById("inputText");
+    const sendBtn       = document.getElementById("sendBtn");
+    const clearBtn      = document.getElementById("clearBtn");
+    const liveDesc      = document.getElementById("liveDesc");
+    const liveBtn       = document.getElementById("liveBtn");
+    const sunsetAudio   = document.getElementById("sunsetAudio");
+    const langLabel     = document.getElementById("langLabel");
+    const langSelect    = document.getElementById("langSelect");
+
+    // valeur initiale du select
+    if(["en","fr","es","ar"].includes(baseLang)){
+      langSelect.value = baseLang;
+      uiLang = baseLang;
+    } else {
+      langSelect.value = "en";
+      uiLang = "en";
+    }
+
+    langSelect.addEventListener("change", () => {
+      uiLang = langSelect.value;
+      currentLang = uiLang;
+      applyLanguageUI();
+    });
 
     function applyLanguageUI(){
-      if(baseLang === "fr"){
-        subtitleEl.textContent = "Avant de chercher un thérapeute, viens parler à ton guide intérieur. Ici, personne ne te juge.";
+      if(uiLang === "fr"){
+        subtitleEl.textContent = "Avant de chercher un thérapeute, viens parler à ton guide intérieur. Ici, rien de ce que tu ressens n’est « trop ».";
         mainResetLabel.textContent = "Soulset Reset — Je veux parler";
         mainResetSub.textContent = "Un seul espace doux pour déposer ce que tu ressens ou parler en direct.";
         panelTitle.textContent = "Comment tu te sens maintenant ?";
@@ -420,8 +475,9 @@
         document.getElementById("ssTitle").textContent = "Soulset Reset";
         document.getElementById("ssText").textContent =
           "On va parler comme dans une vraie séance. Laisse-moi d’abord te parler doucement, puis tu répondras simplement à voix haute.";
-      } else if(baseLang === "es"){
-        subtitleEl.textContent = "Antes de buscar un terapeuta, puedes hablar con tu guía interior. Aquí nadie te juzga.";
+        langLabel.textContent = "Langue";
+      } else if(uiLang === "es"){
+        subtitleEl.textContent = "Antes de buscar un terapeuta, puedes hablar con tu guía interior. Aquí nada de lo que sientes es «demasiado».";
         mainResetLabel.textContent = "Soulset Reset — Quiero hablar";
         mainResetSub.textContent = "Un espacio suave para escribir lo que sientes o hablar en directo.";
         panelTitle.textContent = "¿Cómo te sientes ahora mismo?";
@@ -434,8 +490,9 @@
         document.getElementById("ssTitle").textContent = "Soulset Reset";
         document.getElementById("ssText").textContent =
           "Vamos a hablar como en una sesión real. Primero te hablo con calma, luego tú respondes en voz alta.";
-      } else if(baseLang === "ar"){
-        subtitleEl.textContent = "قبل أن تبحث عن معالج، يمكنك أن تتحدّث إلى دليلك الداخلي. هنا لا أحد يحكم عليك.";
+        langLabel.textContent = "Idioma";
+      } else if(uiLang === "ar"){
+        subtitleEl.textContent = "قبل أن تبحث عن معالج، يمكنك أن تتحدّث إلى دليلك الداخلي. هنا لا شيء مما تشعر به يُعدّ «كثيرًا» عليك.";
         mainResetLabel.textContent = "Soulset Reset — أريد أن أتحدّث";
         mainResetSub.textContent = "مساحة واحدة ناعمة لتكتب ما تشعر به أو لتتحدّث بصوتك.";
         panelTitle.textContent = "كيف تشعر الآن؟";
@@ -448,6 +505,7 @@
         document.getElementById("ssTitle").textContent = "Soulset Reset";
         document.getElementById("ssText").textContent =
           "سنتحدّث كما في جلسة حقيقية. سأبدأ أنا بصوت هادئ، ثم تردّ أنت بصوت عالٍ.";
+        langLabel.textContent = "اللغة";
       } else {
         subtitleEl.textContent = "Before looking for a therapist, come and speak to your inner guide. Here, nothing you feel is ‘too much’.";
         mainResetLabel.textContent = "Soulset Reset — I want to talk";
@@ -462,6 +520,7 @@
         document.getElementById("ssTitle").textContent = "Soulset Reset";
         document.getElementById("ssText").textContent =
           "We’ll talk like in a real session. I’ll speak first, then you just answer out loud.";
+        langLabel.textContent = "Language";
       }
 
       subtitleEl.classList.remove("breathe");
@@ -492,7 +551,6 @@
     const resultEl     = document.getElementById("result");
 
     mainResetBtn.onclick = () => {
-      resetPanel.style.display = "block";
       resetPanel.scrollIntoView({ behavior:"smooth", block:"start" });
     };
 
@@ -511,7 +569,7 @@
       const text = inputText.value.trim();
       if(!text) return;
 
-      const effectiveLang = baseLang;
+      const effectiveLang = uiLang;
       currentLang = effectiveLang;
 
       sendBtn.disabled = true;
@@ -520,7 +578,7 @@
 
       statusEl.textContent =
         (effectiveLang === "fr") ? "Je t’écoute et je reformule pour toi…" :
-        (effectiveLang === "es") ? "Te escucho y te devuelvo lo que siento en tus mots…" :
+        (effectiveLang === "es") ? "Te escucho y te devuelvo lo que dices…" :
         (effectiveLang === "ar") ? "أستمع إليك وأحاول أن أعكس ما تشعر به..." :
         "I’m listening and reflecting back to you…";
 
@@ -591,7 +649,7 @@
     let convActive = false;
     let countdown  = null;
 
-    // TTS calme pour la voix
+    // 🔊 Voix plus posée : phrase par phrase avec pauses
     function speakConversational(text, langKey, onEnd){
       if (!("speechSynthesis" in window)) {
         onEnd && onEnd();
@@ -599,16 +657,33 @@
       }
       speechSynthesis.cancel();
       const clean = text.replace(/<[^>]*>/g,"").replace(/\s+$/,"");
-      const utter = new SpeechSynthesisUtterance(clean);
-      utter.lang =
-        langKey === "ar" ? "ar-SA" :
-        langKey === "es" ? "es-ES" :
-        langKey === "fr" ? "fr-FR" : "en-US";
-      utter.rate  = 0.94;
-      utter.pitch = 0.96;
-      utter.volume= 1;
-      utter.onend = () => onEnd && onEnd();
-      speechSynthesis.speak(utter);
+      const sentences = clean
+        .split(/(?<=[\.\!\?…])\s+/)
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      let index = 0;
+
+      function speakNext(){
+        if(index >= sentences.length){
+          onEnd && onEnd();
+          return;
+        }
+        const utter = new SpeechSynthesisUtterance(sentences[index]);
+        utter.lang =
+          langKey === "ar" ? "ar-SA" :
+          langKey === "es" ? "es-ES" :
+          langKey === "fr" ? "fr-FR" : "en-US";
+        utter.rate  = 0.84;   // plus lent
+        utter.pitch = 0.96;
+        utter.volume= 0.95;
+        utter.onend = () => {
+          index++;
+          setTimeout(speakNext, 350); // petite pause entre les phrases
+        };
+        speechSynthesis.speak(utter);
+      }
+      speakNext();
     }
 
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -633,12 +708,17 @@
       clearInterval(countdown);
       ssFS.style.display = "none";
       statusEl.textContent = "";
+      liveBtn.textContent =
+        uiLang === "fr" ? "🎧 Passer en discussion live" :
+        uiLang === "es" ? "🎧 Pasar a diálogo en vivo" :
+        uiLang === "ar" ? "🎧 بدء حوار مباشر" :
+        "🎧 Start live dialogue";
     }
 
     function startListeningTurn(){
       if (!convRecognition || !convActive) return;
 
-      const effectiveLang = baseLang;
+      const effectiveLang = uiLang;
       convRecognition.lang =
         effectiveLang === "ar" ? "ar-MA" :
         effectiveLang === "es" ? "es-ES" :
@@ -653,9 +733,9 @@
 
       convRecognition.onstart = () => {
         liveBtn.textContent =
-          baseLang === "fr" ? "🎧 Discussion live en cours…" :
-          baseLang === "es" ? "🎧 Diálogo en curso…" :
-          baseLang === "ar" ? "🎧 حوار مباشر جارٍ…" :
+          uiLang === "fr" ? "🎧 Discussion live en cours…" :
+          uiLang === "es" ? "🎧 Diálogo en curso…" :
+          uiLang === "ar" ? "🎧 حوار مباشر جارٍ…" :
           "🎧 Live dialogue running…";
       };
 
@@ -668,7 +748,7 @@
         const userSpeech = event.results[0][0].transcript;
         console.log("User said:", userSpeech);
 
-        const effectiveLang = baseLang;
+        const effectiveLang = uiLang;
         currentLang = effectiveLang;
 
         statusEl.textContent =
@@ -687,7 +767,7 @@
 
           if(data.ok){
             const reply = data.text || "";
-            renderMessage(reply); // affiché aussi dans l’interface normale
+            renderMessage(reply); // affiché aussi dans l’interface
             statusEl.textContent = "";
 
             speakConversational(reply, effectiveLang, () => {
@@ -715,9 +795,9 @@
       if (!convRecognition){
         liveBtn.disabled = true;
         liveBtn.textContent =
-          baseLang === "fr" ? "🎧 Dialogue vocal non supporté" :
-          baseLang === "es" ? "🎧 Voz no disponible" :
-          baseLang === "ar" ? "🎧 الميكروفون غير مدعوم" :
+          uiLang === "fr" ? "🎧 Dialogue vocal non supporté" :
+          uiLang === "es" ? "🎧 Voz no disponible" :
+          uiLang === "ar" ? "🎧 الميكروفون غير مدعوم" :
           "🎧 Voice not supported";
         return;
       }
@@ -733,7 +813,7 @@
       const randomSound = pickRandom(SOUND_SOURCES);
       sunsetAudio.src = randomSound;
       sunsetAudio.currentTime = 0;
-      sunsetAudio.volume = 0.5;
+      sunsetAudio.volume = 0.4;
       sunsetAudio.play().catch(()=>{});
 
       let remaining = 5 * 60; // 5 minutes
@@ -748,15 +828,15 @@
       }, 1000);
 
       const intro =
-        baseLang === "fr" ?
-          "On va garder ça simple. Je vais te parler doucement, et tu pourras simplement répondre à voix haute, sans te censurer." :
-        baseLang === "es" ?
+        uiLang === "fr" ?
+          "On va garder ça simple. Je vais te parler doucement, et tu pourras juste répondre à voix haute, sans te censurer." :
+        uiLang === "es" ?
           "Vamos a mantener esto simple. Te voy a hablar con calma, y tú solo responde en voz alta, sin censurarte." :
-        baseLang === "ar" ?
-          "سنُبقي الأمر بسيطًا. سأتحدّث إليك بهدوء، ويمكنك فقط أن تردّ بصوت عالٍ دون رقابة على نفسك." :
+        uiLang === "ar" ?
+          "سنُبقي الأمر بسيطًا. سأتحدّث إليك بهدوء، ويمكنك فقط أن تردّ بصوت عالٍ دون أن تحكم على نفسك." :
           "We’ll keep this simple. I’ll talk to you softly, and you can just answer out loud, without filtering yourself.";
 
-      speakConversational(intro, baseLang, () => {
+      speakConversational(intro, uiLang, () => {
         startListeningTurn();
       });
     };
@@ -765,7 +845,7 @@
 
   </script>
 
-  <!-- Service worker: garder pour forcer la dernière version -->
+  <!-- Service worker pour forcer la dernière version -->
   <script>
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", async () => {
