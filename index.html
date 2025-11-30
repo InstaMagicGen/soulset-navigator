@@ -13,7 +13,6 @@
     rel="stylesheet"
   />
 
-  <!-- STYLE GLOBAL -->
   <style>
     :root {
       --soulset-text: #f7f7f7;
@@ -55,7 +54,7 @@
       background-repeat: no-repeat;
       filter: saturate(1.1);
       transition: background-image 1.8s ease-in-out, filter 1.8s ease-in-out;
-      opacity: 0.7; /* opacité pas trop élevée */
+      opacity: 0.7;
     }
 
     .bg-layer::after {
@@ -98,12 +97,49 @@
       margin-top: 0.5rem;
     }
 
-    .cta-question {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
+    /* === ÉCRANS === */
+    .screen {
+      width: 100%;
+      max-width: 780px;
+      margin: 0 auto;
+      transition: opacity 0.35s ease, transform 0.35s ease;
     }
 
-    /* === MAIN BUTTON === */
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      position: absolute;
+    }
+
+    .visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+      position: relative;
+    }
+
+    /* === WELCOME === */
+    #welcomeScreen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .cta-question {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .cta-hint {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      max-width: 320px;
+      color: rgba(230, 230, 230, 0.85);
+    }
+
     .soul-button {
       position: relative;
       width: 180px;
@@ -123,6 +159,7 @@
       letter-spacing: 0.12em;
       transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
       overflow: hidden;
+      margin: 0 auto; /* centre le bouton */
     }
 
     .soul-button::before {
@@ -147,35 +184,6 @@
       transform: translateY(-4px) scale(1.04);
       filter: brightness(1.06);
       box-shadow: 0 22px 50px rgba(0, 0, 0, 0.5);
-    }
-
-    .cta-hint {
-      margin-top: 2rem;
-      font-size: 0.9rem;
-      max-width: 320px;
-      color: rgba(230, 230, 230, 0.85);
-    }
-
-    /* === ÉCRANS === */
-    .screen {
-      width: 100%;
-      max-width: 780px;
-      margin: 0 auto;
-      transition: opacity 0.35s ease, transform 0.35s ease;
-    }
-
-    .hidden {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(8px);
-      position: absolute;
-    }
-
-    .visible {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-      position: relative;
     }
 
     /* === DIALOGUE CARD === */
@@ -345,6 +353,86 @@
       color: rgba(210, 210, 210, 0.75);
     }
 
+    /* === RITUEL OVERLAY === */
+    .ritual-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 4, 12, 0.7);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+
+    .ritual-hidden {
+      display: none;
+    }
+
+    .ritual-card {
+      max-width: 540px;
+      width: 90%;
+      border-radius: 24px;
+      background: rgba(8, 9, 20, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.8);
+      padding: 1.5rem 1.5rem 1.7rem;
+      text-align: left;
+    }
+
+    .ritual-title {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--soulset-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .ritual-text {
+      font-size: 0.92rem;
+      color: rgba(240, 240, 240, 0.95);
+      margin-bottom: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .ritual-video-wrapper {
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .ritual-video {
+      width: 100%;
+      display: block;
+    }
+
+    .ritual-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .ritual-button {
+      padding: 0.55rem 1.3rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(120deg, #ffb88c, #ea5753);
+      color: #1b1114;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .ritual-hint {
+      font-size: 0.8rem;
+      color: rgba(220, 220, 220, 0.7);
+    }
+
     /* ANIMATIONS */
     @keyframes breathe {
       0% {
@@ -380,9 +468,11 @@
       main {
         padding: 3rem 1.3rem;
       }
-
       .dialogue-card {
         padding: 1.4rem 1.25rem;
+      }
+      .ritual-card {
+        padding: 1.2rem 1.2rem 1.4rem;
       }
     }
   </style>
@@ -390,49 +480,78 @@
 
 <body>
   <div id="soulset-app">
-    <!-- BACKGROUND (diaporama sunset-1.jpeg → Sunset-7.jpeg) -->
     <div class="bg-layer"></div>
 
-    <!-- CONTENU -->
+    <!-- Rituel Soulset -->
+    <div id="ritualOverlay" class="ritual-overlay ritual-hidden">
+      <div class="ritual-card">
+        <div class="ritual-title" id="ritualTitle">Soulset Reset</div>
+        <p class="ritual-text" id="ritualText">
+          Pendant quelques secondes, laisse ton regard se poser sur ce moment de coucher de soleil.
+          Respire doucement, sans rien forcer.
+        </p>
+        <div class="ritual-video-wrapper">
+          <video
+            id="ritualVideo"
+            class="ritual-video"
+            autoplay
+            muted
+            loop
+            playsinline
+          ></video>
+        </div>
+        <div class="ritual-footer">
+          <button id="ritualButton" class="ritual-button">
+            Je suis prêt(e)
+          </button>
+          <span class="ritual-hint" id="ritualHint">
+            Ce rituel dure moins d’une minute, juste pour te recentrer.
+          </span>
+        </div>
+      </div>
+    </div>
+
     <main>
       <header>
-        <h1 class="brand-title">The Soulset Navigator</h1>
-        <p class="brand-tagline">Recenter • Understand • Reset</p>
+        <h1 class="brand-title" id="brandTitle">The Soulset Navigator</h1>
+        <p class="brand-tagline" id="brandTagline">Recenter • Understand • Reset</p>
       </header>
 
-      <!-- ÉCRAN 1 : WELCOME -->
+      <!-- WELCOME -->
       <section id="welcomeScreen" class="screen visible">
-        <p class="cta-question">Comment te sens-tu aujourd’hui&nbsp;?</p>
+        <p class="cta-question" id="ctaQuestion">Comment te sens-tu aujourd’hui&nbsp;?</p>
 
         <button id="startSoulButton" class="soul-button">
           <span class="pulse-ring"></span>
-          Commencer
+          <span id="startLabel">Commencer</span>
         </button>
 
-        <p class="cta-hint">
+        <p class="cta-hint" id="ctaHint">
           Une courte guidance pour apaiser ton mental et clarifier ton énergie.
         </p>
       </section>
 
-      <!-- ÉCRAN 2 : DIALOGUE -->
+      <!-- DIALOGUE -->
       <section id="dialogueScreen" class="screen hidden">
         <div class="dialogue-card">
           <div class="dialogue-header">
             <div>
-              <div class="dialogue-title">Soulset Dialogue</div>
-              <div class="dialogue-subtitle">
+              <div class="dialogue-title" id="dialogueTitle">Soulset Dialogue</div>
+              <div class="dialogue-subtitle" id="dialogueSubtitle">
                 Décris ce que tu vis, je t’accompagne avec douceur.
               </div>
             </div>
-            <div class="mood-pill">Mode Clarity</div>
+            <div class="mood-pill" id="moodPill">Mode Clarity</div>
           </div>
 
           <div class="prompt-block">
-            <p class="prompt-label">Qu’est-ce qui tourne dans ta tête en ce moment&nbsp;?</p>
+            <p class="prompt-label" id="promptLabel">
+              Qu’est-ce qui tourne dans ta tête en ce moment&nbsp;?
+            </p>
             <textarea
               id="userInput"
               class="input-area"
-              placeholder="Exemple : &quot;Je me sens bloqué, fatigué mentalement, j’hésite entre plusieurs choix.&quot;"
+              placeholder=""
             ></textarea>
 
             <div class="input-row">
@@ -440,18 +559,18 @@
                 Prends ton temps, quelques phrases suffisent.
               </span>
               <button id="sendButton" class="send-button">
-                Envoyer
+                <span id="sendLabel">Envoyer</span>
               </button>
             </div>
           </div>
 
           <div class="response-block" id="responseBlock" style="display: none;">
-            <div class="response-label">Guidance</div>
+            <div class="response-label" id="responseLabel">Guidance</div>
             <div id="assistantResponse" class="response-text"></div>
 
             <div class="listen-row">
               <button id="listenButton" class="listen-button">
-                Écouter en voix douce
+                <span id="listenButtonLabel">Écouter en voix douce</span>
               </button>
               <span id="listenStatus" class="listen-status">
                 La voix est posée, avec des pauses naturelles.
@@ -463,18 +582,174 @@
     </main>
   </div>
 
-  <!-- SCRIPT -->
   <script>
-    // ⚙️ CONFIG ELEVENLABS (remplace par ta clé / ton voice ID)
+    // ===== LANG DETECTION & TRANSLATIONS =====
+    const supportedLangs = ["fr", "en", "ar"];
+    let currentLang = "en";
+
+    try {
+      const browserLang = (navigator.language || navigator.userLanguage || "en")
+        .toLowerCase()
+        .slice(0, 2);
+      currentLang = supportedLangs.includes(browserLang) ? browserLang : "en";
+    } catch (e) {
+      currentLang = "en";
+    }
+
+    const translations = {
+      fr: {
+        title: "The Soulset Navigator",
+        tagline: "Recenter • Understand • Reset",
+        ctaQuestion: "Comment te sens-tu aujourd’hui ?",
+        ctaHint:
+          "Une courte guidance pour apaiser ton mental et clarifier ton énergie.",
+        startLabel: "Commencer",
+        dialogueTitle: "Soulset Dialogue",
+        dialogueSubtitle: "Décris ce que tu vis, je t’accompagne avec douceur.",
+        moodPill: "Mode Clarity",
+        promptLabel: "Qu’est-ce qui tourne dans ta tête en ce moment ?",
+        textareaPlaceholder:
+          "Exemple : « Je me sens bloqué, fatigué mentalement, j’hésite entre plusieurs choix. »",
+        typingIdle: "Prends ton temps, quelques phrases suffisent.",
+        typingThinking: "Je lis ce que tu ressens, une guidance arrive...",
+        typingAfter: "Tu peux ajuster ou détailler, je m’adapte.",
+        sendLabel: "Envoyer",
+        responseLabel: "Guidance",
+        listenButtonLabel: "Écouter en voix douce",
+        listenStatusIdle:
+          "La voix est posée, avec des pauses naturelles.",
+        listenStatusLoading:
+          "Je prépare une voix douce pour toi...",
+        listenStatusDone:
+          "Lecture terminée. Tu peux réécouter si tu veux.",
+        listenStatusError:
+          "Je n’ai pas réussi à générer la voix. Vérifie ta connexion ou ta clé ElevenLabs.",
+        ritualTitle: "Soulset Reset",
+        ritualText:
+          "Pendant quelques secondes, laisse ton regard se poser sur ce moment de coucher de soleil. Respire doucement, sans rien forcer.",
+        ritualButton: "Je suis prêt(e)",
+        ritualHint:
+          "Ce rituel dure moins d’une minute, juste pour te recentrer.",
+        mockIntro: `Je vais d’abord te dire ceci : ce que tu ressens est valide, et il n’y a rien d’“anormal” dans le fait de te sentir comme ça.
+
+Voici une première piste pour toi :
+
+1. Mets des mots simples sur ce que tu ressens (sans te juger).
+2. Identifie une seule petite action douce que tu peux faire dans la prochaine heure pour te soulager un peu.
+3. Rappelle-toi que tu n’as pas besoin de résoudre toute ta vie maintenant, seulement le “prochain pas”.
+
+Si tu veux, tu peux me détailler un peu plus : quelle est la situation précise qui te pèse le plus en ce moment ?`,
+        mockOutro: "\n\nJe t’écoute, à ton rythme."
+      },
+      en: {
+        title: "The Soulset Navigator",
+        tagline: "Recenter • Understand • Reset",
+        ctaQuestion: "How are you feeling today?",
+        ctaHint:
+          "A short guidance to calm your mind and clarify your energy.",
+        startLabel: "Start",
+        dialogueTitle: "Soulset Dialogue",
+        dialogueSubtitle:
+          "Describe what you’re going through, I’ll support you gently.",
+        moodPill: "Clarity Mode",
+        promptLabel: "What is looping in your mind right now?",
+        textareaPlaceholder:
+          'Example: "I feel stuck and mentally tired, I’m hesitating between several options."',
+        typingIdle: "Take your time, a few sentences are enough.",
+        typingThinking: "I’m reading what you shared, guidance is coming...",
+        typingAfter:
+          "You can refine or add details, I will adapt.",
+        sendLabel: "Send",
+        responseLabel: "Guidance",
+        listenButtonLabel: "Listen in a soft voice",
+        listenStatusIdle:
+          "The voice is calm, with natural pauses.",
+        listenStatusLoading:
+          "I’m preparing a soft voice for you...",
+        listenStatusDone:
+          "Playback finished. You can listen again if you’d like.",
+        listenStatusError:
+          "I couldn’t generate the voice. Check your connection or ElevenLabs key.",
+        ritualTitle: "Soulset Reset",
+        ritualText:
+          "For a few seconds, let your eyes rest on this sunset moment. Breathe slowly, without forcing anything.",
+        ritualButton: "I’m ready",
+        ritualHint:
+          "This ritual lasts less than a minute, just to help you recenter.",
+        mockIntro: `First, let me tell you this: what you’re feeling is valid, and there is nothing “wrong” with you for feeling this way.
+
+Here is a first gentle direction:
+
+1. Put simple words on what you feel (without judging yourself).
+2. Choose one small, kind action you can take in the next hour to ease the pressure a bit.
+3. Remember you don’t have to fix your whole life right now, just the “next step”.
+
+If you want, you can tell me a bit more: what is the specific situation that weighs the most on you at the moment?`,
+        mockOutro: "\n\nI’m here, at your pace."
+      },
+      ar: {
+        title: "سولسِت نافيغَيْتور",
+        tagline: "إعادة التمركز • الفهم • إعادة الضبط",
+        ctaQuestion: "كيف تشعر اليوم؟",
+        ctaHint:
+          "إرشاد قصير لتهدئة عقلك وتنقية طاقتك.",
+        startLabel: "ابدأ",
+        dialogueTitle: "حوار سولسِت",
+        dialogueSubtitle:
+          "صف ما تعيشه الآن، وسأرافقك بلطف.",
+        moodPill: "وضع الوضوح",
+        promptLabel: "ما الذي يدور في رأسك في هذه اللحظة؟",
+        textareaPlaceholder:
+          "مثال: «أشعر بأنني عالق ومتعب ذهنيًا، ومتحيّر بين عدة خيارات.»",
+        typingIdle: "خذ وقتك، بضع جمل تكفي.",
+        typingThinking: "أقرأ ما تشعر به، والتوجّه قادم...",
+        typingAfter: "يمكنك الإضافة أو التعديل، وسأتكيّف معك.",
+        sendLabel: "إرسال",
+        responseLabel: "توجّه",
+        listenButtonLabel: "استمع بصوت هادئ",
+        listenStatusIdle:
+          "الصوت هادئ مع توقّفات طبيعية.",
+        listenStatusLoading:
+          "أجهّز لك صوتًا لطيفًا...",
+        listenStatusDone:
+          "انتهى التشغيل، يمكنك الاستماع مرة أخرى إن شئت.",
+        listenStatusError:
+          "تعذر توليد الصوت. تحقّق من الاتصال أو مفتاح ElevenLabs.",
+        ritualTitle: "طقس سولسِت",
+        ritualText:
+          "لثوانٍ قليلة، دع عينيك تستقران على لحظة الغروب هذه. تنفّس بهدوء، بدون أي جهد.",
+        ritualButton: "أنا مستعد",
+        ritualHint:
+          "هذا الطقس لا يتجاوز دقيقة، فقط لمساعدتك على إعادة التمركز.",
+        mockIntro: `أريد أولًا أن أقول لك: ما تشعر به حقيقي ومفهوم، ولا يوجد شيء «خاطئ» في شعورك بهذه الطريقة.
+
+إليك اتّجاهًا أوليًا لطيفًا:
+
+1. عبّر بكلمات بسيطة عمّا تشعر به (دون قسوة على نفسك).
+2. اختر فعلًا صغيرًا واحدًا يمكنك القيام به خلال الساعة القادمة ليخفّ الضغط قليلًا.
+3. تذكّر أنك لست مضطرًا لحل حياتك كلها الآن، فقط «الخطوة التالية».
+
+إذا أحببت، يمكنك أن تخبرني أكثر: ما الموقف المحدّد الذي يثقل كاهلك الآن؟`,
+        mockOutro: "\n\nأنا هنا لأستمع إليك، على مهلك."
+      }
+    };
+
+    const t = translations[currentLang];
+    document.documentElement.lang = currentLang;
+    if (currentLang === "ar") {
+      document.documentElement.dir = "rtl";
+    }
+    document.title = t.title;
+
+    // ===== ELEVENLABS CONFIG (à remplir) =====
     const ELEVEN_API_KEY = "MET_TA_CLE_ELEVENLABS_ICI";
-    const ELEVEN_VOICE_ID = "MET_TON_VOICE_ID_ICI"; // ex: "EXAVITQu4vr4xnSDxMaL"
+    const ELEVEN_VOICE_ID = "MET_TON_VOICE_ID_ICI";
 
     let lastResponseText = "";
 
     document.addEventListener("DOMContentLoaded", () => {
       const bgLayer = document.querySelector(".bg-layer");
 
-      // Tes fichiers existants (d’après ta capture)
       const backgrounds = [
         "sunset-1.jpeg",
         "sunset-2.jpeg",
@@ -485,112 +760,154 @@
         "Sunset-7.jpeg"
       ];
 
+      const ritualVideos = [
+        "Sunset-1V.mp4",
+        "Sunset-3V.mp4",
+        "Sunset-4V.mp4",
+        "Sunset-ambient.mp4"
+      ];
+
       let bgIndex = 0;
 
       function updateBackground() {
         const img = backgrounds[bgIndex];
         bgLayer.style.backgroundImage =
-          "linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.85)), url('" + img + "')";
+          "linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.85)), url('" +
+          img +
+          "')";
         bgIndex = (bgIndex + 1) % backgrounds.length;
       }
 
-      // init + changement toutes les 12s
       updateBackground();
       setInterval(updateBackground, 12000);
 
+      // éléments UI
       const welcomeScreen = document.getElementById("welcomeScreen");
       const dialogueScreen = document.getElementById("dialogueScreen");
       const startBtn = document.getElementById("startSoulButton");
+      const startLabel = document.getElementById("startLabel");
       const sendBtn = document.getElementById("sendButton");
+      const sendLabel = document.getElementById("sendLabel");
       const listenBtn = document.getElementById("listenButton");
+      const listenStatus = document.getElementById("listenStatus");
       const input = document.getElementById("userInput");
       const typingStatus = document.getElementById("typingStatus");
       const responseBlock = document.getElementById("responseBlock");
       const responseEl = document.getElementById("assistantResponse");
-      const listenStatus = document.getElementById("listenStatus");
 
-      // Transition vers l'écran dialogue
+      const brandTitle = document.getElementById("brandTitle");
+      const brandTagline = document.getElementById("brandTagline");
+      const ctaQuestion = document.getElementById("ctaQuestion");
+      const ctaHint = document.getElementById("ctaHint");
+      const dialogueTitle = document.getElementById("dialogueTitle");
+      const dialogueSubtitle = document.getElementById("dialogueSubtitle");
+      const moodPill = document.getElementById("moodPill");
+      const promptLabel = document.getElementById("promptLabel");
+      const responseLabel = document.getElementById("responseLabel");
+      const listenButtonLabel = document.getElementById("listenButtonLabel");
+
+      const ritualOverlay = document.getElementById("ritualOverlay");
+      const ritualTitle = document.getElementById("ritualTitle");
+      const ritualText = document.getElementById("ritualText");
+      const ritualHint = document.getElementById("ritualHint");
+      const ritualButton = document.getElementById("ritualButton");
+      const ritualVideo = document.getElementById("ritualVideo");
+
+      // appliquer les traductions
+      brandTitle.textContent = t.title;
+      brandTagline.textContent = t.tagline;
+      ctaQuestion.textContent = t.ctaQuestion;
+      ctaHint.textContent = t.ctaHint;
+      startLabel.textContent = t.startLabel;
+      dialogueTitle.textContent = t.dialogueTitle;
+      dialogueSubtitle.textContent = t.dialogueSubtitle;
+      moodPill.textContent = t.moodPill;
+      promptLabel.textContent = t.promptLabel;
+      input.placeholder = t.textareaPlaceholder;
+      typingStatus.textContent = t.typingIdle;
+      sendLabel.textContent = t.sendLabel;
+      responseLabel.textContent = t.responseLabel;
+      listenButtonLabel.textContent = t.listenButtonLabel;
+      listenStatus.textContent = t.listenStatusIdle;
+      ritualTitle.textContent = t.ritualTitle;
+      ritualText.textContent = t.ritualText;
+      ritualHint.textContent = t.ritualHint;
+      ritualButton.textContent = t.ritualButton;
+
+      // Rituel Soulset
+      function openRitual() {
+        const vid =
+          ritualVideos[Math.floor(Math.random() * ritualVideos.length)];
+        ritualVideo.src = vid;
+        ritualOverlay.classList.remove("ritual-hidden");
+      }
+
+      ritualButton.addEventListener("click", () => {
+        ritualOverlay.classList.add("ritual-hidden");
+      });
+
+      // Transition vers le dialogue + ouverture du rituel
       startBtn.addEventListener("click", () => {
         welcomeScreen.classList.remove("visible");
         welcomeScreen.classList.add("hidden");
         dialogueScreen.classList.remove("hidden");
         dialogueScreen.classList.add("visible");
         input.focus();
+        openRitual();
       });
 
-      // Envoi du texte utilisateur
+      // Envoi texte utilisateur
       sendBtn.addEventListener("click", async () => {
         const text = input.value.trim();
         if (!text) return;
 
-        typingStatus.textContent = "Je lis ce que tu ressens, une guidance arrive...";
+        typingStatus.textContent = t.typingThinking;
         sendBtn.disabled = true;
         responseBlock.style.display = "none";
 
         try {
           const guidance = await callSoulsetAI(text);
           lastResponseText = guidance;
-
           responseEl.textContent = guidance;
           responseBlock.style.display = "block";
-          typingStatus.textContent = "Tu peux ajuster ou détailler, je m’adapte.";
+          typingStatus.textContent = t.typingAfter;
         } catch (err) {
           console.error(err);
           responseEl.textContent =
-            "Une petite perturbation énergétique (ou technique) s’est produite. Essaie encore dans un instant.";
+            "Une erreur s’est produite. Essaie encore dans un instant.";
           responseBlock.style.display = "block";
-          typingStatus.textContent = "Erreur réseau ou IA, réessaie dans un moment.";
+          typingStatus.textContent = t.typingIdle;
         } finally {
           sendBtn.disabled = false;
         }
       });
 
-      // Écouter en voix douce (ElevenLabs)
+      // Écoute ElevenLabs
       listenBtn.addEventListener("click", async () => {
         if (!lastResponseText) return;
 
         listenBtn.disabled = true;
-        listenStatus.textContent = "Je prépare une voix douce pour toi...";
+        listenStatus.textContent = t.listenStatusLoading;
 
         try {
           await playElevenLabsTTS(lastResponseText);
-          listenStatus.textContent = "Lecture terminée. Tu peux réécouter si tu veux.";
+          listenStatus.textContent = t.listenStatusDone;
         } catch (err) {
           console.error(err);
-          listenStatus.textContent =
-            "Je n’ai pas réussi à générer la voix. Vérifie ta connexion ou ta clé ElevenLabs.";
+          listenStatus.textContent = t.listenStatusError;
         } finally {
           listenBtn.disabled = false;
         }
       });
     });
 
-    // 🔮 MOCK – À BRANCHER SUR TON ENDPOINT IA (Vercel / OpenAI)
+    // Mock IA – à remplacer par ton endpoint réel
     async function callSoulsetAI(userText) {
-      // Ici tu pourras appeler ton /api/soulset-navigator
-      //
-      // const res = await fetch("/api/soulset-navigator", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ input: userText })
-      // });
-      // const data = await res.json();
-      // return data.answer;
-
-      const base = `Je vais d’abord te dire ceci : ce que tu ressens est valide, et il n’y a rien d’“anormal” dans le fait de te sentir comme ça.
-
-Voici une première piste pour toi :
-
-1. Mets des mots simples sur ce que tu ressens (sans te juger).
-2. Identifie une seule petite action douce que tu peux faire dans la prochaine heure pour te soulager un peu.
-3. Rappelle-toi que tu n’as pas besoin de résoudre toute ta vie maintenant, seulement le “prochain pas”.
-
-Si tu veux, tu peux me détailler un peu plus : quelle est la situation précise qui te pèse le plus en ce moment ?`;
-
-      return base + "\n\nJe t’écoute, à ton rythme.";
+      // ici tu peux connecter ton /api/soulset-navigator
+      return t.mockIntro + t.mockOutro;
     }
 
-    // 🎧 ElevenLabs TTS – voix douce
+    // ElevenLabs TTS
     async function playElevenLabsTTS(text) {
       if (!ELEVEN_API_KEY || ELEVEN_API_KEY === "MET_TA_CLE_ELEVENLABS_ICI") {
         throw new Error("Clé ElevenLabs manquante.");
