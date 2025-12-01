@@ -400,7 +400,7 @@
 
     // ================== OPENAI CHAT ==================
     async function callOpenAI(messages) {
-      if (!OPENAI_API_KEY || OPENAI_API_KEY === "MET_TA_CLE_OPENAI_ICI") {
+      if (!OPENAI_API_KEY || OPENAI_API_KEY === "") {
         throw new Error("Aucune clé OpenAI définie. Ajoute ta clé dans OPENAI_API_KEY.");
       }
 
