@@ -188,7 +188,7 @@ video {
 
 <script>
 /* ----------------------- LANGUAGE ----------------------- */
-const userLang = navigator.language.slice(0, 2);
+const userLang = navigator.language.split("-")[0];
 
 const T = {
   fr: {
@@ -275,16 +275,17 @@ const ritualVideos = [
 ];
 
 const ritualOverlay = document.getElementById("ritualOverlay");
-document.getElementById("ritualDone").onclick = () => {
-  ritualOverlay.classList.add("hidden");
-  showScreen("dialogueScreen");
-};
 
-function openRitual() {
+function openRituel() {
   const vid = ritualVideos[Math.floor(Math.random()*ritualVideos.length)];
   document.getElementById("ritualVideo").src = vid;
   ritualOverlay.classList.remove("hidden");
 }
+
+document.getElementById("ritualDone").onclick = () => {
+  ritualOverlay.classList.add("hidden");
+  showScreen("dialogueScreen");
+};
 
 
 /* ----------------------- FREE LIMIT ----------------------- */
@@ -295,12 +296,13 @@ function showScreen(id) {
   document.getElementById(id).classList.add("visible");
 }
 
-
 /* ---------------------- START BUTTON ---------------------- */
-document.getElementById("startBtn").onclick = () => {
+document.getElementById("startBtn").addEventListener("click", () => {
+  console.log("Start clicked");
+
   if (firstUse) openRituel();
   else showScreen("proScreen");
-};
+});
 
 
 /* ---------------------- SEND BUTTON ----------------------- */
