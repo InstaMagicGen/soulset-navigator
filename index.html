@@ -7,10 +7,7 @@
 
   <style>
     /* ================== GLOBAL ================== */
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
@@ -18,8 +15,8 @@
       color: #fff;
       min-height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
     }
 
     #bg {
@@ -40,525 +37,227 @@
     }
 
     .card {
-      background: radial-gradient(circle at top, rgba(0,0,0,0.8), rgba(0,0,0,0.95));
-      border-radius: 24px;
-      padding: 24px 22px 26px;
+      background: rgba(0,0,0,0.75);
+      border-radius: 22px;
+      padding: 22px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-      border: 1px solid rgba(255,255,255,0.05);
       backdrop-filter: blur(18px);
     }
 
-    h1, h2, h3 {
-      margin: 0 0 10px;
-    }
+    .screen { display: none; }
+    .screen.active { display: block; animation: fadeInUp 0.4s ease; }
 
-    p {
-      margin: 0 0 12px;
-      line-height: 1.5;
-    }
-
-    .muted {
-      opacity: 0.8;
-      font-size: 0.95rem;
-    }
-
-    .small {
-      font-size: 0.85rem;
-      opacity: 0.75;
-    }
-
-    .center {
-      text-align: center;
-    }
-
-    .mt-lg { margin-top: 18px; }
-    .mt-xl { margin-top: 26px; }
+    h1, h2, p { margin: 0 0 12px; }
+    .muted { opacity: 0.8; }
+    .small { opacity: 0.75; font-size: 0.85rem; }
 
     .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      outline: none;
-      padding: 14px 30px;
-      border-radius: 999px;
       background: linear-gradient(120deg, #ffb88c, #ea5753);
-      color: #fff;
-      font-weight: 600;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 999px;
+      color: white;
       font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
       box-shadow: 0 12px 40px rgba(0,0,0,0.55);
-      margin-top: 18px;
-      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
-    }
-
-    .btn-primary:active {
-      transform: translateY(1px) scale(0.99);
-      box-shadow: 0 6px 24px rgba(0,0,0,0.7);
-    }
-
-    .btn-secondary {
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.08);
-      padding: 8px 16px;
-      font-size: 0.9rem;
-      color: #fff;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    .btn-secondary:disabled {
-      opacity: 0.5;
-      cursor: default;
+      margin-top: 20px;
     }
 
     textarea {
       width: 100%;
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.6);
-      color: #fff;
-      padding: 12px 14px;
+      background: rgba(0,0,0,0.5);
+      padding: 12px;
       min-height: 110px;
-      resize: vertical;
-      font-family: inherit;
-      font-size: 0.96rem;
-      outline: none;
+      color: #fff;
+      font-size: 1rem;
+      margin-top: 10px;
     }
 
-    textarea:focus {
-      border-color: rgba(255,255,255,0.4);
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
-    }
-
-    .label {
-      font-size: 0.88rem;
-      opacity: 0.85;
-      margin-bottom: 6px;
-    }
-
-    .screen {
-      display: none;
-    }
-
-    .screen.active {
-      display: block;
-      animation: fadeInUp 0.4s ease;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Chat */
     #chatHistory {
-      border-radius: 18px;
-      background: rgba(0,0,0,0.45);
-      padding: 10px 10px 6px;
       max-height: 260px;
       overflow-y: auto;
-      margin-bottom: 10px;
-      border: 1px solid rgba(255,255,255,0.06);
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.05);
+      margin-top: 10px;
     }
 
-    .msg {
-      margin-bottom: 10px;
-      text-align: left;
+    .msg { margin-bottom: 12px; }
+    .msg-role { font-size: 0.8rem; opacity: 0.6; margin-bottom: 3px; }
+    .msg .bubble { padding: 10px 12px; border-radius: 12px; }
+    .assistant .bubble { background: rgba(255,255,255,0.1); }
+    .user { text-align: right; }
+    .user .bubble { background: #ea5753; display: inline-block; }
+
+    .btn-secondary {
+      margin-top: 10px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      cursor: pointer;
     }
 
-    .msg-role {
-      font-size: 0.78rem;
-      opacity: 0.6;
-      margin-bottom: 2px;
-    }
-
-    .msg.assistant .bubble {
-      background: rgba(255,255,255,0.09);
-      border-radius: 14px;
-      padding: 8px 10px;
-      font-size: 0.93rem;
-    }
-
-    .msg.user {
-      text-align: right;
-    }
-
-    .msg.user .bubble {
-      display: inline-block;
-      background: rgba(234,87,83,0.88);
-      border-radius: 14px;
-      padding: 8px 10px;
-      font-size: 0.93rem;
-      text-align: left;
-    }
-
-    #typingIndicator {
-      font-size: 0.82rem;
-      opacity: 0.7;
-      min-height: 1em;
-      margin-top: 4px;
-    }
-
-    .row {
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-      margin-top: 8px;
-    }
-
-    .row textarea {
-      flex: 1;
-      min-height: 60px;
-      margin: 0;
-    }
-
-    .row .btn-primary {
-      padding-inline: 20px;
-      margin: 0;
-      white-space: nowrap;
-    }
-
-    .error {
-      color: #ffb3b3;
-      font-size: 0.82rem;
-      margin-top: 6px;
-      min-height: 1em;
-    }
-
-    @media (max-width: 600px) {
-      .card {
-        border-radius: 18px;
-        padding: 20px 16px 22px;
-      }
-      .row {
-        flex-direction: column;
-      }
-      .row .btn-primary {
-        width: 100%;
-      }
-      #chatHistory {
-        max-height: 220px;
-      }
-    }
+    #typingIndicator { opacity: 0.7; font-size: 0.9rem; }
   </style>
 </head>
+
 <body>
   <div id="bg"></div>
 
   <main>
     <div class="card">
 
-      <!-- ================== SCREEN 1 : ACCUEIL ================== -->
+      <!-- ÉCRAN 1 : ACCUEIL -->
       <section id="screen-welcome" class="screen active">
-        <h1 id="welcome-title">Bienvenue dans The Soulset Navigator</h1>
-        <p id="welcome-body" class="muted">
+        <h1>Bienvenue dans The Soulset Navigator</h1>
+        <p class="muted">
           Cet espace reproduit l’ambiance d’une consultation psychologique : calme, confidentielle, sans jugement.
-          Tu peux y déposer ce que tu ressens, mettre des mots sur tes émotions, et recevoir une guidance claire
-          pour retrouver un peu de stabilité intérieure.
+          Tu peux t’exprimer librement ici. Je suis là pour t’accompagner pas à pas.
         </p>
-        <p class="small">
-          Ce n’est pas un service d’urgence médicale, mais un espace de soutien émotionnel pour t’aider à comprendre ce que tu vis.
-        </p>
-
-        <div class="center mt-xl">
-          <button id="btn-start" class="btn-primary">Commencer</button>
-        </div>
+        <button id="btn-start" class="btn-primary">Commencer</button>
       </section>
 
-      <!-- ================== SCREEN 2 : RESSENTI INITIAL ================== -->
+      <!-- ÉCRAN 2 : RESSENTI INITIAL -->
       <section id="screen-feeling" class="screen">
-        <h2 id="feeling-title">Comment te sens-tu aujourd’hui&nbsp;?</h2>
-        <p id="feeling-body" class="muted">
-          Écris librement ce que tu ressens en ce moment. Il n’y a pas de bonne ou de mauvaise réponse.
-        </p>
+        <h2>Comment te sens-tu aujourd’hui&nbsp;?</h2>
+        <p class="muted">Écris ton ressenti sans pression.</p>
 
-        <div class="mt-lg">
-          <div class="label">Ton ressenti principal</div>
-          <textarea id="feeling-input" placeholder="Exemple : « Je me sens épuisé, anxieux, et j’ai l’impression de ne plus avancer. »"></textarea>
-        </div>
+        <textarea id="feeling-input" placeholder="Exemple : Je me sens anxieux, fatigué, un peu perdu…"></textarea>
 
-        <div class="center mt-lg">
-          <button id="btn-feeling-continue" class="btn-primary">Continuer</button>
-        </div>
-
-        <p class="small mt-lg">
-          Tu pourras ensuite entrer dans un dialogue guidé, comme si tu échangeais avec un thérapeute.
-        </p>
+        <button id="btn-feeling-continue" class="btn-primary">Continuer</button>
       </section>
 
-      <!-- ================== SCREEN 3 : DIALOGUE LIVE ================== -->
+      <!-- ÉCRAN 3 : DIALOGUE LIVE -->
       <section id="screen-dialogue" class="screen">
-        <h2 id="dialogue-title">Dialogue thérapeutique</h2>
-        <p id="dialogue-subtitle" class="muted">
-          Réponds aux questions au fil de la conversation. L’objectif est de clarifier ce que tu vis, sans pression.
-        </p>
-
-        <div id="chatHistory" class="mt-lg"></div>
-
+        <h2>Dialogue thérapeutique</h2>
+        <div id="chatHistory"></div>
         <div id="typingIndicator"></div>
-        <div id="errorBlock" class="error"></div>
 
-        <div class="row mt-lg">
-          <textarea id="dialogue-input" placeholder="Écris ici ta réponse, comme tu le dirais à un thérapeute."></textarea>
-          <button id="btn-send" class="btn-primary">Envoyer</button>
-        </div>
+        <textarea id="dialogue-input" placeholder="Écris ici ta réponse…"></textarea>
+        <button id="btn-send" class="btn-primary">Envoyer</button>
 
-        <button id="btn-listen" class="btn-secondary">
-          <span>Écouter la dernière réponse</span>
-        </button>
-
-        <p class="small mt-lg">
-          Tu peux écrire autant que tu veux. Quand tu sens que c’est suffisant, tu peux le dire
-          (par exemple : « merci, j’ai terminé pour aujourd’hui ») et tu recevras une synthèse avec des pistes concrètes.
-        </p>
+        <button id="btn-listen" class="btn-secondary">Écouter la dernière réponse</button>
       </section>
 
     </div>
   </main>
 
   <script>
-    // ================== CONFIG ==================
-    const OPENAI_API_KEY = "MET_TA_CLE_OPENAI_ICI"; // ⚠️ À REMPLACER par ta clé (prototypage uniquement)
-
-    const userLang = (navigator.language || "fr").split("-")[0].toLowerCase();
-
-    // ================== BACKGROUND SLIDESHOW ==================
-    const bgEl = document.getElementById("bg");
+    /* ====== BACKGROUND IMAGES ====== */
     const bgImages = [
-      "sunset-1.jpeg",
-      "sunset-2.jpeg",
-      "sunset-3.jpeg",
-      "Sunset-4.jpeg",
-      "Sunset-5.jpeg",
-      "Sunset-6.jpeg",
-      "Sunset-7.jpeg"
+      "sunset-1.jpeg","sunset-2.jpeg","sunset-3.jpeg",
+      "Sunset-4.jpeg","Sunset-5.jpeg","Sunset-6.jpeg","Sunset-7.jpeg"
     ];
     let bgIndex = 0;
-
-    function updateBackground() {
-      const img = bgImages[bgIndex];
-      bgEl.style.backgroundImage = `url("${img}")`;
+    setInterval(() => {
+      document.getElementById("bg").style.backgroundImage =
+        `url('${bgImages[bgIndex]}')`;
       bgIndex = (bgIndex + 1) % bgImages.length;
-    }
-    updateBackground();
-    setInterval(updateBackground, 12000);
+    }, 8000);
+    document.getElementById("bg").style.backgroundImage = `url('${bgImages[0]}')`;
 
-    // ================== SCREEN LOGIC ==================
-    const screenWelcome = document.getElementById("screen-welcome");
-    const screenFeeling = document.getElementById("screen-feeling");
-    const screenDialogue = document.getElementById("screen-dialogue");
-
+    /* ====== SCREEN MANAGEMENT ====== */
     function showScreen(id) {
-      [screenWelcome, screenFeeling, screenDialogue].forEach(s => s.classList.remove("active"));
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById(id).classList.add("active");
     }
 
-    // ================== ELEMENTS ==================
+    /* ====== ELEMENTS ====== */
     const btnStart = document.getElementById("btn-start");
-    const btnFeelingContinue = document.getElementById("btn-feeling-continue");
+    const btnFeeling = document.getElementById("btn-feeling-continue");
     const feelingInput = document.getElementById("feeling-input");
-
-    const chatHistoryEl = document.getElementById("chatHistory");
+    const chatHistory = document.getElementById("chatHistory");
     const dialogueInput = document.getElementById("dialogue-input");
     const btnSend = document.getElementById("btn-send");
     const btnListen = document.getElementById("btn-listen");
     const typingIndicator = document.getElementById("typingIndicator");
-    const errorBlock = document.getElementById("errorBlock");
 
-    // ================== CONVERSATION STATE ==================
-    let conversationHistory = [];
+    /* ====== CONVERSATION ====== */
+    let history = [];
     let lastAssistantMessage = "";
 
     function addMessage(role, text) {
-      const msgDiv = document.createElement("div");
-      msgDiv.className = "msg " + role;
+      const div = document.createElement("div");
+      div.className = "msg " + role;
 
-      const label = document.createElement("div");
-      label.className = "msg-role";
-      label.textContent = role === "assistant" ? "Soulset Navigator" : "Toi";
-
-      const bubble = document.createElement("div");
-      bubble.className = "bubble";
-      bubble.textContent = text;
-
-      msgDiv.appendChild(label);
-      msgDiv.appendChild(bubble);
-      chatHistoryEl.appendChild(msgDiv);
-      chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
+      div.innerHTML = `
+        <div class="msg-role">${role === "assistant" ? "Soulset" : "Toi"}</div>
+        <div class="bubble">${text}</div>
+      `;
+      chatHistory.appendChild(div);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 
-    // ================== OPENAI CHAT ==================
-    async function callOpenAI(messages) {
-      if (!OPENAI_API_KEY || OPENAI_API_KEY === "") {
-        throw new Error("Aucune clé OpenAI définie. Ajoute ta clé dans OPENAI_API_KEY.");
-      }
+    /* ====== API CALL (via BACKEND) ====== */
+    async function callAI() {
+      typingIndicator.textContent = "Le thérapeute réfléchit…";
 
-      const body = {
-        model: "gpt-4.1-mini",
-        messages
-      };
-
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      const res = await fetch("/api/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + OPENAI_API_KEY
-        },
-        body: JSON.stringify(body)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: history })
       });
 
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error("Erreur API OpenAI : " + res.status + " - " + txt);
-      }
-
       const data = await res.json();
+      typingIndicator.textContent = "";
       return data.choices[0].message.content;
     }
 
-    function buildSystemPrompt(lang) {
-      const base = `
-Tu es "The Soulset Navigator", un accompagnant thérapeutique professionnel, chaleureux et structuré.
+    /* ====== FLOW ====== */
+    btnStart.onclick = () => showScreen("screen-feeling");
 
-Ton rôle :
-- Accueillir la personne comme dans un cabinet de psychologie.
-- L'aider à mettre des mots sur ses émotions, pensées et besoins.
-- Poser UNE seule question claire à la fois pour approfondir.
-- Quand la personne dit que c'est suffisant (par ex. "merci", "j'ai terminé", "c'est bon pour aujourd'hui"),
-  tu arrêtes de poser des questions et tu fais 3 choses :
-  1) une courte synthèse de ce que tu as compris,
-  2) 2 à 4 pistes concrètes pour l'aider au quotidien,
-  3) une brève phrase d'apaisement (1 ou 2 phrases maximum).
+    btnFeeling.onclick = async () => {
+      const feeling = feelingInput.value.trim();
+      if (!feeling) return;
 
-Règles de style :
-- Adapte-toi à la langue de l'utilisateur (ici, prioritairement français).
-- Ton ton est professionnel mais humain, sans spiritualité, sans ésotérisme.
-- Tu restes dans le soutien émotionnel, pas dans le diagnostic médical.
-- Tu restes concis : 4 à 7 phrases maximum par réponse.
-`;
-      return base;
-    }
-
-    // ================== FLOW ==================
-
-    // 1) Accueil -> Ressenti initial
-    btnStart.addEventListener("click", () => {
-      showScreen("screen-feeling");
-      feelingInput.focus();
-    });
-
-    // 2) Ressenti initial -> démarrage de la conversation
-    btnFeelingContinue.addEventListener("click", async () => {
-      const text = feelingInput.value.trim();
-      if (!text) return;
-      errorBlock.textContent = "";
       showScreen("screen-dialogue");
-      chatHistoryEl.innerHTML = "";
 
-      // Construire l'historique initial
-      conversationHistory = [
-        { role: "system", content: buildSystemPrompt(userLang) },
-        {
-          role: "user",
-          content: `Mon ressenti principal en ce moment : ${text}`
-        }
+      history = [
+        { role: "system", content: `
+Tu es un accompagnant thérapeutique professionnel. 
+Tu poses UNE seule question à la fois. 
+Quand l’utilisateur dit qu'il a fini, tu fais une synthèse + 3 conseils + 1 phrase d’apaisement.
+`},
+        { role: "user", content: feeling }
       ];
 
-      addMessage("user", text);
-      typingIndicator.textContent = "Le thérapeute lit ton ressenti…";
+      addMessage("user", feeling);
 
-      try {
-        const reply = await callOpenAI(conversationHistory);
-        conversationHistory.push({ role: "assistant", content: reply });
-        lastAssistantMessage = reply;
-        addMessage("assistant", reply);
-        typingIndicator.textContent = "";
-      } catch (err) {
-        console.error(err);
-        errorBlock.textContent = err.message || "Une erreur est survenue. Réessaie dans un instant.";
-        typingIndicator.textContent = "";
-      }
-    });
+      const reply = await callAI();
+      lastAssistantMessage = reply;
+      history.push({ role: "assistant", content: reply });
 
-    // 3) Dialogue live : user répond, IA poursuit
-    btnSend.addEventListener("click", async () => {
+      addMessage("assistant", reply);
+    };
+
+    btnSend.onclick = async () => {
       const text = dialogueInput.value.trim();
       if (!text) return;
-      errorBlock.textContent = "";
-
       dialogueInput.value = "";
+
       addMessage("user", text);
-      conversationHistory.push({ role: "user", content: text });
+      history.push({ role: "user", content: text });
 
-      typingIndicator.textContent = "Le thérapeute réfléchit à la suite de l’échange…";
-      btnSend.disabled = true;
+      const reply = await callAI();
+      lastAssistantMessage = reply;
+      history.push({ role: "assistant", content: reply });
 
-      try {
-        const reply = await callOpenAI(conversationHistory);
-        conversationHistory.push({ role: "assistant", content: reply });
-        lastAssistantMessage = reply;
-        addMessage("assistant", reply);
-        typingIndicator.textContent = "";
-      } catch (err) {
-        console.error(err);
-        errorBlock.textContent = err.message || "Une erreur est survenue. Réessaie dans un instant.";
-        typingIndicator.textContent = "";
-      } finally {
-        btnSend.disabled = false;
-        dialogueInput.focus();
-      }
-    });
+      addMessage("assistant", reply);
+    };
 
-    // Envoi avec Entrée (Ctrl+Entrée pour retour à la ligne sur desktop)
-    dialogueInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        btnSend.click();
-      }
-    });
-
-    // ================== TTS DOUX (VOIX NAVIGATEUR) ==================
-    btnListen.addEventListener("click", () => {
+    /* ====== TTS ====== */
+    btnListen.onclick = () => {
       if (!lastAssistantMessage) return;
-      if (!("speechSynthesis" in window)) {
-        errorBlock.textContent = "La lecture vocale n’est pas supportée sur ce navigateur.";
-        return;
-      }
-
-      window.speechSynthesis.cancel();
-
       const utter = new SpeechSynthesisUtterance(lastAssistantMessage);
-      // Ajustement pour voix plus douce
-      utter.rate = 0.9;  // un peu plus lent
-      utter.pitch = 0.95; // légèrement plus grave
-      utter.volume = 0.95;
-
-      // Choix de langue pour la voix
-      const voices = window.speechSynthesis.getVoices();
-      const targetLang = userLang === "fr" ? "fr" : "en";
-      const match = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(targetLang));
-      if (match) {
-        utter.voice = match;
-      }
-
-      window.speechSynthesis.speak(utter);
-    });
-
-    // Sur certains navigateurs, il faut charger les voix après l’event
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.onvoiceschanged = () => {};
-    }
+      utter.rate = 0.9;
+      utter.pitch = 0.95;
+      speechSynthesis.speak(utter);
+    };
   </script>
 </body>
 </html>
