@@ -250,14 +250,48 @@ Quand l’utilisateur dit qu'il a fini, tu fais une synthèse + 3 conseils + 1 p
       addMessage("assistant", reply);
     };
 
-    /* ====== TTS ====== */
-    btnListen.onclick = () => {
-      if (!lastAssistantMessage) return;
-      const utter = new SpeechSynthesisUtterance(lastAssistantMessage);
-      utter.rate = 0.9;
-      utter.pitch = 0.95;
-      speechSynthesis.speak(utter);
+   /* ====== TTS haute qualité via /api/voice ====== */
+btnListen.onclick = async () => {
+  if (!lastAssistantMessage) return;
+
+  btnListen.disabled = true;
+  const originalLabel = btnListen.textContent;
+  btnListen.textContent = "Lecture en cours…";
+
+  try {
+    const res = await fetch("/api/voice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text: lastAssistantMessage,
+        // plus tard tu pourras choisir la voix : "fable", "nova", etc.
+        voice: "nova"
+      })
+    });
+
+    if (!res.ok) {
+      console.error("Erreur TTS:", await res.text());
+      alert("Impossible de générer la voix pour le moment.");
+      return;
+    }
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+
+    audio.play();
+    audio.onended = () => {
+      URL.revokeObjectURL(url);
     };
+  } catch (e) {
+    console.error(e);
+    alert("Un problème est survenu pendant la lecture vocale.");
+  } finally {
+    btnListen.disabled = false;
+    btnListen.textContent = originalLabel;
+  }
+};
+
   </script>
 </body>
 </html>
