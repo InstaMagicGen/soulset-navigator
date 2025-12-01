@@ -1,347 +1,564 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The Soulset Navigator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Soulset Navigator • Consultation</title>
 
-<style>
-/* ------------------------- GLOBAL ------------------------- */
-body {
-  margin: 0;
-  font-family: "Inter", sans-serif;
-  background: #000;
-  color: white;
-  overflow: hidden;
-}
+  <style>
+    /* ================== GLOBAL ================== */
+    * {
+      box-sizing: border-box;
+    }
 
-#bg {
-  position: fixed;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  opacity: 0.65;
-  transition: background-image 1.6s ease-in-out;
-  z-index: -1;
-}
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.main-btn {
-  background: linear-gradient(120deg, #ffb88c, #ea5753);
-  border: none;
-  padding: 16px 32px;
-  border-radius: 14px;
-  color: #fff;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-}
+    #bg {
+      position: fixed;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.6;
+      filter: blur(2px);
+      transition: background-image 1.5s ease-in-out;
+      z-index: -1;
+    }
 
-.main-btn.small {
-  padding: 12px 24px;
-  font-size: 1rem;
-}
+    main {
+      width: 100%;
+      max-width: 520px;
+      padding: 20px;
+    }
 
-.sub-btn {
-  background: rgba(255,255,255,0.1);
-  padding: 10px 20px;
-  border-radius: 10px;
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.2);
-  margin-top: 15px;
-}
+    .card {
+      background: radial-gradient(circle at top, rgba(0,0,0,0.8), rgba(0,0,0,0.95));
+      border-radius: 24px;
+      padding: 24px 22px 26px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+      border: 1px solid rgba(255,255,255,0.05);
+      backdrop-filter: blur(18px);
+    }
 
-.screen {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: 0.6s;
-  display: none;
-  text-align: center;
-  width: 100%;
-  max-width: 480px;
-  margin: auto;
-}
+    h1, h2, h3 {
+      margin: 0 0 10px;
+    }
 
-.screen.visible {
-  opacity: 1;
-  transform: translateY(0);
-  display: block;
-}
+    p {
+      margin: 0 0 12px;
+      line-height: 1.5;
+    }
 
-.tagline {
-  opacity: 0.8;
-  margin-bottom: 30px;
-}
+    .muted {
+      opacity: 0.8;
+      font-size: 0.95rem;
+    }
 
-textarea {
-  width: 100%;
-  border-radius: 10px;
-  border: none;
-  padding: 14px;
-  min-height: 100px;
-  background: rgba(0,0,0,0.45);
-  color: white;
-  margin-bottom: 15px;
-}
+    .small {
+      font-size: 0.85rem;
+      opacity: 0.75;
+    }
 
-.status {
-  opacity: 0.7;
-  margin-top: 12px;
-}
+    .center {
+      text-align: center;
+    }
 
-/* --------------------- RITUEL ---------------------- */
-.overlay {
-  position: fixed;
-  inset: 0;
-  backdrop-filter: blur(18px);
-  background: rgba(0,0,0,0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
+    .mt-lg { margin-top: 18px; }
+    .mt-xl { margin-top: 26px; }
 
-.hidden {
-  display: none;
-}
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      outline: none;
+      padding: 14px 30px;
+      border-radius: 999px;
+      background: linear-gradient(120deg, #ffb88c, #ea5753);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.55);
+      margin-top: 18px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+    }
 
-.ritual-card {
-  width: 90%;
-  max-width: 520px;
-  background: rgba(0,0,0,0.6);
-  border-radius: 20px;
-  overflow: hidden;
-  text-align: center;
-}
+    .btn-primary:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.7);
+    }
 
-.ritual-text {
-  padding: 20px;
-}
+    .btn-secondary {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.08);
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
 
-video {
-  width: 100%;
-  display: block;
-}
-</style>
+    .btn-secondary:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    textarea {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      padding: 12px 14px;
+      min-height: 110px;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 0.96rem;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: rgba(255,255,255,0.4);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+    }
+
+    .label {
+      font-size: 0.88rem;
+      opacity: 0.85;
+      margin-bottom: 6px;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+      animation: fadeInUp 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Chat */
+    #chatHistory {
+      border-radius: 18px;
+      background: rgba(0,0,0,0.45);
+      padding: 10px 10px 6px;
+      max-height: 260px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .msg {
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    .msg-role {
+      font-size: 0.78rem;
+      opacity: 0.6;
+      margin-bottom: 2px;
+    }
+
+    .msg.assistant .bubble {
+      background: rgba(255,255,255,0.09);
+      border-radius: 14px;
+      padding: 8px 10px;
+      font-size: 0.93rem;
+    }
+
+    .msg.user {
+      text-align: right;
+    }
+
+    .msg.user .bubble {
+      display: inline-block;
+      background: rgba(234,87,83,0.88);
+      border-radius: 14px;
+      padding: 8px 10px;
+      font-size: 0.93rem;
+      text-align: left;
+    }
+
+    #typingIndicator {
+      font-size: 0.82rem;
+      opacity: 0.7;
+      min-height: 1em;
+      margin-top: 4px;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-top: 8px;
+    }
+
+    .row textarea {
+      flex: 1;
+      min-height: 60px;
+      margin: 0;
+    }
+
+    .row .btn-primary {
+      padding-inline: 20px;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .error {
+      color: #ffb3b3;
+      font-size: 0.82rem;
+      margin-top: 6px;
+      min-height: 1em;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        border-radius: 18px;
+        padding: 20px 16px 22px;
+      }
+      .row {
+        flex-direction: column;
+      }
+      .row .btn-primary {
+        width: 100%;
+      }
+      #chatHistory {
+        max-height: 220px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div id="bg"></div>
 
-<!-- ░░░░░░░░░░░░░░░░░░ RITUEL ░░░░░░░░░░░░░░░░░░ -->
-<div id="ritualOverlay" class="overlay hidden">
-  <div class="ritual-card">
-    <video id="ritualVideo" autoplay muted loop playsinline></video>
+  <main>
+    <div class="card">
 
-    <div class="ritual-text">
-      <h2 id="ritualTitle"></h2>
-      <p id="ritualMessage"></p>
+      <!-- ================== SCREEN 1 : ACCUEIL ================== -->
+      <section id="screen-welcome" class="screen active">
+        <h1 id="welcome-title">Bienvenue dans The Soulset Navigator</h1>
+        <p id="welcome-body" class="muted">
+          Cet espace reproduit l’ambiance d’une consultation psychologique : calme, confidentielle, sans jugement.
+          Tu peux y déposer ce que tu ressens, mettre des mots sur tes émotions, et recevoir une guidance claire
+          pour retrouver un peu de stabilité intérieure.
+        </p>
+        <p class="small">
+          Ce n’est pas un service d’urgence médicale, mais un espace de soutien émotionnel pour t’aider à comprendre ce que tu vis.
+        </p>
+
+        <div class="center mt-xl">
+          <button id="btn-start" class="btn-primary">Commencer</button>
+        </div>
+      </section>
+
+      <!-- ================== SCREEN 2 : RESSENTI INITIAL ================== -->
+      <section id="screen-feeling" class="screen">
+        <h2 id="feeling-title">Comment te sens-tu aujourd’hui&nbsp;?</h2>
+        <p id="feeling-body" class="muted">
+          Écris librement ce que tu ressens en ce moment. Il n’y a pas de bonne ou de mauvaise réponse.
+        </p>
+
+        <div class="mt-lg">
+          <div class="label">Ton ressenti principal</div>
+          <textarea id="feeling-input" placeholder="Exemple : « Je me sens épuisé, anxieux, et j’ai l’impression de ne plus avancer. »"></textarea>
+        </div>
+
+        <div class="center mt-lg">
+          <button id="btn-feeling-continue" class="btn-primary">Continuer</button>
+        </div>
+
+        <p class="small mt-lg">
+          Tu pourras ensuite entrer dans un dialogue guidé, comme si tu échangeais avec un thérapeute.
+        </p>
+      </section>
+
+      <!-- ================== SCREEN 3 : DIALOGUE LIVE ================== -->
+      <section id="screen-dialogue" class="screen">
+        <h2 id="dialogue-title">Dialogue thérapeutique</h2>
+        <p id="dialogue-subtitle" class="muted">
+          Réponds aux questions au fil de la conversation. L’objectif est de clarifier ce que tu vis, sans pression.
+        </p>
+
+        <div id="chatHistory" class="mt-lg"></div>
+
+        <div id="typingIndicator"></div>
+        <div id="errorBlock" class="error"></div>
+
+        <div class="row mt-lg">
+          <textarea id="dialogue-input" placeholder="Écris ici ta réponse, comme tu le dirais à un thérapeute."></textarea>
+          <button id="btn-send" class="btn-primary">Envoyer</button>
+        </div>
+
+        <button id="btn-listen" class="btn-secondary">
+          <span>Écouter la dernière réponse</span>
+        </button>
+
+        <p class="small mt-lg">
+          Tu peux écrire autant que tu veux. Quand tu sens que c’est suffisant, tu peux le dire
+          (par exemple : « merci, j’ai terminé pour aujourd’hui ») et tu recevras une synthèse avec des pistes concrètes.
+        </p>
+      </section>
+
     </div>
+  </main>
 
-    <button id="ritualDone" class="main-btn"></button>
-  </div>
-</div>
+  <script>
+    // ================== CONFIG ==================
+    const OPENAI_API_KEY = "MET_TA_CLE_OPENAI_ICI"; // ⚠️ À REMPLACER par ta clé (prototypage uniquement)
 
-<div id="bg"></div>
+    const userLang = (navigator.language || "fr").split("-")[0].toLowerCase();
 
-<main id="app">
+    // ================== BACKGROUND SLIDESHOW ==================
+    const bgEl = document.getElementById("bg");
+    const bgImages = [
+      "sunset-1.jpeg",
+      "sunset-2.jpeg",
+      "sunset-3.jpeg",
+      "Sunset-4.jpeg",
+      "Sunset-5.jpeg",
+      "Sunset-6.jpeg",
+      "Sunset-7.jpeg"
+    ];
+    let bgIndex = 0;
 
-  <!-- ░░░░░░░░░░ WELCOME SCREEN ░░░░░░░░░░ -->
-  <section id="welcomeScreen" class="screen visible">
-    <h1 id="appTitle"></h1>
-    <p id="appTagline" class="tagline"></p>
+    function updateBackground() {
+      const img = bgImages[bgIndex];
+      bgEl.style.backgroundImage = `url("${img}")`;
+      bgIndex = (bgIndex + 1) % bgImages.length;
+    }
+    updateBackground();
+    setInterval(updateBackground, 12000);
 
-    <button id="startBtn" class="main-btn"></button>
+    // ================== SCREEN LOGIC ==================
+    const screenWelcome = document.getElementById("screen-welcome");
+    const screenFeeling = document.getElementById("screen-feeling");
+    const screenDialogue = document.getElementById("screen-dialogue");
 
-    <p id="welcomeHint" class="hint"></p>
-  </section>
+    function showScreen(id) {
+      [screenWelcome, screenFeeling, screenDialogue].forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
 
-  <!-- ░░░░░░░░░░ DIALOGUE ░░░░░░░░░░ -->
-  <section id="dialogueScreen" class="screen hidden">
-    <h2 id="dialogTitle"></h2>
-    <p id="dialogSubtitle"></p>
+    // ================== ELEMENTS ==================
+    const btnStart = document.getElementById("btn-start");
+    const btnFeelingContinue = document.getElementById("btn-feeling-continue");
+    const feelingInput = document.getElementById("feeling-input");
 
-    <textarea id="userInput"></textarea>
+    const chatHistoryEl = document.getElementById("chatHistory");
+    const dialogueInput = document.getElementById("dialogue-input");
+    const btnSend = document.getElementById("btn-send");
+    const btnListen = document.getElementById("btn-listen");
+    const typingIndicator = document.getElementById("typingIndicator");
+    const errorBlock = document.getElementById("errorBlock");
 
-    <button id="sendBtn" class="main-btn small"></button>
+    // ================== CONVERSATION STATE ==================
+    let conversationHistory = [];
+    let lastAssistantMessage = "";
 
-    <div id="responseBlock" class="hidden">
-      <h3 id="guidanceLabel"></h3>
-      <p id="assistantResponse"></p>
+    function addMessage(role, text) {
+      const msgDiv = document.createElement("div");
+      msgDiv.className = "msg " + role;
 
-      <button id="listenBtn" class="sub-btn"></button>
-    </div>
+      const label = document.createElement("div");
+      label.className = "msg-role";
+      label.textContent = role === "assistant" ? "Soulset Navigator" : "Toi";
 
-    <p id="typingStatus" class="status"></p>
-  </section>
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
 
-  <!-- ░░░░░░░░░░ PRO SCREEN ░░░░░░░░░░ -->
-  <section id="proScreen" class="screen hidden">
-    <h2 id="proTitle"></h2>
-    <p id="proMessage"></p>
+      msgDiv.appendChild(label);
+      msgDiv.appendChild(bubble);
+      chatHistoryEl.appendChild(msgDiv);
+      chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
+    }
 
-    <a href="https://gumroad.com" target="_blank"
-       id="proButton" class="main-btn"></a>
-  </section>
+    // ================== OPENAI CHAT ==================
+    async function callOpenAI(messages) {
+      if (!OPENAI_API_KEY || OPENAI_API_KEY === "MET_TA_CLE_OPENAI_ICI") {
+        throw new Error("Aucune clé OpenAI définie. Ajoute ta clé dans OPENAI_API_KEY.");
+      }
 
-</main>
+      const body = {
+        model: "gpt-4.1-mini",
+        messages
+      };
 
-<script>
-/* ----------------------- LANGUAGE ----------------------- */
-const userLang = navigator.language.split("-")[0];
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + OPENAI_API_KEY
+        },
+        body: JSON.stringify(body)
+      });
 
-const T = {
-  fr: {
-    title: "The Soulset Navigator",
-    tagline: "Recenter • Understand • Reset",
-    start: "Commencer",
-    hint: "Une courte guidance pour apaiser ton mental.",
-    dialogTitle: "Soulset Dialogue",
-    dialogSubtitle: "Décris ce que tu ressens…",
-    placeholder: "Exemple : « Je me sens fatigué émotionnellement. »",
-    send: "Envoyer",
-    guidance: "Guidance",
-    listen: "Écouter",
-    typing: "Une guidance se prépare…",
-    proTitle: "Soulset Pro",
-    proMessage: "Tu as utilisé ta session gratuite. Débloque un accès illimité.",
-    proButton: "Débloquer Soulset Pro",
-    ritualTitle: "Rituel Sunset",
-    ritualText: "Regarde ce coucher de soleil pendant quelques secondes… respire…",
-    ritualDone: "Je suis prêt(e)"
-  },
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error("Erreur API OpenAI : " + res.status + " - " + txt);
+      }
 
-  en: {
-    title: "The Soulset Navigator",
-    tagline: "Recenter • Understand • Reset",
-    start: "Start",
-    hint: "A short guidance to calm your mind.",
-    dialogTitle: "Soulset Dialogue",
-    dialogSubtitle: "Describe what you're feeling…",
-    placeholder: "Example: “I feel mentally tired today.”",
-    send: "Send",
-    guidance: "Guidance",
-    listen: "Listen",
-    typing: "Preparing guidance…",
-    proTitle: "Soulset Pro",
-    proMessage: "You've used your free session. Unlock unlimited access.",
-    proButton: "Unlock Soulset Pro",
-    ritualTitle: "Sunset Ritual",
-    ritualText: "Watch the sunset for a few seconds… breathe…",
-    ritualDone: "I'm ready"
-  }
-};
+      const data = await res.json();
+      return data.choices[0].message.content;
+    }
 
-const tr = T[userLang] || T["en"];
+    function buildSystemPrompt(lang) {
+      const base = `
+Tu es "The Soulset Navigator", un accompagnant thérapeutique professionnel, chaleureux et structuré.
 
-/* APPLY TEXT */
-document.getElementById("appTitle").textContent = tr.title;
-document.getElementById("appTagline").textContent = tr.tagline;
-document.getElementById("startBtn").textContent = tr.start;
-document.getElementById("welcomeHint").textContent = tr.hint;
-document.getElementById("dialogTitle").textContent = tr.dialogTitle;
-document.getElementById("dialogSubtitle").textContent = tr.dialogSubtitle;
-document.getElementById("userInput").placeholder = tr.placeholder;
-document.getElementById("sendBtn").textContent = tr.send;
-document.getElementById("guidanceLabel").textContent = tr.guidance;
-document.getElementById("listenBtn").textContent = tr.listen;
-document.getElementById("proTitle").textContent = tr.proTitle;
-document.getElementById("proMessage").textContent = tr.proMessage;
-document.getElementById("proButton").textContent = tr.proButton;
-document.getElementById("ritualTitle").textContent = tr.ritualTitle;
-document.getElementById("ritualMessage").textContent = tr.ritualText;
-document.getElementById("ritualDone").textContent = tr.ritualDone;
+Ton rôle :
+- Accueillir la personne comme dans un cabinet de psychologie.
+- L'aider à mettre des mots sur ses émotions, pensées et besoins.
+- Poser UNE seule question claire à la fois pour approfondir.
+- Quand la personne dit que c'est suffisant (par ex. "merci", "j'ai terminé", "c'est bon pour aujourd'hui"),
+  tu arrêtes de poser des questions et tu fais 3 choses :
+  1) une courte synthèse de ce que tu as compris,
+  2) 2 à 4 pistes concrètes pour l'aider au quotidien,
+  3) une brève phrase d'apaisement (1 ou 2 phrases maximum).
 
+Règles de style :
+- Adapte-toi à la langue de l'utilisateur (ici, prioritairement français).
+- Ton ton est professionnel mais humain, sans spiritualité, sans ésotérisme.
+- Tu restes dans le soutien émotionnel, pas dans le diagnostic médical.
+- Tu restes concis : 4 à 7 phrases maximum par réponse.
+`;
+      return base;
+    }
 
-/* ----------------------- BACKGROUND ----------------------- */
-const backgrounds = [
-  "sunset-1.jpeg","sunset-2.jpeg","sunset-3.jpeg",
-  "Sunset-4.jpeg","Sunset-5.jpeg","Sunset-6.jpeg","Sunset-7.jpeg"
-];
+    // ================== FLOW ==================
 
-let bgIndex = 0;
-function updateBackground() {
-  document.getElementById("bg").style.backgroundImage =
-  `url('${backgrounds[bgIndex]}')`;
-  bgIndex = (bgIndex + 1) % backgrounds.length;
-}
-setInterval(updateBackground, 10000);
-updateBackground();
+    // 1) Accueil -> Ressenti initial
+    btnStart.addEventListener("click", () => {
+      showScreen("screen-feeling");
+      feelingInput.focus();
+    });
 
+    // 2) Ressenti initial -> démarrage de la conversation
+    btnFeelingContinue.addEventListener("click", async () => {
+      const text = feelingInput.value.trim();
+      if (!text) return;
+      errorBlock.textContent = "";
+      showScreen("screen-dialogue");
+      chatHistoryEl.innerHTML = "";
 
-/* ----------------------- RITUEL ----------------------- */
-const ritualVideos = [
-  "Sunset-1V.mp4", "Sunset-3V.mp4", "Sunset-4V.mp4", "Sunset-ambient.mp4"
-];
+      // Construire l'historique initial
+      conversationHistory = [
+        { role: "system", content: buildSystemPrompt(userLang) },
+        {
+          role: "user",
+          content: `Mon ressenti principal en ce moment : ${text}`
+        }
+      ];
 
-const ritualOverlay = document.getElementById("ritualOverlay");
+      addMessage("user", text);
+      typingIndicator.textContent = "Le thérapeute lit ton ressenti…";
 
-function openRituel() {
-  const vid = ritualVideos[Math.floor(Math.random()*ritualVideos.length)];
-  document.getElementById("ritualVideo").src = vid;
-  ritualOverlay.classList.remove("hidden");
-}
+      try {
+        const reply = await callOpenAI(conversationHistory);
+        conversationHistory.push({ role: "assistant", content: reply });
+        lastAssistantMessage = reply;
+        addMessage("assistant", reply);
+        typingIndicator.textContent = "";
+      } catch (err) {
+        console.error(err);
+        errorBlock.textContent = err.message || "Une erreur est survenue. Réessaie dans un instant.";
+        typingIndicator.textContent = "";
+      }
+    });
 
-document.getElementById("ritualDone").onclick = () => {
-  ritualOverlay.classList.add("hidden");
-  showScreen("dialogueScreen");
-};
+    // 3) Dialogue live : user répond, IA poursuit
+    btnSend.addEventListener("click", async () => {
+      const text = dialogueInput.value.trim();
+      if (!text) return;
+      errorBlock.textContent = "";
 
+      dialogueInput.value = "";
+      addMessage("user", text);
+      conversationHistory.push({ role: "user", content: text });
 
-/* ----------------------- FREE LIMIT ----------------------- */
-let firstUse = localStorage.getItem("soulset_free") === null;
+      typingIndicator.textContent = "Le thérapeute réfléchit à la suite de l’échange…";
+      btnSend.disabled = true;
 
-function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("visible"));
-  document.getElementById(id).classList.add("visible");
-}
+      try {
+        const reply = await callOpenAI(conversationHistory);
+        conversationHistory.push({ role: "assistant", content: reply });
+        lastAssistantMessage = reply;
+        addMessage("assistant", reply);
+        typingIndicator.textContent = "";
+      } catch (err) {
+        console.error(err);
+        errorBlock.textContent = err.message || "Une erreur est survenue. Réessaie dans un instant.";
+        typingIndicator.textContent = "";
+      } finally {
+        btnSend.disabled = false;
+        dialogueInput.focus();
+      }
+    });
 
-/* ---------------------- START BUTTON ---------------------- */
-document.getElementById("startBtn").addEventListener("click", () => {
-  console.log("Start clicked");
+    // Envoi avec Entrée (Ctrl+Entrée pour retour à la ligne sur desktop)
+    dialogueInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        btnSend.click();
+      }
+    });
 
-  if (firstUse) openRituel();
-  else showScreen("proScreen");
-});
+    // ================== TTS DOUX (VOIX NAVIGATEUR) ==================
+    btnListen.addEventListener("click", () => {
+      if (!lastAssistantMessage) return;
+      if (!("speechSynthesis" in window)) {
+        errorBlock.textContent = "La lecture vocale n’est pas supportée sur ce navigateur.";
+        return;
+      }
 
+      window.speechSynthesis.cancel();
 
-/* ---------------------- SEND BUTTON ----------------------- */
-document.getElementById("sendBtn").onclick = async () => {
-  const text = document.getElementById("userInput").value.trim();
-  if (!text) return;
+      const utter = new SpeechSynthesisUtterance(lastAssistantMessage);
+      // Ajustement pour voix plus douce
+      utter.rate = 0.9;  // un peu plus lent
+      utter.pitch = 0.95; // légèrement plus grave
+      utter.volume = 0.95;
 
-  if (firstUse) {
-    localStorage.setItem("soulset_free","used");
-    firstUse = false;
-  }
+      // Choix de langue pour la voix
+      const voices = window.speechSynthesis.getVoices();
+      const targetLang = userLang === "fr" ? "fr" : "en";
+      const match = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(targetLang));
+      if (match) {
+        utter.voice = match;
+      }
 
-  document.getElementById("typingStatus").textContent = tr.typing;
+      window.speechSynthesis.speak(utter);
+    });
 
-  const response = 
-    "Respire profondément… tu fais de ton mieux. " +
-    "Accorde-toi un instant, reconnecte-toi à ton intention du moment.";
-
-  document.getElementById("assistantResponse").textContent = response;
-  document.getElementById("responseBlock").classList.remove("hidden");
-  document.getElementById("typingStatus").textContent = "";
-};
-
-
-/* ---------------------- COQUI TTS ------------------------- */
-document.getElementById("listenBtn").onclick = async () => {
-  const text = document.getElementById("assistantResponse").textContent;
-
-  const res = await fetch("https://huggingface.co/spaces/coqui/tts/api/predict", {
-    method: "POST",
-    headers: { "Content-Type":"application/json" },
-    body: JSON.stringify({ text })
-  });
-
-  const data = await res.json();
-  const audio = new Audio(data.audio);
-  audio.play();
-};
-</script>
-
+    // Sur certains navigateurs, il faut charger les voix après l’event
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.onvoiceschanged = () => {};
+    }
+  </script>
 </body>
 </html>
