@@ -29,12 +29,15 @@ export default async function handler(req, res) {
     });
 
     if (!upstream.ok) {
-      const errorText = await upstream.text();
-      console.error("OpenAI TTS error:", upstream.status, errorText);
-      return res
-        .status(upstream.status)
-        .json({ error: "OpenAI TTS error", details: errorText });
-    }
+  const errorJson = await upstream.json().catch(() => null);
+  console.error("OpenAI TTS error:", upstream.status, errorJson);
+
+  return res.status(upstream.status).json({
+    error: "OpenAI TTS error",
+    details: errorJson
+  });
+}
+
 
     const audioBuffer = await upstream.arrayBuffer();
     const base64 = Buffer.from(audioBuffer).toString("base64");
