@@ -251,11 +251,12 @@ Quand l’utilisateur dit qu'il a fini, tu fais une synthèse + 3 conseils + 1 p
     };
 
    /* ====== TTS haute qualité via /api/voice ====== */
+/* ====== TTS haute qualité via /api/voice (data URL) ====== */
 btnListen.onclick = async () => {
   if (!lastAssistantMessage) return;
 
-  btnListen.disabled = true;
   const originalLabel = btnListen.textContent;
+  btnListen.disabled = true;
   btnListen.textContent = "Lecture en cours…";
 
   try {
@@ -264,33 +265,35 @@ btnListen.onclick = async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         text: lastAssistantMessage,
-        // plus tard tu pourras choisir la voix : "fable", "nova", etc.
-        voice: "nova"
+        voice: "nova" // tu pourras tester d'autres voix : fable, onyx, shimmer…
       })
     });
 
+    const data = await res.json();
+
     if (!res.ok) {
-      console.error("Erreur TTS:", await res.text());
-      alert("Impossible de générer la voix pour le moment.");
+      console.error("Erreur TTS:", data);
+      alert("Impossible de générer la voix pour le moment.\n\nDétails: " + (data.error || "Erreur inconnue"));
       return;
     }
 
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const audio = new Audio(url);
+    if (!data.audio) {
+      alert("La réponse TTS ne contient pas de flux audio.");
+      return;
+    }
 
+    const audio = new Audio(data.audio);
     audio.play();
-    audio.onended = () => {
-      URL.revokeObjectURL(url);
-    };
+
   } catch (e) {
-    console.error(e);
+    console.error("Erreur TTS côté front:", e);
     alert("Un problème est survenu pendant la lecture vocale.");
   } finally {
     btnListen.disabled = false;
     btnListen.textContent = originalLabel;
   }
 };
+
 
   </script>
 </body>
