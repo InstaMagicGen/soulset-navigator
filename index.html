@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Soulset Navigator • Consultation</title>
+  <title>The Soulset Navigator • Sunset Session</title>
 
   <style>
-    /* ================== GLOBAL ================== */
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
@@ -32,36 +32,54 @@
 
     main {
       width: 100%;
-      max-width: 520px;
-      padding: 20px;
+      max-width: 540px;
+      padding: 18px;
     }
 
     .card {
-      background: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.78);
       border-radius: 22px;
-      padding: 22px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+      padding: 22px 20px 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.75);
       backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.06);
     }
 
-    .screen { display: none; }
-    .screen.active { display: block; animation: fadeInUp 0.4s ease; }
+    h1, h2, h3 { margin: 0 0 10px; }
+    p { margin: 0 0 10px; }
+    .muted { opacity: 0.85; font-size: 0.95rem; }
+    .small { opacity: 0.75; font-size: 0.82rem; }
 
-    h1, h2, p { margin: 0 0 12px; }
-    .muted { opacity: 0.8; }
-    .small { opacity: 0.75; font-size: 0.85rem; }
+    .screen { display: none; }
+    .screen.active { display: block; animation: fadeInUp 0.35s ease; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
     .btn-primary {
-      background: linear-gradient(120deg, #ffb88c, #ea5753);
       border: none;
-      padding: 14px 28px;
       border-radius: 999px;
-      color: white;
-      font-size: 1rem;
+      padding: 13px 26px;
+      background: linear-gradient(120deg,#ffb88c,#ea5753);
+      color: #fff;
+      font-size: 0.98rem;
       font-weight: 600;
       cursor: pointer;
       box-shadow: 0 12px 40px rgba(0,0,0,0.55);
-      margin-top: 20px;
+      margin-top: 18px;
+    }
+
+    .btn-secondary {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.06);
+      padding: 8px 16px;
+      font-size: 0.86rem;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 10px;
     }
 
     textarea {
@@ -69,232 +87,657 @@
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(0,0,0,0.5);
-      padding: 12px;
-      min-height: 110px;
+      padding: 11px 12px;
       color: #fff;
-      font-size: 1rem;
-      margin-top: 10px;
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 90px;
+      margin-top: 8px;
     }
 
-    #chatHistory {
-      max-height: 260px;
-      overflow-y: auto;
-      padding: 10px;
-      border-radius: 16px;
+    textarea:focus {
+      outline: none;
+      border-color: rgba(255,255,255,0.35);
+    }
+
+    .center { text-align: center; }
+    .mt-md { margin-top: 16px; }
+    .mt-lg { margin-top: 22px; }
+
+    /* Mood buttons */
+    .mood-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .mood-btn {
+      flex: 1;
+      padding: 8px 0;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
       background: rgba(255,255,255,0.05);
-      margin-top: 10px;
-    }
-
-    .msg { margin-bottom: 12px; }
-    .msg-role { font-size: 0.8rem; opacity: 0.6; margin-bottom: 3px; }
-    .msg .bubble { padding: 10px 12px; border-radius: 12px; }
-    .assistant .bubble { background: rgba(255,255,255,0.1); }
-    .user { text-align: right; }
-    .user .bubble { background: #ea5753; display: inline-block; }
-
-    .btn-secondary {
-      margin-top: 10px;
-      padding: 8px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.08);
-      color: white;
+      color: #fff;
+      font-size: 0.86rem;
       cursor: pointer;
     }
 
-    #typingIndicator { opacity: 0.7; font-size: 0.9rem; }
+    .mood-btn.selected {
+      background: rgba(234,87,83,0.95);
+      border-color: rgba(255,255,255,0.4);
+    }
+
+    /* Chat */
+    #chatHistory {
+      max-height: 230px;
+      overflow-y: auto;
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      margin-top: 10px;
+    }
+
+    .msg { margin-bottom: 9px; }
+    .msg-role { font-size: 0.78rem; opacity: 0.6; margin-bottom: 3px; }
+    .msg .bubble {
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+    }
+    .msg.assistant .bubble {
+      background: rgba(255,255,255,0.12);
+    }
+    .msg.user { text-align: right; }
+    .msg.user .bubble {
+      display: inline-block;
+      background: #ea5753;
+    }
+
+    #typingIndicator { font-size: 0.84rem; opacity: 0.75; min-height: 1em; }
+
+    /* History timeline */
+    #historyBlock {
+      margin-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 12px;
+    }
+
+    .history-item {
+      font-size: 0.83rem;
+      margin-bottom: 8px;
+      opacity: 0.85;
+    }
+
+    .history-date {
+      opacity: 0.65;
+      font-size: 0.78rem;
+    }
+
+    @media (max-width: 600px) {
+      .card { border-radius: 18px; padding: 18px 16px 18px; }
+    }
   </style>
 </head>
-
 <body>
   <div id="bg"></div>
 
   <main>
     <div class="card">
-
-      <!-- ÉCRAN 1 : ACCUEIL -->
+      <!-- Screen 1: Waiting room -->
       <section id="screen-welcome" class="screen active">
-        <h1>Bienvenue dans The Soulset Navigator</h1>
-        <p class="muted">
-          Cet espace reproduit l’ambiance d’une consultation psychologique : calme, confidentielle, sans jugement.
-          Tu peux t’exprimer librement ici. Je suis là pour t’accompagner pas à pas.
-        </p>
-        <button id="btn-start" class="btn-primary">Commencer</button>
+        <h1 id="welcome-title"></h1>
+        <p id="welcome-body" class="muted"></p>
+        <p id="welcome-note" class="small"></p>
+
+        <div class="center mt-lg">
+          <button id="btn-start" class="btn-primary"></button>
+        </div>
       </section>
 
-      <!-- ÉCRAN 2 : RESSENTI INITIAL -->
-      <section id="screen-feeling" class="screen">
-        <h2>Comment te sens-tu aujourd’hui&nbsp;?</h2>
-        <p class="muted">Écris ton ressenti sans pression.</p>
+      <!-- Screen 2: Sunset Scan -->
+      <section id="screen-scan" class="screen">
+        <h2 id="scan-title"></h2>
+        <p id="scan-body" class="muted"></p>
 
-        <textarea id="feeling-input" placeholder="Exemple : Je me sens anxieux, fatigué, un peu perdu…"></textarea>
+        <label class="small" id="scan-question-label"></label>
+        <textarea id="scan-text"></textarea>
 
-        <button id="btn-feeling-continue" class="btn-primary">Continuer</button>
+        <div class="mt-md small" id="mood-label"></div>
+        <div class="mood-row" id="mood-row">
+          <!-- mood buttons injected by JS -->
+        </div>
+
+        <div class="center mt-lg">
+          <button id="btn-scan-continue" class="btn-primary"></button>
+        </div>
       </section>
 
-      <!-- ÉCRAN 3 : DIALOGUE LIVE -->
-      <section id="screen-dialogue" class="screen">
-        <h2>Dialogue thérapeutique</h2>
+      <!-- Screen 3: Live dialogue -->
+      <section id="screen-session" class="screen">
+        <h2 id="session-title"></h2>
+        <p id="session-subtitle" class="muted"></p>
+
         <div id="chatHistory"></div>
         <div id="typingIndicator"></div>
 
-        <textarea id="dialogue-input" placeholder="Écris ici ta réponse…"></textarea>
-        <button id="btn-send" class="btn-primary">Envoyer</button>
+        <textarea id="dialogue-input"></textarea>
+        <button id="btn-send" class="btn-primary"></button>
+        <button id="btn-listen" class="btn-secondary"></button>
+        <button id="btn-close-session" class="btn-secondary"></button>
 
-        <button id="btn-listen" class="btn-secondary">Écouter la dernière réponse</button>
+        <div id="historyBlock">
+          <h3 id="history-title" style="font-size:0.9rem; margin-bottom:6px;"></h3>
+          <div id="history-list"></div>
+        </div>
       </section>
-
     </div>
   </main>
 
   <script>
-    /* ====== BACKGROUND IMAGES ====== */
+    // ========= Language detection & translations =========
+    const userLang = (navigator.language || "en").split("-")[0].toLowerCase();
+
+    const TR = {
+      fr: {
+        welcomeTitle: "Séance Soulset du soir",
+        welcomeBody:
+          "Bienvenue dans ta salle de consultation au coucher du soleil. Ici, tu viens ranger ce que ta journée a laissé en vrac, pour ne pas t’endormir avec le cerveau en surcharge.",
+        welcomeNote:
+          "Une seule petite séance par jour : 1 coucher de soleil, 1 session, 1 micro-changement.",
+        btnStart: "Commencer la séance du jour",
+
+        scanTitle: "Scan de ta journée",
+        scanBody:
+          "En une phrase ou deux, comment résumerais-tu ta journée ? Écris spontanément, comme si tu parlais à ton thérapeute.",
+        scanQuestionLabel: "Ton résumé du jour",
+        scanPlaceholder: "Exemple : « Journée lourde, beaucoup de pression au travail et je me sens vidé. »",
+        moodLabel: "Comment te sens-tu maintenant, juste avant la séance ?",
+        moodOptions: ["Très bas", "Bas", "Neutre", "Plutôt bien", "Très bien"],
+        btnScanContinue: "Lancer la session",
+
+        sessionTitle: "Dialogue thérapeutique",
+        sessionSubtitle:
+          "Réponds simplement aux questions. Tu peux t’arrêter quand tu sens que c’est suffisant.",
+        dialoguePlaceholder: "Écris ta réponse ici, comme tu le dirais à quelqu’un de bienveillant.",
+        btnSend: "Envoyer",
+        btnListen: "Écouter la dernière réponse",
+        btnClose: "Terminer la séance",
+        typing: "Le thérapeute prépare la prochaine étape…",
+
+        historyTitle: "Tes dernières séances",
+        historyNoData: "Tu verras ici les phrases-ancres de tes séances précédentes.",
+        historyMood: "Humeur après séance",
+        historyAnchorLabel: "Phrase-ancre",
+
+        summaryPrompt: (langName) => `
+Tu es "The Soulset Navigator", un accompagnant thérapeutique professionnel.
+Tu vas recevoir ci-dessous toute la conversation précédente avec l'utilisateur.
+
+Ta tâche :
+1) Faire une synthèse courte de ce que la personne a vécu aujourd'hui (4 à 6 phrases).
+2) Proposer UN seul micro-pas concret pour demain (1 à 2 phrases).
+3) Formuler une phrase-ancre très courte (1 phrase) qui commence par "Je" et qui peut être relue le lendemain soir.
+
+Réponds STRICTEMENT dans ce format JSON, sans texte avant ni après :
+{
+  "summary": "...",
+  "micro_step": "...",
+  "anchor": "..."
+}
+
+Écris tout en ${langName}.
+`.trim(),
+
+        systemPrompt: (langName) => `
+Tu es "The Soulset Navigator", un accompagnant thérapeutique professionnel et chaleureux.
+
+Ton rôle pendant la session :
+- Accueillir la personne comme dans un cabinet de psychologie.
+- L'aider à clarifier ce qu'elle a vécu aujourd'hui.
+- Poser UNE seule question claire à la fois pour approfondir.
+- Rester concret, empathique et structuré.
+- Répondre en ${langName}, dans un style simple et humain.
+- Quand la personne indique qu'elle veut arrêter (par ex. "merci", "j'ai terminé", "c'est bon pour aujourd'hui"),
+  tu peux déjà commencer à l'amener vers une clôture, sans faire la synthèse finale (qui sera demandée à part).
+`.trim()
+      },
+
+      en: {
+        welcomeTitle: "Your Sunset Session",
+        welcomeBody:
+          "Welcome to your evening consultation room. This is where you tidy up what the day left scattered, so you don’t take the whole weight of it into your sleep.",
+        welcomeNote:
+          "Just one short session per day: 1 sunset, 1 session, 1 small shift.",
+        btnStart: "Start today’s session",
+
+        scanTitle: "Scan your day",
+        scanBody:
+          "In one or two sentences, how would you sum up your day? Write freely, as if you were talking to your therapist.",
+        scanQuestionLabel: "Your summary of the day",
+        scanPlaceholder: "Example: “Heavy day, a lot of pressure at work and I feel drained.”",
+        moodLabel: "How do you feel right now, just before the session?",
+        moodOptions: ["Very low", "Low", "Neutral", "Quite good", "Very good"],
+        btnScanContinue: "Start the session",
+
+        sessionTitle: "Therapeutic dialogue",
+        sessionSubtitle:
+          "Simply answer the questions. You can stop whenever it feels enough for today.",
+        dialoguePlaceholder: "Write your answer here, as you would to someone who truly listens.",
+        btnSend: "Send",
+        btnListen: "Listen to last answer",
+        btnClose: "End today’s session",
+        typing: "The therapist is preparing the next step…",
+
+        historyTitle: "Your past sessions",
+        historyNoData: "You’ll see here the anchor sentences from your previous evenings.",
+        historyMood: "Mood after session",
+        historyAnchorLabel: "Anchor sentence",
+
+        summaryPrompt: (langName) => `
+You are "The Soulset Navigator", a professional therapeutic companion.
+You will receive the full previous conversation with the user.
+
+Your task:
+1) Write a short synthesis of what this person experienced today (4–6 sentences).
+2) Propose ONE concrete micro-step for tomorrow (1–2 sentences).
+3) Create a very short anchor sentence (1 sentence) starting with "I" that they can read tomorrow evening.
+
+Reply STRICTLY in this JSON format, with no text before or after:
+{
+  "summary": "...",
+  "micro_step": "...",
+  "anchor": "..."
+}
+
+Write everything in ${langName}.
+`.trim(),
+
+        systemPrompt: (langName) => `
+You are "The Soulset Navigator", a warm and professional therapeutic companion.
+
+Your role during the session:
+- Welcome the person as in a real therapy office.
+- Help them clarify what they went through today.
+- Ask ONE clear question at a time to go deeper.
+- Stay concrete, empathic and structured.
+- Answer in ${langName}, in a simple human tone.
+- When the person indicates they want to stop (e.g. "thanks", "I'm done for today"),
+  you gently move toward closure, without doing the final synthesis (which will be requested separately).
+`.trim()
+      }
+    };
+
+    const lang = TR[userLang] ? userLang : "en";
+    const tr = TR[lang];
+    const langName = lang === "fr" ? "français" : "English";
+
+    // ========= Background slideshow =========
     const bgImages = [
       "sunset-1.jpeg","sunset-2.jpeg","sunset-3.jpeg",
       "Sunset-4.jpeg","Sunset-5.jpeg","Sunset-6.jpeg","Sunset-7.jpeg"
     ];
     let bgIndex = 0;
-    setInterval(() => {
-      document.getElementById("bg").style.backgroundImage =
-        `url('${bgImages[bgIndex]}')`;
+    const bgEl = document.getElementById("bg");
+    function updateBg() {
+      bgEl.style.backgroundImage = `url('${bgImages[bgIndex]}')`;
       bgIndex = (bgIndex + 1) % bgImages.length;
-    }, 8000);
-    document.getElementById("bg").style.backgroundImage = `url('${bgImages[0]}')`;
+    }
+    updateBg();
+    setInterval(updateBg, 9000);
 
-    /* ====== SCREEN MANAGEMENT ====== */
+    // ========= UI init =========
+    const screenWelcome = document.getElementById("screen-welcome");
+    const screenScan = document.getElementById("screen-scan");
+    const screenSession = document.getElementById("screen-session");
+
     function showScreen(id) {
-      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      [screenWelcome, screenScan, screenSession].forEach(s => s.classList.remove("active"));
       document.getElementById(id).classList.add("active");
     }
 
-    /* ====== ELEMENTS ====== */
-    const btnStart = document.getElementById("btn-start");
-    const btnFeeling = document.getElementById("btn-feeling-continue");
-    const feelingInput = document.getElementById("feeling-input");
-    const chatHistory = document.getElementById("chatHistory");
+    // Texts
+    document.getElementById("welcome-title").textContent = tr.welcomeTitle;
+    document.getElementById("welcome-body").textContent = tr.welcomeBody;
+    document.getElementById("welcome-note").textContent = tr.welcomeNote;
+    document.getElementById("btn-start").textContent = tr.btnStart;
+
+    document.getElementById("scan-title").textContent = tr.scanTitle;
+    document.getElementById("scan-body").textContent = tr.scanBody;
+    document.getElementById("scan-question-label").textContent = tr.scanQuestionLabel;
+    document.getElementById("scan-text").placeholder = tr.scanPlaceholder;
+    document.getElementById("mood-label").textContent = tr.moodLabel;
+    document.getElementById("btn-scan-continue").textContent = tr.btnScanContinue;
+
+    document.getElementById("session-title").textContent = tr.sessionTitle;
+    document.getElementById("session-subtitle").textContent = tr.sessionSubtitle;
+    document.getElementById("dialogue-input").placeholder = tr.dialoguePlaceholder;
+    document.getElementById("btn-send").textContent = tr.btnSend;
+    document.getElementById("btn-listen").textContent = tr.btnListen;
+    document.getElementById("btn-close-session").textContent = tr.btnClose;
+    document.getElementById("history-title").textContent = tr.historyTitle;
+
+    // Mood buttons
+    const moodRow = document.getElementById("mood-row");
+    let currentMood = null;
+    tr.moodOptions.forEach((label, index) => {
+      const btn = document.createElement("button");
+      btn.className = "mood-btn";
+      btn.textContent = (index+1) + " • " + label;
+      btn.onclick = () => {
+        currentMood = index + 1;
+        document.querySelectorAll(".mood-btn").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+      };
+      moodRow.appendChild(btn);
+    });
+
+    // ========= Conversation state =========
+    const chatHistoryEl = document.getElementById("chatHistory");
+    const typingIndicator = document.getElementById("typingIndicator");
     const dialogueInput = document.getElementById("dialogue-input");
     const btnSend = document.getElementById("btn-send");
     const btnListen = document.getElementById("btn-listen");
-    const typingIndicator = document.getElementById("typingIndicator");
+    const btnCloseSession = document.getElementById("btn-close-session");
 
-    /* ====== CONVERSATION ====== */
-    let history = [];
+    let messages = [];
     let lastAssistantMessage = "";
+    let sessionStarted = false;
+    let sessionClosed = false;
 
     function addMessage(role, text) {
       const div = document.createElement("div");
       div.className = "msg " + role;
-
       div.innerHTML = `
-        <div class="msg-role">${role === "assistant" ? "Soulset" : "Toi"}</div>
+        <div class="msg-role">${role === "assistant" ? "Soulset" : (lang === "fr" ? "Toi" : "You")}</div>
         <div class="bubble">${text}</div>
       `;
-      chatHistory.appendChild(div);
-      chatHistory.scrollTop = chatHistory.scrollHeight;
+      chatHistoryEl.appendChild(div);
+      chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
     }
 
-    /* ====== API CALL (via BACKEND) ====== */
-    async function callAI() {
-      typingIndicator.textContent = "Le thérapeute réfléchit…";
-
+    async function callChatAPI(msgs) {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: history })
+        body: JSON.stringify({ messages: msgs })
       });
-
+      if (!res.ok) {
+        const t = await res.text();
+        throw new Error("Chat API error: " + t);
+      }
       const data = await res.json();
-      typingIndicator.textContent = "";
       return data.choices[0].message.content;
     }
 
-    /* ====== FLOW ====== */
-    btnStart.onclick = () => showScreen("screen-feeling");
+    // ========= History storage =========
+    const HISTORY_KEY = "soulset_sessions_v1";
 
-    btnFeeling.onclick = async () => {
-      const feeling = feelingInput.value.trim();
-      if (!feeling) return;
+    function loadHistory() {
+      try {
+        const raw = localStorage.getItem(HISTORY_KEY);
+        if (!raw) return [];
+        return JSON.parse(raw);
+      } catch {
+        return [];
+      }
+    }
 
-      showScreen("screen-dialogue");
+    function saveHistory(sessions) {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(sessions));
+    }
 
-      history = [
-        { role: "system", content: `
-Tu es un accompagnant thérapeutique professionnel. 
-Tu poses UNE seule question à la fois. 
-Quand l’utilisateur dit qu'il a fini, tu fais une synthèse + 3 conseils + 1 phrase d’apaisement.
-`},
-        { role: "user", content: feeling }
+    function renderHistory() {
+      const listEl = document.getElementById("history-list");
+      const sessions = loadHistory();
+      listEl.innerHTML = "";
+      if (!sessions.length) {
+        const p = document.createElement("p");
+        p.className = "small";
+        p.textContent = tr.historyNoData;
+        listEl.appendChild(p);
+        return;
+      }
+
+      sessions.slice(-4).reverse().forEach(s => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+        const date = new Date(s.date);
+        const dateStr = date.toLocaleDateString(undefined, {
+          weekday: "short", day: "2-digit", month: "short"
+        });
+        div.innerHTML = `
+          <div class="history-date">${dateStr}</div>
+          <div><strong>${tr.historyAnchorLabel} :</strong> ${s.anchor}</div>
+          <div><strong>${tr.historyMood} :</strong> ${s.moodAfter ?? "—"}/5</div>
+        `;
+        listEl.appendChild(div);
+      });
+    }
+
+    renderHistory();
+
+    // ========= Flow =========
+    document.getElementById("btn-start").onclick = () => {
+      // empêcher plusieurs séances par jour si tu veux plus tard
+      showScreen("screen-scan");
+      document.getElementById("scan-text").focus();
+    };
+
+    document.getElementById("btn-scan-continue").onclick = async () => {
+      const scanText = document.getElementById("scan-text").value.trim();
+      if (!scanText) return;
+
+      showScreen("screen-session");
+      chatHistoryEl.innerHTML = "";
+      typingIndicator.textContent = tr.typing;
+      sessionStarted = true;
+      sessionClosed = false;
+
+      messages = [
+        { role: "system", content: tr.systemPrompt(langName) },
+        {
+          role: "user",
+          content:
+            (lang === "fr"
+              ? `Résumé de ma journée : ${scanText}\nHumeur avant séance (1-5) : ${currentMood ?? "non précisé"}.`
+              : `Summary of my day: ${scanText}\nMood before session (1-5): ${currentMood ?? "not specified"}.`)
+        }
       ];
 
-      addMessage("user", feeling);
+      addMessage("user", scanText);
 
-      const reply = await callAI();
-      lastAssistantMessage = reply;
-      history.push({ role: "assistant", content: reply });
-
-      addMessage("assistant", reply);
+      try {
+        const reply = await callChatAPI(messages);
+        lastAssistantMessage = reply;
+        messages.push({ role: "assistant", content: reply });
+        addMessage("assistant", reply);
+      } catch (err) {
+        addMessage("assistant", (lang === "fr"
+          ? "Je rencontre un souci technique pour le moment. Essaie à nouveau dans un instant."
+          : "I’m having a technical issue right now. Please try again in a moment."));
+        console.error(err);
+      } finally {
+        typingIndicator.textContent = "";
+      }
     };
 
     btnSend.onclick = async () => {
+      if (!sessionStarted || sessionClosed) return;
+
       const text = dialogueInput.value.trim();
       if (!text) return;
       dialogueInput.value = "";
-
       addMessage("user", text);
-      history.push({ role: "user", content: text });
+      messages.push({ role: "user", content: text });
 
-      const reply = await callAI();
-      lastAssistantMessage = reply;
-      history.push({ role: "assistant", content: reply });
+      typingIndicator.textContent = tr.typing;
+      btnSend.disabled = true;
 
-      addMessage("assistant", reply);
+      try {
+        const reply = await callChatAPI(messages);
+        lastAssistantMessage = reply;
+        messages.push({ role: "assistant", content: reply });
+        addMessage("assistant", reply);
+      } catch (err) {
+        console.error(err);
+        addMessage("assistant", (lang === "fr"
+          ? "Une erreur s’est produite, on peut reprendre dans quelques instants."
+          : "Something went wrong, we can resume in a moment."));
+      } finally {
+        typingIndicator.textContent = "";
+        btnSend.disabled = false;
+        dialogueInput.focus();
+      }
     };
 
-   /* ====== TTS haute qualité via /api/voice ====== */
-/* ====== TTS haute qualité via /api/voice (data URL) ====== */
-btnListen.onclick = async () => {
-  if (!lastAssistantMessage) return;
-
-  const originalLabel = btnListen.textContent;
-  btnListen.disabled = true;
-  btnListen.textContent = "Lecture en cours…";
-
-  try {
-    const res = await fetch("/api/voice", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        text: lastAssistantMessage,
-        voice: "nova" // tu pourras tester d'autres voix : fable, onyx, shimmer…
-      })
+    // Enter = send
+    dialogueInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        btnSend.click();
+      }
     });
 
-    const data = await res.json();
+    // ========= Close session => summary + micro-step + anchor =========
+    btnCloseSession.onclick = async () => {
+      if (!sessionStarted || sessionClosed) return;
+      sessionClosed = true;
 
-    if (!res.ok) {
-      console.error("Erreur TTS:", data);
-      alert("Impossible de générer la voix pour le moment.\n\nDétails: " + (data.error || "Erreur inconnue"));
-      return;
-    }
+      typingIndicator.textContent = tr.typing;
 
-    if (!data.audio) {
-      alert("La réponse TTS ne contient pas de flux audio.");
-      return;
-    }
+      // construire un nouveau jeu de messages pour la synthèse
+      const summaryMessages = [
+        { role: "system", content: tr.summaryPrompt(langName) },
+        ...messages.filter(m => m.role !== "system")
+      ];
 
-    const audio = new Audio(data.audio);
-    audio.play();
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages: summaryMessages })
+        });
 
-  } catch (e) {
-    console.error("Erreur TTS côté front:", e);
-    alert("Un problème est survenu pendant la lecture vocale.");
-  } finally {
-    btnListen.disabled = false;
-    btnListen.textContent = originalLabel;
-  }
-};
+        if (!res.ok) {
+          const txt = await res.text();
+          console.error("Summary error:", txt);
+          addMessage("assistant", (lang === "fr"
+            ? "Je n’arrive pas à générer la synthèse pour le moment, mais on peut s’arrêter ici en douceur."
+            : "I couldn’t generate the summary right now, but we can gently stop here for today."));
+          typingIndicator.textContent = "";
+          return;
+        }
 
+        const data = await res.json();
+        let content = data.choices[0].message.content;
+        let summaryText = "";
+        let microStep = "";
+        let anchor = "";
 
+        try {
+          const parsed = JSON.parse(content);
+          summaryText = parsed.summary || "";
+          microStep = parsed.micro_step || "";
+          anchor = parsed.anchor || "";
+        } catch {
+          // si pas un JSON valide, utiliser tout le texte comme synthèse brute
+          summaryText = content;
+          microStep = "";
+          anchor = "";
+        }
+
+        const combined =
+          (lang === "fr"
+            ? "🎯 Synthèse de ta séance :\n\n"
+            : "🎯 Session summary:\n\n") +
+          summaryText +
+          (microStep
+            ? "\n\n" + (lang === "fr" ? "➡️ Micro-pas pour demain : " : "➡️ Micro-step for tomorrow: ") + microStep
+            : "") +
+          (anchor
+            ? "\n\n" + (lang === "fr" ? "🪬 Phrase-ancre : " : "🪬 Anchor sentence: ") + "« " + anchor + " »"
+            : "");
+
+        addMessage("assistant", combined);
+        lastAssistantMessage = combined;
+
+        // Stocker dans l’historique
+        const sessions = loadHistory();
+        sessions.push({
+          date: new Date().toISOString(),
+          moodAfter: currentMood ?? null,
+          anchor: anchor || (lang === "fr"
+            ? "Je prends soin de ma fin de journée."
+            : "I’m taking care of how my day ends.")
+        });
+        saveHistory(sessions);
+        renderHistory();
+      } catch (err) {
+        console.error(err);
+        addMessage("assistant", (lang === "fr"
+          ? "La séance est terminée, merci pour ta confiance aujourd’hui."
+          : "The session is closed for today, thank you for your trust."));
+      } finally {
+        typingIndicator.textContent = "";
+      }
+    };
+
+    // ========= TTS via /api/voice =========
+    btnListen.onclick = async () => {
+      if (!lastAssistantMessage) return;
+
+      const originalLabel = btnListen.textContent;
+      btnListen.disabled = true;
+      btnListen.textContent = (lang === "fr" ? "Lecture en cours…" : "Playing…");
+
+      try {
+        const res = await fetch("/api/voice", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: lastAssistantMessage,
+            voice: "nova"
+          })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          console.error("TTS backend error:", data);
+          // Fallback éventuel : voix du navigateur
+          if ("speechSynthesis" in window) {
+            const u = new SpeechSynthesisUtterance(lastAssistantMessage);
+            u.rate = 0.9;
+            u.pitch = 0.95;
+            speechSynthesis.speak(u);
+          } else {
+            alert("Audio indisponible pour le moment.");
+          }
+          return;
+        }
+
+        if (!data.audio) {
+          alert("Réponse audio invalide.");
+          return;
+        }
+
+        const audio = new Audio(data.audio);
+        audio.play();
+      } catch (e) {
+        console.error("TTS front error:", e);
+        if ("speechSynthesis" in window) {
+          const u = new SpeechSynthesisUtterance(lastAssistantMessage);
+          u.rate = 0.9;
+          u.pitch = 0.95;
+          speechSynthesis.speak(u);
+        } else {
+          alert("Impossible de lire la réponse pour le moment.");
+        }
+      } finally {
+        btnListen.disabled = false;
+        btnListen.textContent = tr.btnListen;
+      }
+    };
   </script>
 </body>
 </html>
